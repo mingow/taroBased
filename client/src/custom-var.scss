@@ -1,0 +1,14 @@
+@import "./app";
+
+$custom-forward-color: #404146;
+
+/* Text Color */
+$color-text-base: #f9c00c !default; // 文字的基本色
+$color-text-base-inverse: #FFF !default; // 反色
+$color-text-secondary: #0090ff !default; // 辅助色
+$color-text-placeholder: #C9C9C9 !default;
+$color-text-disabled: #CCC !default;
+$color-text-title: #f9c00c !default; // 文章标题
+$color-text-paragraph: #3F536E !default; // 文章段落
+
+@import "~taro-ui/dist/style/index.scss";

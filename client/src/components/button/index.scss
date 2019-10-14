@@ -1,0 +1,23 @@
+@import './../../app';
+
+.base {
+  border-radius: 40px;
+  height: 80px;
+  margin:20px;
+  text-align: center;
+  line-height: 80px;
+  background-color: $custom-base-color;
+}
+
+.solid {
+  background-color: $custom-base-color;
+  color:complement($custom-base-color);
+}
+.glow {
+  box-shadow: 0 0 20px $custom-base-color;
+}
+.border {
+  border:2px solid $custom-base-color;
+  color:$custom-base-color;
+  background-color: transparent;
+}
