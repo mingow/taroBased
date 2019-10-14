@@ -1,0 +1,20 @@
+@import './../../app';
+
+.border {
+  border: 4rpx solid $color-brand;
+  border-radius: 50%;  
+  .inner {
+    border-radius: 50%;
+    margin:6rpx;
+    background-color: #fff;
+  }
+}
+
+.normal {
+  width:80rpx;
+  height:80rpx;
+  .inner {
+    width:68rpx;
+    height:68rpx;
+  }
+}

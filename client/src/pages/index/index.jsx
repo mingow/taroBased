@@ -7,6 +7,7 @@ import { AtButton,AtIcon,AtBadge,AtCard } from 'taro-ui'
 import Login from '../../components/login/index'
 import CCard from '../../components/imageCard/index'
 import CScrollArea from '../../components/scrollArea/index'
+import CAvatar from '../../components/avatar/index'
 
 export default class Index extends Component {
 
@@ -39,6 +40,7 @@ export default class Index extends Component {
           <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/banter-snaps-BZzHWmQUszE-unsplash.jpg'>
           </CCard>
         </CScrollArea>
+        <CAvatar></CAvatar>
         <AtButton className='glow' circle type = 'primary'>按钮文案</AtButton>
       </View>
     )
