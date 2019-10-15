@@ -1,0 +1,69 @@
+@import './../../app';
+
+.grid {
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 0 30rpx rgba(#000000, 0.7);
+  margin: 20rpx;
+}
+
+.image {
+  width:100%;
+  height:100%;
+}
+
+.avatar {
+  position: relative;
+  bottom:10rpx;
+  left:10rpx;
+}
+
+.alt {
+  position:relative;
+  display:block;
+  bottom: 300rpx;
+  left: 80rpx;
+  color:#9a9a9a;
+  font-size: 24rpx;
+}
+
+.img {
+  height:96rpx;
+  width:96rpx;
+  border-radius: 48rpx;
+  display: block;
+  background-color: $color-brand;
+  float:left;
+}
+
+.header {
+  margin:30rpx;
+}
+.header::after {
+  clear:both;
+}
+.text {
+  display: inline-block;
+  float:left;
+  text{
+    display:block;
+
+    margin:6rpx 40rpx;
+  }
+  .primary {
+    font-size: 36rpx;
+    color:#fff;
+  }
+  .second {
+    font-size: 24rpx;
+    color:#606060;
+  }
+}
+.clear {
+  clear:both;
+}
+.body {
+  margin:30rpx;
+  color:#d1d1d1;
+  font-size: 28rpx;
+}

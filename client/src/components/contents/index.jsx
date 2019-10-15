@@ -2,23 +2,27 @@ import Taro, { Component } from "@tarojs/taro"
 import { View, Text, Button } from "@tarojs/components"
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
+import _isFunction from 'lodash/isFunction'
 import './index.scss'
-import { AtIcon } from 'taro-ui'
 
+import CAvatar from '../../components/avatar/index'
 
-export default class CAvatar extends Component {
+export default class CContent extends Component {
   constructor (props) {
     super(props)
     this.state = {
       context: {},
-      cls:this.props.size
+      src:''
     }
   }
 
+  componentWillMount() {
 
-  componentWillMount() {}
+  }
 
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
 
   componentWillUnmount() {}
 
@@ -26,45 +30,46 @@ export default class CAvatar extends Component {
 
   componentDidHide() {}
 
-  componentWillUpdate(nextProps, nextState) {
-    console.log(nextProps);
-  }
 
   render() {
-
-    const {
-      size = 'normal',
-      type = '',
-      circle,
-      full,
-      loading,
-      disabled,
-      customStyle
-    } = this.props
-
+    const { title, second } = this.props
 
     return (
-      <View className={this.props.size} style={customStyle}>
-        <View className='inner'>
-          
+      <View className='area grid'>
+        <View className='header'>
+          <Image className='img'></Image>
+          <View className='text'>
+            <Text className='primary'>{this.props.title}</Text>
+            {this.props.second?<Text className='second'>{this.props.second}</Text>:''}
+          </View>
+        </View>
+        <View className='clear'></View>
+        <View className='body'>
+        {this.props.children}
         </View>
       </View>
     )
   }
 }
 
-CAvatar.defaultProps = {
+CContent.defaultProps = {
   size: 'normal',
+  title:'undefined',
+  second:'second',
   type: '',
   circle: false,
   full: false,
   loading: false,
+  cloudId:'',
   disabled: false,
   customStyle: {},
   onClick: () => {}
 }
 
-CAvatar.propTypes = {
+CContent.propTypes = {
+  title: PropTypes.string,
+  second: PropTypes.string,
+  cloudId: PropTypes.string,
   size: PropTypes.oneOf(['normal', 'small']),
   type: PropTypes.oneOf(['primary', 'secondary', '']),
   circle: PropTypes.bool,

@@ -1,3 +1,5 @@
+@import './../../app';
+
 .grid {
   border-radius: 12rpx;
   overflow: hidden;
@@ -5,6 +7,9 @@
   width:250rpx;
   box-shadow: 0 0 20rpx #000;
   margin: 20rpx;
+}
+
+.area {
 }
 
 .image {
@@ -22,8 +27,8 @@
     list-style:none;
     display:inline-block;
     margin-right:0.1rem;
-    text-align:center;
-    overflow: hidden;
+    // text-align:center;
+    overflow:visible;
   }
   .content:nth-child(1){
     margin-left: 0.1rem;
@@ -35,5 +40,25 @@
     width:0;
     height:0;
     display: none;
+  }
+}
+
+.title {
+  color:#fff;
+  font-size: 48rpx;
+  margin:10rpx 30rpx 0;
+}
+
+.more {
+  width:120rpx;
+  float:right;
+  margin: 20rpx 10rpx;
+  .btn {
+    height:36rpx;
+    line-height: 36rpx;
+    border-radius: 18rpx;
+    background-color: $color-brand;
+    font-size: 24rpx;
+    color:#fff;
   }
 }

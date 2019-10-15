@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 import _isFunction from 'lodash/isFunction'
 import './index.scss'
 
+import CAvatar from '../../components/avatar/index'
+
 const SIZE_CLASS = {
   normal: 'normal',
   small: 'small',
@@ -82,7 +84,10 @@ export default class CCard extends Component {
 
     return (
       <View onClick={this.handleClick} className={rootClass}>
+
         <Image className='image' mode='aspectFill' src = {this.state.src}></Image>
+        {this.props.children}
+        <Text className='alt'style={this.state.src==''?'':'display:none'}>Loading</Text>
       </View>
     )
   }
