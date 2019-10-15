@@ -17,7 +17,21 @@ export default class CContent extends Component {
   }
 
   componentWillMount() {
-
+    var own = this;
+    if(own.props.cloudId){
+      Taro.cloud.getTempFileURL({
+        fileList: [{
+          fileID: own.props.cloudId
+        }]
+      }).then(res => {
+        console.log(res.fileList[0].tempFileURL)
+        if(res.fileList[0].tempFileURL){
+          own.setState({src:res.fileList[0].tempFileURL})
+        }
+      }).catch(error => {
+        // handle error
+      })
+    }
   }
 
   componentDidMount() {
@@ -36,6 +50,10 @@ export default class CContent extends Component {
 
     return (
       <View className='area grid'>
+        {!this.state.src?'':<View className='thumb'>
+          <Image mode='aspectFill' className='pic' src={this.state.src}></Image>
+        </View>}
+
         <View className='header'>
           <Image className='img'></Image>
           <View className='text'>
@@ -56,6 +74,7 @@ CContent.defaultProps = {
   size: 'normal',
   title:'undefined',
   second:'second',
+  thumb:'',
   type: '',
   circle: false,
   full: false,
@@ -69,6 +88,7 @@ CContent.defaultProps = {
 CContent.propTypes = {
   title: PropTypes.string,
   second: PropTypes.string,
+  thumb: PropTypes.string,
   cloudId: PropTypes.string,
   size: PropTypes.oneOf(['normal', 'small']),
   type: PropTypes.oneOf(['primary', 'secondary', '']),

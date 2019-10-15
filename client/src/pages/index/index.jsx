@@ -34,18 +34,33 @@ export default class Index extends Component {
       <View className='index'>
         <View className='1px'></View>
         <CScrollArea>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/d6682b4f306737da47a2bce65f6dcd42.jpg'>
+          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/e35328563ec1a76207e7ffd0340db7ba.png'>
             <View className='avatar'><CAvatar size='small'></CAvatar><Text>桌游</Text></View>
           </CCard>
           <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/61f78111c558b48dd6a624fe408d4a54.jpg'>
             <View className='avatar'><CAvatar size='small'></CAvatar><Text>KTV</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/1110340580.jpg'>
+          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/88d8be1ea8369f9276c3e400a466823e.jpg'>
             <View className='avatar'><CAvatar size='small'></CAvatar><Text>麻将</Text></View>
+          </CCard>
+          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/98aebf4eba20f898330e3b109a4d4d8f.jpg'>
+            <View className='avatar'><CAvatar size='small'></CAvatar><Text>电竞</Text></View>
+          </CCard>
+          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/6ea73555dbd407472ccd3762fe6019d6.jpeg'>
+            <View className='avatar'><CAvatar size='small'></CAvatar><Text>射箭</Text></View>
+          </CCard>
+          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/60e67392224b03e76993802cf423da2d.jpeg'>
+            <View className='avatar'><CAvatar size='small'></CAvatar><Text>电影</Text></View>
           </CCard>
         </CScrollArea>
         <CContent title="欢迎光临" second="轰趴馆">
           开业大酬宾活动火热进行中，详情请联系管家
+        </CContent>
+        <CContent title="周末还宅在家里吗？" second="轰趴馆" cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>
+          快邀上好友来龙岸嗨翻天吧
+        </CContent>
+        <CContent title="周末还宅在家里吗？" second="轰趴馆" cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>
+          快邀上好友来龙岸嗨翻天吧
         </CContent>
         <View></View>
       </View>
