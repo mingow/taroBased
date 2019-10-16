@@ -26,15 +26,7 @@ export default class CWebview extends Component {
 
   render () {
     return (
-      <WebView src = {this.props.src} binderror = {this.error.bind(this)}></WebView>
+      <WebView src = {this.state.src} binderror = {this.error.bind(this)}></WebView>
     )
   }
-}
-
-CWebview.defaultProps={
-  src:''
-}
-
-CWebview.propTypes={
-  src:PropTypes.string
 }

@@ -16,7 +16,10 @@ export default class Index extends Component {
     navigationBarTitleText: '首页',
     backgroundColor:'#242a38',
     backgroundColorTop:'#242a38',
-    backgroundColorBottom:'#242a38'
+    backgroundColorBottom:'#242a38',
+    usingComponents: {
+      'mp-tabbar': './../../custom-tab-bar/index' // 书写第三方组件的相对路径
+    }
   }
 
   componentWillMount () { }
@@ -53,6 +56,7 @@ export default class Index extends Component {
             <View className='avatar'><CAvatar size='small'></CAvatar><Text>电影</Text></View>
           </CCard>
         </CScrollArea>
+        <View className='title'><Text>活动</Text></View>
         <CContent title="欢迎光临" second="轰趴馆">
           开业大酬宾活动火热进行中，详情请联系管家
         </CContent>
@@ -62,7 +66,10 @@ export default class Index extends Component {
         <CContent title="周末还宅在家里吗？" second="轰趴馆" cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>
           快邀上好友来龙岸嗨翻天吧
         </CContent>
-        <View></View>
+        <View className='margin'>
+          <AtButton type='primary' openType='contact'>联系客服</AtButton>
+        </View>
+
       </View>
     )
   }

@@ -12,7 +12,7 @@ export default class CContent extends Component {
     super(props)
     this.state = {
       context: {},
-      src:''
+      img:''
     }
   }
 
@@ -26,7 +26,7 @@ export default class CContent extends Component {
       }).then(res => {
         console.log(res.fileList[0].tempFileURL)
         if(res.fileList[0].tempFileURL){
-          own.setState({src:res.fileList[0].tempFileURL})
+          own.setState({img:res.fileList[0].tempFileURL})
         }
       }).catch(error => {
         // handle error
@@ -63,8 +63,8 @@ export default class CContent extends Component {
 
     return (
       <View className='area grid' onClick={this.naviTo.bind(this)}>
-        {!this.state.src?'':<View className='thumb'>
-          <Image mode='aspectFill' className='pic' src={this.state.src}></Image>
+        {!this.state.img?'':<View className='thumb'>
+          <Image mode='aspectFill' className='pic' src={this.state.img}></Image>
         </View>}
 
         <View className='header'>
