@@ -56,7 +56,7 @@ export default class Index extends Component {
         <CContent title="欢迎光临" second="轰趴馆">
           开业大酬宾活动火热进行中，详情请联系管家
         </CContent>
-        <CContent title="周末还宅在家里吗？" second="轰趴馆" cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>
+        <CContent title="周末还宅在家里吗？" second="轰趴馆" src='https://mp.weixin.qq.com/s/IkmaHpNddqf12YeLP4iB4g' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>
           快邀上好友来龙岸嗨翻天吧
         </CContent>
         <CContent title="周末还宅在家里吗？" second="轰趴馆" cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/IMG_0213.JPG'>

@@ -44,12 +44,25 @@ export default class CContent extends Component {
 
   componentDidHide() {}
 
+  naviTo() {
+    console.log(this.props.src)
+    var own = this;
+    if(this.props.src){
+      Taro.navigateTo({
+        url:'/pages/webview/index?src='+this.props.src,
+        success: function(res) {
+          // 通过eventChannel向被打开页面传送数据
+          res.eventChannel.emit('sendData', { src: own.props.src })
+        }
+      })
+    }
+  }
 
   render() {
     const { title, second } = this.props
 
     return (
-      <View className='area grid'>
+      <View className='area grid' onClick={this.naviTo.bind(this)}>
         {!this.state.src?'':<View className='thumb'>
           <Image mode='aspectFill' className='pic' src={this.state.src}></Image>
         </View>}
@@ -74,6 +87,7 @@ CContent.defaultProps = {
   size: 'normal',
   title:'undefined',
   second:'second',
+  src:'',
   thumb:'',
   type: '',
   circle: false,
@@ -87,6 +101,7 @@ CContent.defaultProps = {
 
 CContent.propTypes = {
   title: PropTypes.string,
+  src: PropTypes.string,
   second: PropTypes.string,
   thumb: PropTypes.string,
   cloudId: PropTypes.string,
