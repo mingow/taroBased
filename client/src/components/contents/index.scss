@@ -3,8 +3,9 @@
 .grid {
   border-radius: 12rpx;
   overflow: hidden;
-  box-shadow: 0 0 30rpx rgba(#000000, 0.7);
+  box-shadow: 0 0 20rpx $shadow-color;
   margin: 20rpx;
+  background-color: $panel-bg;
 }
 
 .image {
@@ -52,7 +53,8 @@
   }
   .primary {
     font-size: 36rpx;
-    color:#fff;
+    color:$text-main;
+    font-weight: bold;
   }
   .second {
     font-size: 24rpx;
@@ -64,7 +66,7 @@
 }
 .body {
   margin:30rpx;
-  color:#d1d1d1;
+  color:lighten($text-main,10%);
   font-size: 28rpx;
 }
 .pic {

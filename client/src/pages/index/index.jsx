@@ -14,9 +14,9 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '首页',
-    backgroundColor:'#242a38',
-    backgroundColorTop:'#242a38',
-    backgroundColorBottom:'#242a38',
+    backgroundColor:'#f5f5f6',
+    backgroundColorTop:'#f5f5f6',
+    backgroundColorBottom:'#f5f5f6',
     usingComponents: {
       'mp-tabbar': './../../custom-tab-bar/index' // 书写第三方组件的相对路径
     }
@@ -36,7 +36,7 @@ export default class Index extends Component {
     return (
       <View className='index'>
         <View className='1px'></View>
-        <CScrollArea>
+        <CScrollArea className='scroll'>
           <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/e35328563ec1a76207e7ffd0340db7ba.png'>
             <View className='avatar'><CAvatar size='small'></CAvatar><Text>桌游</Text></View>
           </CCard>

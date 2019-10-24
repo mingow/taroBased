@@ -17,6 +17,7 @@ class App extends Component {
   config = {
     pages: [
       'pages/index/index',
+      'pages/member/index',
       'pages/webview/index'
     ],
     tabBar: {
@@ -24,7 +25,7 @@ class App extends Component {
       color: '#7A7E83',
       selectedColor: '#f66e62',
       borderStyle: 'black',
-      backgroundColor: '#242a38',
+      backgroundColor: '#f5f5f6',
       list: [
         {
           pagePath: 'pages/index/index',
@@ -45,7 +46,7 @@ class App extends Component {
           text: "留言"
         },
         {
-          pagePath: "pages/index/index",
+          pagePath: "pages/member/index",
           iconPath: "assets/images/user.png",
           selectedIconPath: "assets/images/user-fill.png",
           text: "会员"
@@ -53,10 +54,10 @@ class App extends Component {
       ]
     },
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#242a38',
+      backgroundTextStyle: 'dark',
+      navigationBarBackgroundColor: '#f5f5f6',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'white'
+      navigationBarTextStyle: 'black'
     },
     cloud: true
   }
