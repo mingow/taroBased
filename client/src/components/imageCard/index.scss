@@ -3,9 +3,9 @@
 .grid {
   border-radius: 12rpx;
   overflow: hidden;
-  height: 350rpx;
-  width:250rpx;
-  box-shadow: 0 0 30rpx darken($shadow-color,15%); 
+  height: 300rpx;
+  width:300rpx;
+  box-shadow: 0 0 15rpx darken($shadow-color,15%);
   margin: 30rpx 20rpx;
   background: darken($img-blank,70%);
 }
@@ -19,6 +19,16 @@
   position: relative;
   bottom:10rpx;
   left:10rpx;
+}
+
+.picArea {
+  height:60%;
+}
+
+.textArea {
+  background-color: #fff;
+  height:40%;
+  padding:30rpx;
 }
 
 .alt {

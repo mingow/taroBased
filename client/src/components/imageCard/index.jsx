@@ -84,9 +84,12 @@ export default class CCard extends Component {
 
     return (
       <View onClick={this.handleClick} className={rootClass}>
-
-        <Image className='image' mode='aspectFill' src = {this.state.src}></Image>
-        {this.props.children}
+        <View className='picArea'>
+          <Image className='image' mode='aspectFill' src = {this.state.src}></Image>
+        </View>
+        <View className='textArea'>
+          {this.props.children}
+        </View>
         <Text className='alt'style={this.state.src==''?'':'display:none'}>Loading</Text>
       </View>
     )

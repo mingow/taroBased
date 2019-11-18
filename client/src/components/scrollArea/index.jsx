@@ -67,7 +67,6 @@ export default class CScrollArea extends Component {
 
     return (
       <View className='area' >
-        <View className='title'><Text>发现</Text><View className='more'><Button className='btn'>more</Button></View></View>
         <View className='content'>{this.props.children}</View>
 
       </View>
