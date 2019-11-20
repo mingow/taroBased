@@ -53,18 +53,8 @@ export default class CScrollArea extends Component {
     var own = this;
     const rootClass = classNames(
       'grid',
-      {
-        'at-card--full': isFull
-      },
       this.props.className
     )
-
-    const iconClass = classNames({
-      'at-icon': true,
-      [`at-icon-${icon && icon.value}`]: icon && icon.value,
-      'at-card__header-icon': true,
-    })
-
     return (
       <View className='area' >
         <View className='content'>{this.props.children}</View>

@@ -1,0 +1,37 @@
+@import './../../app';
+
+.index {
+  // height:400px;
+  background-color: #f5f5f6;
+  padding: 10rpx 0;
+}
+.glow {
+  box-shadow: 0 0 20px $color-brand;
+}
+.avatar {
+  position: relative;
+  bottom:84rpx;
+  left:16rpx;
+  c-avatar {
+    display: inline-block;
+  }
+  text {
+    display: inline-block;
+    position: relative;
+    bottom: 20rpx;
+    left: 10rpx;
+    color: $text-main;
+    font-size: 20rpx;
+  }
+}
+.1px{
+  display: block;
+  width:200%;
+  border-radius: 50%;
+
+}
+
+.test-h {
+  height:100vw;
+  width:100vw;
+}

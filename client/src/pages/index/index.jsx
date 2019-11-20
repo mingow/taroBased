@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
 import { AtButton,AtIcon,AtBadge,AtCard } from 'taro-ui'
@@ -10,6 +10,7 @@ import CScrollArea from '../../components/scrollArea/index'
 import CAvatar from '../../components/avatar/index'
 import CContent from '../../components/contents/index'
 import Cbutton from '../../components/button/index'
+import CloudImage from '../../components/imageFromCloud/index'
 
 export default class Index extends Component {
 
@@ -42,7 +43,7 @@ export default class Index extends Component {
           <Cbutton circle type='secondary'>立即预定</Cbutton>
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
-        <CScrollArea className='scroll'>
+        <CScrollArea>
           <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/e35328563ec1a76207e7ffd0340db7ba.png'>
             <View className='avatar'><Text>桌游</Text></View>
           </CCard>
@@ -63,6 +64,22 @@ export default class Index extends Component {
           </CCard>
         </CScrollArea>
         <View className='title'><Text className='primary'>优惠</Text><Text className='second'>疯狂折扣，回血双十一</Text></View>
+        <Swiper
+          className='test-h'
+          indicatorColor='#999'
+          indicatorActiveColor='#333'
+          circular
+          autoplay>
+          <SwiperItem>
+            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+          </SwiperItem>
+          <SwiperItem>
+            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+          </SwiperItem>
+          <SwiperItem>
+            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+          </SwiperItem>
+        </Swiper>
         <View className='title'><Text className='primary'>活动</Text><Text className='second'>精彩活动，嗨翻全场</Text></View>
         <CContent title="欢迎光临" second="轰趴馆">
           开业大酬宾活动火热进行中，详情请联系管家

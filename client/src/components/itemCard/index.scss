@@ -1,0 +1,86 @@
+@import './../../app';
+
+.grid {
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 0 20rpx $shadow-color;
+  margin: 20rpx;
+  background-color: $panel-bg;
+}
+
+.image {
+  width:100%;
+  height:100%;
+}
+
+.avatar {
+  position: relative;
+  bottom:10rpx;
+  left:10rpx;
+}
+
+.alt {
+  position:relative;
+  display:block;
+  bottom: 300rpx;
+  left: 80rpx;
+  color:#9a9a9a;
+  font-size: 24rpx;
+}
+
+.img {
+  height:96rpx;
+  width:96rpx;
+  border-radius: 48rpx;
+  display: block;
+  background-color: $color-brand;
+  float:left;
+}
+
+.header {
+  // margin:30rpx;
+}
+.header::after {
+  clear:both;
+}
+.text {
+  display: inline-block;
+  float:left;
+  margin:20rpx 0;
+  text{
+    display:block;
+    font-size:24rpx;
+    margin:6rpx 20rpx;
+  }
+  .primary {
+    font-size: 24rpx;
+    color:$text-main;
+    // font-weight: bold;
+  }
+  .second {
+    font-size: 24rpx;
+    color:lighten($text-main,50%);
+  }
+  .price {
+    display: inline;
+    color:#f00;
+    font-weight: bold;
+  }
+  .oriPrice {
+    display: inline;
+    text-decoration:line-through;
+    color:#666;
+  }
+}
+.clear {
+  clear:both;
+}
+.body {
+  margin:30rpx;
+  color:lighten($text-main,10%);
+  font-size: 28rpx;
+}
+.pic {
+  width:100%;
+  height:400rpx;
+}

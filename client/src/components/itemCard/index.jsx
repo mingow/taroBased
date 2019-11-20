@@ -7,28 +7,12 @@ import './index.scss'
 
 import CAvatar from '../../components/avatar/index'
 
-const SIZE_CLASS = {
-  normal: 'normal',
-  small: 'small',
-}
-
-const TYPE_CLASS = {
-  primary: 'primary',
-  secondary: 'secondary',
-}
-
-export default class CCard extends Component {
+export default class ItemCard extends Component {
   constructor (props) {
     super(props)
     this.state = {
       context: {},
-      src:''
-    }
-  }
-
-  handleClick = (...args) => {
-    if (_isFunction(this.props.onClick)) {
-      this.props.onClick(...args)
+      img:''
     }
   }
 
@@ -42,7 +26,7 @@ export default class CCard extends Component {
       }).then(res => {
         console.log(res.fileList[0].tempFileURL)
         if(res.fileList[0].tempFileURL){
-          own.setState({src:res.fileList[0].tempFileURL})
+          own.setState({img:res.fileList[0].tempFileURL})
         }
       }).catch(error => {
         // handle error
@@ -60,36 +44,49 @@ export default class CCard extends Component {
 
   componentDidHide() {}
 
-  onClick () {
-    if (!this.props.disabled) {
-      this.props.onClick && this.props.onClick(...arguments)
+  naviTo() {
+    console.log(this.props.src)
+    var own = this;
+    if(this.props.src){
+      Taro.navigateTo({
+        url:'/pages/item/index?src='+this.props.src,
+        success: function(res) {
+          // 通过eventChannel向被打开页面传送数据
+          res.eventChannel.emit('sendData', { src: own.props.src })
+        }
+      })
     }
   }
 
   render() {
-    const { title, note, extra, thumb, isFull, icon } = this.props
-    const rootClass = classNames(
-      'grid',
-      this.props.className
-    )
+    const { title, second } = this.props
 
     return (
-      <View onClick={this.handleClick} className={rootClass}>
-        <View className='picArea'>
-          <Image className='image' mode='aspectFill' src = {this.state.src}></Image>
+      <View className='area grid' onClick={this.naviTo.bind(this)}>
+        {!this.state.img?'':<View className='thumb'>
+          <Image mode='aspectFill' className='pic' src={this.state.img}></Image>
+        </View>}
+
+        <View className='header'>
+          <View className='text'>
+            <Text className='primary'>{this.props.title}</Text>
+            <Text className='second'>{this.props.second}</Text>
+            <Text className='price'>¥3999起</Text>
+            <Text className='oriPrice'>¥5200</Text>
+          </View>
         </View>
-        <View className='textArea'>
-          {this.props.children}
-        </View>
-        // <Text className='alt'style={this.state.src==''?'':'display:none'}>Loading</Text>
+        <View className='clear'></View>
       </View>
     )
   }
 }
 
-CCard.defaultProps = {
+ItemCard.defaultProps = {
   size: 'normal',
-  title:'',
+  title:'undefined',
+  second:'second',
+  src:'',
+  thumb:'',
   type: '',
   circle: false,
   full: false,
@@ -100,8 +97,11 @@ CCard.defaultProps = {
   onClick: () => {}
 }
 
-CCard.propTypes = {
+ItemCard.propTypes = {
   title: PropTypes.string,
+  src: PropTypes.string,
+  second: PropTypes.string,
+  thumb: PropTypes.string,
   cloudId: PropTypes.string,
   size: PropTypes.oneOf(['normal', 'small']),
   type: PropTypes.oneOf(['primary', 'secondary', '']),

@@ -2,7 +2,7 @@
 
 .index {
   // height:400px;
-  background-color: #f5f5f6;
+  background-color: #fff;
 }
 .avatar-info {
   width:100%;
@@ -23,4 +23,16 @@
 
 .test-h{
   height:300rpx;
+}
+
+.footer {
+  background-color: #eee;
+  padding:30rpx;
+  text {
+    font-size: 24rpx;
+    display: block;
+    text-align: center;
+    color:#666;
+    width:100%;
+  }
 }

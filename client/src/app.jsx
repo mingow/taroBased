@@ -19,7 +19,8 @@ class App extends Component {
       'pages/index/index',
       'pages/member/index',
       'pages/booking/index',
-      'pages/webview/index'
+      'pages/webview/index',
+      'pages/item/index'
     ],
     tabBar: {
       // custom: true,
