@@ -14,7 +14,7 @@ import Cbutton from '../../components/button/index'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '首页',
+    navigationBarTitleText: 'Homiez欢乐轰趴',
     backgroundColor:'#ffffff',
     backgroundColorTop:'#ffffff',
     backgroundColorBottom:'#ffffff',
@@ -38,7 +38,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='1px'></View>
         <View className='header margin'>
-          <Text>欢迎光临</Text>
+          <Text>HOMIEZ欢迎你</Text>
           <Cbutton circle type='secondary'>立即预定</Cbutton>
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
@@ -62,7 +62,8 @@ export default class Index extends Component {
             <View className='avatar'><Text>电影</Text></View>
           </CCard>
         </CScrollArea>
-        <View className='title'><Text>活动</Text></View>
+        <View className='title'><Text className='primary'>优惠</Text><Text className='second'>疯狂折扣，回血双十一</Text></View>
+        <View className='title'><Text className='primary'>活动</Text><Text className='second'>精彩活动，嗨翻全场</Text></View>
         <CContent title="欢迎光临" second="轰趴馆">
           开业大酬宾活动火热进行中，详情请联系管家
         </CContent>

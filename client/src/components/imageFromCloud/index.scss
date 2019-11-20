@@ -1,0 +1,46 @@
+@import './../../app';
+
+.grid {
+  border-radius: 12rpx;
+  overflow: hidden;
+  height: 300rpx;
+  width:300rpx;
+  box-shadow: 0 0 15rpx darken($shadow-color,15%);
+  margin: 30rpx 20rpx;
+  background: darken($img-blank,70%);
+}
+
+.root {
+  width: 100%;
+  height:100%;
+}
+
+.image {
+  width:100%;
+  height:100%;
+}
+
+.avatar {
+  position: relative;
+  bottom:10rpx;
+  left:10rpx;
+}
+
+.picArea {
+  height:60%;
+}
+
+.textArea {
+  background-color: #fff;
+  height:40%;
+  padding:30rpx;
+}
+
+.alt {
+  position:relative;
+  display:block;
+  bottom: 300rpx;
+  left: 80rpx;
+  color:#9a9a9a;
+  font-size: 24rpx;
+}

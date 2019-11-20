@@ -18,12 +18,13 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/member/index',
+      'pages/booking/index',
       'pages/webview/index'
     ],
     tabBar: {
       // custom: true,
       color: '#7A7E83',
-      selectedColor: '#f66e62',
+      selectedColor: '#2CD18A',
       borderStyle: 'black',
       backgroundColor: '#f5f5f6',
       list: [
@@ -34,10 +35,10 @@ class App extends Component {
           text: "首页"
         },
         {
-          pagePath: "pages/index/index",
-          iconPath: "assets/images/bell.png",
-          selectedIconPath: "assets/images/bell-fill.png",
-          text: "通知"
+          pagePath: "pages/booking/index",
+          iconPath: "assets/images/carry out.png",
+          selectedIconPath: "assets/images/carry out-fill.png",
+          text: "订场"
         },
         {
           pagePath: "pages/index/index",

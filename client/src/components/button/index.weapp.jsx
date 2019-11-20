@@ -51,7 +51,7 @@ export default class CButton extends Component {
       customStyle
     } = this.props
 
-    const rootClassName = ['at-button']
+    const rootClassName = ['at-button','base','glow']
 
     const classObject = {
       [`at-button--${SIZE_CLASS[size]}`]: SIZE_CLASS[size],
@@ -59,6 +59,7 @@ export default class CButton extends Component {
       [`at-button--${type}`]: TYPE_CLASS[type],
       'at-button--circle': circle,
       'at-button--full': full,
+
     }
 
     console.log(classObject);
