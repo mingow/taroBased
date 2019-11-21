@@ -35,3 +35,66 @@
   height:100vw;
   width:100vw;
 }
+.header {
+  text {
+    display: block;
+    line-height: 36rpx;
+  }
+  padding:25rpx;
+  font-size: 24rpx;
+  .primary {
+    font-weight: bold;
+  }
+}
+.bottom {
+  position: fixed;
+  height:100rpx;
+  width:100%;
+  background-color: #f2f2f2;
+  border-top: 1px solid #ccc;
+  bottom:0;
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+  .grid {
+    display: inline-block;
+    height: 100rpx;
+  }
+  .left{
+    width:50%;
+    display: flex;
+    justify-content: center;
+  }
+  .right {
+    right:0;
+    background-color: $color-brand;
+    position: fixed;
+    margin-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+    margin-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+    bottom: 0;
+    width:50%;
+    text{
+      display: inline-block;
+      width:100%;
+      text-align: center;
+      line-height: 100rpx;
+      font-size: 28rpx;
+      font-weight: bold;
+    }
+  }
+}
+
+.iButton{
+  width:100rpx;
+  height:100rpx;
+  padding:10rpx 0;
+  display: inline-block;
+  text{
+    display: block;
+    font-size: 18rpx;
+    text-align: center;
+    color:#666;
+  }
+  view{
+    margin: 0 auto;
+  }
+}

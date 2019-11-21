@@ -39,7 +39,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='1px'></View>
         <View className='header margin'>
-          <Text>HOMIEZ欢迎你</Text>
+          <Text>Homiez欢迎你</Text>
           <Cbutton circle type='secondary'>立即预定</Cbutton>
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
