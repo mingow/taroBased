@@ -46,6 +46,27 @@
     font-weight: bold;
   }
 }
+.img {
+  height:120rpx;
+  width:120rpx;
+}
+
+.layer{
+  .header{
+    font-size: 24rpx;
+    line-height: 48rpx;
+    display: block;
+    padding:24rpx 0;
+  }
+  .disc{
+    margin:0 20rpx;
+  }
+}
+
+.tag {
+  margin:10rpx 20rpx 10rpx 0;
+}
+
 .bottom {
   position: fixed;
   height:100rpx;
@@ -97,4 +118,9 @@
   view{
     margin: 0 auto;
   }
+}
+
+.at-tag--active.at-tag--primary{
+  border-color: $color-brand!important;
+  background-color: $color-brand!important;
 }
