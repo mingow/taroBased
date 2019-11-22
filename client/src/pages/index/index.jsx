@@ -18,10 +18,7 @@ export default class Index extends Component {
     navigationBarTitleText: 'Homiez欢乐轰趴',
     backgroundColor:'#ffffff',
     backgroundColorTop:'#ffffff',
-    backgroundColorBottom:'#ffffff',
-    usingComponents: {
-      'mp-tabbar': './../../custom-tab-bar/index' // 书写第三方组件的相对路径
-    }
+    backgroundColorBottom:'#ffffff'
   }
 
   componentWillMount () { }

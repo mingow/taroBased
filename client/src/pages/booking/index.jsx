@@ -18,9 +18,6 @@ export default class Index extends Component {
 
     backgroundColorTop:'#fff',
     backgroundColorBottom:'#fff',
-    usingComponents: {
-      'mp-tabbar': './../../custom-tab-bar/index' // 书写第三方组件的相对路径
-    }
   }
 
   componentWillMount () { }

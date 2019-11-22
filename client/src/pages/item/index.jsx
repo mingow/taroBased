@@ -28,10 +28,12 @@ export default class Index extends Component {
         price:'',
         oriPrice:'',
         intro:[
-          '【场地空间】400平天地4层超大面积，100平湖畔花园鸟语花香',
+          '【场地空间】400平米天地4层超大面积，100平米湖畔花园鸟语花香',
           '【娱乐设施】',
-          '【五黑房】超强吃机主机配34寸曲面显示器',
-          '【KTV】20平超大练歌房',
+          '【五黑房】超强吃机主机配34寸曲面显示器，祝你大吉大利',
+          '【KTV】20平米海量曲库超大练歌房，让你想唱就唱',
+          '【电影房】高清投影巨幅荧幕，让你身临其境',
+          '【桌游】玉女烈白混，谁水谁先die'
         ]
       },
       static:{
@@ -154,6 +156,9 @@ export default class Index extends Component {
         </View>
         <View className='contents'>
           {content}
+        </View>
+        <View>
+          <WebView src = 'https://mp.weixin.qq.com/s/MYfcxgegSKjch2DMBcBZbw' binderror = {this.error.bind(this)}></WebView>
         </View>
         {/* 以下部分是底部菜单栏 */}
         <View className='bottom at-row safeArea'>

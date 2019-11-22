@@ -18,10 +18,7 @@ export default class Index extends Component {
     navigationBarTextStyle: 'white',
     backgroundColor:'#f5f5f6',
     backgroundColorTop:'#2CD18A',
-    backgroundColorBottom:'#f5f5f6',
-    usingComponents: {
-      'mp-tabbar': './../../custom-tab-bar/index' // 书写第三方组件的相对路径
-    }
+    backgroundColorBottom:'#f5f5f6'
   }
 
   componentWillMount () { }
