@@ -2,8 +2,8 @@
 
 .index {
   // height:400px;
-  background-color: #f5f5f6;
-  padding: 10rpx 0;
+  background-color: #eee;
+  // padding: 10rpx 0;
 }
 .glow {
   box-shadow: 0 0 20px $color-brand;
@@ -24,6 +24,13 @@
     font-size: 20rpx;
   }
 }
+
+.priceSession{
+  text-align: right;
+  font-size: 36rpx;
+  padding:12rpx 0;
+}
+
 .1px{
   display: block;
   width:200%;
@@ -40,6 +47,7 @@
     display: block;
     line-height: 36rpx;
   }
+  background-color: #fff;
   padding:25rpx;
   font-size: 24rpx;
   .primary {
@@ -51,6 +59,16 @@
   width:120rpx;
 }
 
+.safeArea {
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+}
+
+.scroll{
+  height:500rpx;
+  overflow: scroll;
+}
+
 .layer{
   .header{
     font-size: 24rpx;
@@ -60,11 +78,24 @@
   }
   .disc{
     margin:0 20rpx;
+    text{
+      display: block;
+    }
+    .small{
+      font-size: 20rpx;
+      margin:5rpx 0;
+    }
   }
 }
 
 .tag {
   margin:10rpx 20rpx 10rpx 0;
+}
+
+.contents{
+  margin:20rpx 0;
+  padding:10rpx 20rpx;
+  background-color: #fff;
 }
 
 .bottom {
@@ -74,8 +105,6 @@
   background-color: #f2f2f2;
   border-top: 1px solid #ccc;
   bottom:0;
-  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
-  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
   .grid {
     display: inline-block;
     height: 100rpx;
@@ -89,9 +118,7 @@
     right:0;
     background-color: $color-brand;
     position: fixed;
-    margin-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
-    margin-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
-    bottom: 0;
+    // bottom: 0;
     width:50%;
     text{
       display: inline-block;
@@ -102,6 +129,11 @@
       font-weight: bold;
     }
   }
+}
+
+.article_p {
+  font-size: 24rpx;
+  margin:0;
 }
 
 .iButton{

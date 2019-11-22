@@ -39,7 +39,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='1px'></View>
         <View className='header margin'>
-          <Text>Homiez欢迎你</Text>
+          <Text>Homie欢迎你</Text>
           <Cbutton circle type='secondary'>立即预定</Cbutton>
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
@@ -74,10 +74,10 @@ export default class Index extends Component {
             <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
           </SwiperItem>
           <SwiperItem>
-            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales01.jpg' ></CloudImage>
           </SwiperItem>
           <SwiperItem>
-            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales02.jpg' ></CloudImage>
           </SwiperItem>
         </Swiper>
         <View className='title'><Text className='primary'>活动</Text><Text className='second'>精彩活动，嗨翻全场</Text></View>
