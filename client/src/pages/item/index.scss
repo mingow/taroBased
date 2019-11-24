@@ -1,7 +1,7 @@
 @import './../../app';
 
 .index {
-  // height:400px;
+  padding-bottom: 100rpx;
   background-color: #eee;
   // padding: 10rpx 0;
 }
@@ -64,6 +64,11 @@
   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
 }
 
+.safeAreaM {
+  margin-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  margin-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+}
+
 .scroll{
   height:500rpx;
   overflow: scroll;
@@ -96,6 +101,13 @@
   margin:20rpx 0;
   padding:10rpx 20rpx;
   background-color: #fff;
+  text{
+    font-size: 28rpx;
+    text-align: center;
+    line-height: 60rpx;
+    display: block;
+    margin-bottom: 30rpx;
+  }
 }
 
 .bottom {
