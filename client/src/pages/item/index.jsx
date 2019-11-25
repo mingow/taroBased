@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { ScrollView,View, Text,WebView,Swiper, SwiperItem,CoverView  } from '@tarojs/components'
 import PropTypes from 'prop-types'
 import CloudImage from '../../components/imageFromCloud/index'
-import { AtButton,AtIcon,AtFloatLayout,AtCalendar,AtTag,AtDivider,AtMessage } from 'taro-ui'
+import { AtButton,AtIcon,AtFloatLayout,AtCalendar,AtTag,AtDivider,AtMessage,AtToast  } from 'taro-ui'
 
 export default class Index extends Component {
 
@@ -19,6 +19,8 @@ export default class Index extends Component {
       src: '',
       width:0,
       buy:false,
+      loading:'确认日期中',
+      loadingToast:false,
       session:'',
       date:'',
       currentDate:new Date(new Date()-3600*24*1000),
@@ -115,6 +117,58 @@ export default class Index extends Component {
         res.eventChannel.emit('sendData', {})
       }
     })
+  }
+  //提交订单信息验证
+  submit(){
+
+    const me = this;
+    const data = {
+      session:this.state.session,
+      date:this.state.date
+    }
+
+    wx.authorize({
+      scope:'scope.userInfo',
+      success: function() {
+        //授权成功，检查订单时间有效性
+        this.setState({loadingToast:true});
+        wx.cloud.callFunction({
+          // 云函数名称
+          name: 'checkSessionAvailable',
+          // 传给云函数的参数
+          data: data,
+          success: function(res) {
+            me.setState({loadingToast:false});
+            if(res.result){
+              if(res.result.available&&res.result.data.session==me.state.session&&res.result.data.date==me.state.date){
+                //me.setState({price:res.result.price})
+                Taro.atMessage({
+                  'message': '订单已生成',
+                  'type': 'success',
+                })
+
+              }
+            }
+          },
+          fail: function() {
+            me.setState({loadingToast:false});
+            Taro.atMessage({
+              'message': '订单无效，请重新选择时间和场次',
+              'type': 'error',
+            })
+          }
+        });
+      },
+      failure:function(){
+        me.setState({loadingToast:false});
+        Taro.atMessage({
+          'message': '为获取用户授权，无法生成订单',
+          'type': 'error',
+        })
+      }
+    })
+
+
   }
 
   checkAvailable(){
@@ -258,9 +312,10 @@ export default class Index extends Component {
             <AtCalendar onSelectDate={this.changeDate.bind(this)} Swiper="{false}" minDate={this.state.currentDate} />
           </ScrollView>
 
-          <AtButton type='primary' disabled={!this.state.price} >立即预定</AtButton>
+          <AtButton onClick={this.submit.bind(this)} type='primary' disabled={!this.state.price} >立即预定</AtButton>
           <View className='safeArea'></View>
         </AtFloatLayout>
+        <AtToast isOpened={this.state.loadingToast} text={this.state.loading} status='loading'></AtToast>
       </View>
 
     )
