@@ -92,7 +92,7 @@ export default class Index extends Component {
   changeDate(e) {
     this.setState({date:e.value.start},this.pushInfo);
   }
-
+  //弹出通知条，获取价格
   pushInfo() {
     if(this.state.session&&this.state.date){
       this.checkAvailable();
@@ -102,14 +102,13 @@ export default class Index extends Component {
       })
     }
   }
-
+  //更改场次
   changeTag(e) {
     this.setState({session:e.name},this.pushInfo);
 
   }
-
+  //跳转公众号文章介绍店铺详情
   more() {
-    console.log('success')
     Taro.navigateTo({
       url:'/pages/webview/index?src='+this.state.data.more,
       success: function(res) {
@@ -119,56 +118,45 @@ export default class Index extends Component {
     })
   }
   //提交订单信息验证
-  submit(){
-
+  submit(info){
     const me = this;
+    //生成参数
     const data = {
       session:this.state.session,
       date:this.state.date
     }
+    this.setState({loadingToast:true});
 
-    wx.authorize({
-      scope:'scope.userInfo',
-      success: function() {
-        //授权成功，检查订单时间有效性
-        this.setState({loadingToast:true});
-        wx.cloud.callFunction({
-          // 云函数名称
-          name: 'checkSessionAvailable',
-          // 传给云函数的参数
-          data: data,
-          success: function(res) {
-            me.setState({loadingToast:false});
-            if(res.result){
-              if(res.result.available&&res.result.data.session==me.state.session&&res.result.data.date==me.state.date){
-                //me.setState({price:res.result.price})
-                Taro.atMessage({
-                  'message': '订单已生成',
-                  'type': 'success',
-                })
-
-              }
-            }
-          },
-          fail: function() {
-            me.setState({loadingToast:false});
-            Taro.atMessage({
-              'message': '订单无效，请重新选择时间和场次',
-              'type': 'error',
-            })
-          }
-        });
+    wx.cloud.callFunction({
+      name:'preOrderRequest',
+      data:data,
+      success:function(res){
+        var msg = {
+          message: '',
+          type: 'error',
+        }
+        switch (res.result.errMsg) {
+          case 'repeat':
+            msg.message='订单已生成，请不要重复提交，请到个人页面查看';
+            break;
+          case 'occupy':
+            msg.message='场次已被他人抢定，请重新选择时间和场次';
+            break;
+          default:
+            msg.message='场次已确认';
+            break;
+        }
+        Taro.atMessage(msg)
+        me.setState({loadingToast:false});
       },
-      failure:function(){
+      fail:function(){
         me.setState({loadingToast:false});
         Taro.atMessage({
-          'message': '为获取用户授权，无法生成订单',
+          'message': '预定失败，可能是网络原因，请重试',
           'type': 'error',
         })
       }
     })
-
-
   }
 
   checkAvailable(){
@@ -315,7 +303,7 @@ export default class Index extends Component {
           <AtButton onClick={this.submit.bind(this)} type='primary' disabled={!this.state.price} >立即预定</AtButton>
           <View className='safeArea'></View>
         </AtFloatLayout>
-        <AtToast isOpened={this.state.loadingToast} text={this.state.loading} status='loading'></AtToast>
+        <AtToast hasMask={true} duration={0} isOpened={this.state.loadingToast} text={this.state.loading} status='loading'></AtToast>
       </View>
 
     )
