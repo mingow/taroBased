@@ -21,6 +21,7 @@ export default class Index extends Component {
       buy:false,
       session:'',
       date:'',
+      currentDate:new Date(new Date()-3600*24*1000),
       price:'',
       data:{
         name:'Homie欢乐轰趴·龙岸花园店',
@@ -56,7 +57,29 @@ export default class Index extends Component {
     //导航返回
   }
 
+  getCurrentDate(){
+    const me = this;
+    wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getCurrentDate',
+      // 传给云函数的参数
+      success: function(res) {
+        if(res.result){
+          //向前倒数一天
+          const current = new Date(res.result.parse-3600*24*1000);
+          me.setState({currentDate:current});
+          console.log('getCurrentDate success!');
+        }
+      },
+      fail: function() {
+        console.error('getCurrentDate error!');
+      }
+    });
+  }
+
+  //打开浮动层，进行预定
   openFloatLayer() {
+    this.getCurrentDate();
     this.setState({buy:true});
   }
 
@@ -128,6 +151,7 @@ export default class Index extends Component {
   }
 
   componentWillMount() {
+    this.getCurrentDate();
     console.log(wx.getSystemInfoSync().windowWidth);
     this.setState({width:wx.getSystemInfoSync().windowWidth+'px'});
     if(this.$router.params.src){
@@ -231,7 +255,7 @@ export default class Index extends Component {
             <View>
               <AtDivider><Text className='header'>日期选择</Text></AtDivider>
             </View>
-            <AtCalendar onSelectDate={this.changeDate.bind(this)} Swiper="{false}" minDate={new Date(new Date()-3600*24*1000)} />
+            <AtCalendar onSelectDate={this.changeDate.bind(this)} Swiper="{false}" minDate={this.state.currentDate} />
           </ScrollView>
 
           <AtButton type='primary' disabled={!this.state.price} >立即预定</AtButton>
