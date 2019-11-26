@@ -9,14 +9,79 @@
   height:300rpx;
   background-color: $color-brand;
   box-shadow: 0 0 30rpx $shadow-color;
+  overflow: hidden;
 }
 .avatar {
   position: absolute;
   left:100rpx;
   top:75rpx;
-  width:100rpx;
-  height:100rpx;
+  width:120rpx;
+  height:120rpx;
   display:block;
   overflow:hidden;
   border-radius: 50%;
+  border:5rpx solid #fff;
+}
+
+.nickname {
+  position: absolute;
+  left:250rpx;
+  top:125rpx;
+  text-align: center;
+  font-size: 32rpx;
+}
+
+.card {
+  height:150rpx;
+  width:88%;
+  background-color: darken($color-brand,35%);
+  position: relative;
+  bottom:70rpx;
+  border-radius: 15rpx;
+  margin:0 auto;
+  box-shadow: 0 0 15rpx #000;
+  text{
+    font-size: 24rpx;
+    color:lighten($color-brand,35%);
+    display: inline-block;
+    line-height: 70rpx;
+    margin:0 20rpx;
+
+  }
+  .right{
+    float:right
+  }
+}
+.banner{
+  background-color: #fff;
+  margin:20rpx 0 ;
+  width:100%;
+  .list{
+    padding:20rpx 0;
+  }
+  .title{
+    display: inline-block;
+    padding:10rpx 20rpx;
+    width:100%;
+    border-bottom: 1px solid #eee;
+    font-size: 24rpx;
+    font-weight: bold;
+  }
+}
+
+.iButton{
+  width:25%;
+  height:100rpx;
+  display: inline-block;
+  text{
+    display: block;
+    font-weight: normal;
+    font-size: 22rpx;
+    text-align: center;
+    margin:10rpx;
+    color:#666;
+  }
+  view{
+    margin: 0 auto;
+  }
 }

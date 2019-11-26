@@ -49,6 +49,10 @@ export default class Index extends Component {
 
   }
 
+  getPhoneNum (res) {
+    console.log(res.result.cloudID)
+  }
+
   componentDidShow () { }
 
   componentDidHide () { }
@@ -57,7 +61,10 @@ export default class Index extends Component {
     return (
       <View className='index'>
         <View className='info'>
-
+          <Text>订单联系人</Text>
+          <Text>订单联系人</Text>
+          <Text>订单联系人</Text>
+          
         </View>
         <View className='footer'>
           <Text>更多分店即将到来，敬请期待...</Text>
