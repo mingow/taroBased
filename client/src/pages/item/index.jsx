@@ -25,6 +25,7 @@ export default class Index extends Component {
       date:'',
       currentDate:new Date(new Date()-3600*24*1000),
       price:'',
+      location:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd',
       data:{
         name:'Homie欢乐轰趴·龙岸花园店',
         desciption:'价格为30人标准价格，支付前请和客服确认场次信息，节假日请提前预定',
@@ -123,7 +124,8 @@ export default class Index extends Component {
     //生成参数
     const data = {
       session:this.state.session,
-      date:this.state.date
+      date:this.state.date,
+      location:this.state.location
     }
     this.setState({loadingToast:true});
 
@@ -142,8 +144,19 @@ export default class Index extends Component {
           case 'occupy':
             msg.message='场次已被他人抢定，请重新选择时间和场次';
             break;
+          case 'unfinished':
+            msg.message='您有未完成支付订单，请先支付或取消';
+            break;
           default:
             msg.message='场次已确认';
+            const id = res.result.id;
+            Taro.navigateTo({
+              url:'/pages/preOrder/index?id='+res.result.id,
+              success: function(res) {
+                // 通过eventChannel向被打开页面传送数据
+                console.log(res);
+              }
+            })
             break;
         }
         Taro.atMessage(msg)
@@ -163,7 +176,8 @@ export default class Index extends Component {
     const me = this;
     const data = {
       session:this.state.session,
-      date:this.state.date
+      date:this.state.date,
+      location:this.state.location
     }
     //清空价格，避免获取状态时触发点击
     this.setState({price:''});
