@@ -59,11 +59,15 @@
   .list{
     padding:20rpx 0;
   }
+  .header{
+    padding:10rpx 20rpx;
+    border-bottom: 1px solid #eee;
+  }
   .title{
     display: inline-block;
-    padding:10rpx 20rpx;
+    //padding:10rpx 20rpx;
     width:100%;
-    border-bottom: 1px solid #eee;
+
     font-size: 24rpx;
     font-weight: bold;
   }

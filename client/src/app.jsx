@@ -44,9 +44,9 @@ class App extends Component {
         },
         {
           pagePath: "pages/index/index",
-          iconPath: "assets/images/message.png",
-          selectedIconPath: "assets/images/message-fill.png",
-          text: "留言"
+          iconPath: "assets/images/game.png",
+          selectedIconPath: "assets/images/game-fill.png",
+          text: "游戏"
         },
         {
           pagePath: "pages/member/index",

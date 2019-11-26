@@ -40,7 +40,7 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='banner'>
-          <Text className='title'>我的订单</Text>
+          <View className='header'><Text className='title'>我的订单</Text></View>
           <View className='at-row list'>
             <View className='at-col iButton'>
               <View><AtIcon prefixClass='icon' value='daifukuan' size='24' color='#666'></AtIcon></View>
@@ -61,7 +61,7 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='banner'>
-          <Text className='title'>我的优惠</Text>
+          <View className='header'><Text className='title'>我的优惠</Text></View>
           <View className='at-row list'>
             <View className='at-col iButton'>
               <View><AtIcon prefixClass='icon' value='youhuiquan' size='24' color='#666'></AtIcon></View>
