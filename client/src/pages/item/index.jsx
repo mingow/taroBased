@@ -237,7 +237,7 @@ export default class Index extends Component {
             circular
             autoplay>
             <SwiperItem>
-              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.JPG' ></CloudImage>
+              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg' ></CloudImage>
             </SwiperItem>
             <SwiperItem>
               <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
