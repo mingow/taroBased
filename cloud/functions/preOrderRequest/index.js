@@ -32,13 +32,13 @@ exports.main = async (event) => {
         //判断查询条件，如果是全天场，当天只要有记录即不可预定
         var arr = []
         if(event.session=='all'){
-          arr.push({lcation:event.location,date:event.date,status:1});//日期相同且订单有效
-          arr.push({lcation:event.location,date:event.date,status:0,stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同，但订单仍在付款有效时间内(15min)
+          arr.push({location:event.location,date:event.date,status:1});//日期相同且订单有效
+          arr.push({location:event.location,date:event.date,status:0,stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同，但订单仍在付款有效时间内(15min)
         }else{
-          arr.push({lcation:event.location,date:event.date,status:1,session:'all'});//日期相同订单有效的全天场次
-          arr.push({lcation:event.location,date:event.date,status:1,session:event.session});//日期相同订单有效的对应场次
-          arr.push({lcation:event.location,date:event.date,status:0,session:'all',stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同订单在等待期的全天场次
-          arr.push({lcation:event.location,date:event.date,status:0,session:event.session,stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同订单在等待期的对应场次
+          arr.push({location:event.location,date:event.date,status:1,session:'all'});//日期相同订单有效的全天场次
+          arr.push({location:event.location,date:event.date,status:1,session:event.session});//日期相同订单有效的对应场次
+          arr.push({location:event.location,date:event.date,status:0,session:'all',stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同订单在等待期的全天场次
+          arr.push({location:event.location,date:event.date,status:0,session:event.session,stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同订单在等待期的对应场次
         }
         orderLst.where(_.or(arr))
         .get().then((res) => {
@@ -62,7 +62,10 @@ exports.main = async (event) => {
                 date:event.date,  //预约日期
                 session:event.session,  //预约场次
                 status:0, //订单状态
-                stamp:db.serverDate() //时间戳
+                stamp:db.serverDate(), //时间戳
+                timeline:[{status:0,stamp:db.serverDate()}],
+                shopInfo:event.shopInfo,
+                createTime:db.serverDate()
               }
             })
             .then((res) => {

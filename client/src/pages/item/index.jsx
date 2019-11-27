@@ -28,6 +28,10 @@ export default class Index extends Component {
       location:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd',
       data:{
         name:'Homie欢乐轰趴·龙岸花园店',
+        pics:[
+          'cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg',
+        ],
+        thumb:'cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg',
         desciption:'价格为30人标准价格，支付前请和客服确认场次信息，节假日请提前预定',
         price:'',
         oriPrice:'',
@@ -122,10 +126,17 @@ export default class Index extends Component {
   submit(info){
     const me = this;
     //生成参数
+
+    var shopInfo = Object.assign({},this.state.data);
+    delete shopInfo.intro;
     const data = {
       session:this.state.session,
       date:this.state.date,
-      location:this.state.location
+      location:this.state.location,
+      shopInfo:{
+        name:shopInfo.name,
+        thumb:shopInfo.thumb
+      }
     }
     this.setState({loadingToast:true});
 
@@ -177,7 +188,8 @@ export default class Index extends Component {
     const data = {
       session:this.state.session,
       date:this.state.date,
-      location:this.state.location
+      location:this.state.location,
+      shopName:this.state.data.name
     }
     //清空价格，避免获取状态时触发点击
     this.setState({price:''});
@@ -207,6 +219,7 @@ export default class Index extends Component {
   }
 
   componentWillMount() {
+
     this.getCurrentDate();
     console.log(wx.getSystemInfoSync().windowWidth);
     this.setState({width:wx.getSystemInfoSync().windowWidth+'px'});
@@ -222,8 +235,14 @@ export default class Index extends Component {
   }
 
   render () {
-    const content = this.state.data.intro.map((i,index) => {
+
+    const {data} = this.state
+
+    const content = data.intro.map((i,index) => {
       return <View key={index} className='at-article__p article_p'>{i}</View>
+    })
+    const pics = data.pics.map((i,index) => {
+      return <SwiperItem key={index}><CloudImage cloudId={i}></CloudImage></SwiperItem>
     })
     return (
       <View>
@@ -236,15 +255,7 @@ export default class Index extends Component {
             indicatorActiveColor='#333'
             circular
             autoplay>
-            <SwiperItem>
-              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg' ></CloudImage>
-            </SwiperItem>
-            <SwiperItem>
-              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
-            </SwiperItem>
-            <SwiperItem>
-              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
-            </SwiperItem>
+            {pics}
           </Swiper>
           <View className='header'>
             <Text className='primary'>{this.state.data.name}</Text>
@@ -284,7 +295,7 @@ export default class Index extends Component {
         <AtFloatLayout className='layer' isOpened={this.state.buy} onClose={this.closeFloatLayer.bind(this)}>
           <View className='at-row'>
             <View className='at-col--auto img'>
-              <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.JPG' ></CloudImage>
+              <CloudImage cloudId={this.state.data.thumb} ></CloudImage>
             </View>
             <View className='at-col disc'>
               <Text>{this.state.data.name}</Text>
