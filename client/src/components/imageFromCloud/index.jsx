@@ -31,6 +31,24 @@ export default class CloudImage extends Component {
     }
   }
 
+  componentWillUpdate (nextProps, nextState) {
+    if(nextProps.cloudId&&nextProps.cloudId!=this.props.cloudId){
+      var own = this;
+      Taro.cloud.getTempFileURL({
+        fileList: [{
+          fileID: nextProps.cloudId
+        }]
+      }).then(res => {
+        console.log(res.fileList[0].tempFileURL)
+        if(res.fileList[0].tempFileURL){
+          own.setState({src:res.fileList[0].tempFileURL})
+        }
+      }).catch(error => {
+        // handle error
+      })
+    }
+  }
+
   componentWillMount() {
     var own = this;
     if(own.props.cloudId){

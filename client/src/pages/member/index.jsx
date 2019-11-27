@@ -27,10 +27,10 @@ export default class Index extends Component {
         {text:'全部订单',icon:'suoyoudingdan'},
       ],
       discountPanel:[
-        {text:'优惠券',icon:'youhuiquan'},
-        {text:'邀请码',icon:'yaoqing'},
-        {text:'积分',icon:'jifen'},
-        {text:'返现',icon:'fanxian'},
+        {text:'优惠券',icon:'youhuiquan',available:true},
+        {text:'邀请码',icon:'yaoqing',available:false},
+        {text:'积分',icon:'jifen',available:true},
+        {text:'返现',icon:'fanxian',available:false},
       ],
     }
   }
@@ -66,8 +66,8 @@ export default class Index extends Component {
 
     const discount = this.state.discountPanel.map((i,index) => {
       return <View key={index} className='at-col iButton' onClick={me.naviOrderLst.bind(me,index)}>
-        <View><AtIcon prefixClass='icon' value={i.icon} size='24' color='#666'></AtIcon></View>
-        <Text>{i.text}</Text>
+        <View><AtIcon prefixClass='icon' value={i.icon} size='24'  color={i.available?'#666':'#d5d5d5'} ></AtIcon></View>
+        <Text style={i.available?'color:#666':'color:#d5d5d5'}>{i.text}</Text>
       </View>
     })
 

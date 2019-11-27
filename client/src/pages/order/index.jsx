@@ -146,6 +146,18 @@ export default class Index extends Component {
     })
   }
 
+  showDetail(id){
+    Taro.navigateTo({
+      url:'/pages/preOrder/index?id='+id,
+      success: function(res) {
+        // 通过eventChannel向被打开页面传送数据
+        console.log(res);
+      }
+    })
+  }
+
+  doNothing() {}
+
   render () {
     var me = this;
     const List = this.state.currentLst.map((i,index) => {
@@ -160,7 +172,7 @@ export default class Index extends Component {
         <View className='at-row at-row__justify--end footer'>
           <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showModal.bind(this,i._id)} className='gray' size='small'>取消</AtButton></View>
           <View style={i.status>0?'':'display:none'} className='at-col--auto grid'><AtButton className='gray' size='small'>查看</AtButton></View>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton type='primary' size='small'>去支付</AtButton></View>
+          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id)} type='primary' size='small'>去支付</AtButton></View>
 
         </View>
       </View>
