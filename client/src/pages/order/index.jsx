@@ -140,6 +140,12 @@ export default class Index extends Component {
     })
   }
 
+  closeModal(){
+    this.setState({
+      showModal:false
+    })
+  }
+
   render () {
     var me = this;
     const List = this.state.currentLst.map((i,index) => {
@@ -184,7 +190,9 @@ export default class Index extends Component {
         title='取消订单'
         cancelText='再想想'
         confirmText='确认取消'
-        onConfirm={ this.cancelOrder.bind(this) }
+        onConfirm={ this.cancelOrder.bind(this)}
+        onCancel={this.closeModal.bind(this)}
+        onClose={this.closeModal.bind(this)}
         content='确认要取消所选订单吗？'
       />
       </View>
