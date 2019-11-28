@@ -81,7 +81,6 @@ export default class CCard extends Component {
         <View className='textArea'>
           {this.props.children}
         </View>
-        // <Text className='alt'style={this.state.src==''?'':'display:none'}>Loading</Text>
       </View>
     )
   }

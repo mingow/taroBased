@@ -25,6 +25,8 @@ export default class Index extends Component {
       date:'',
       currentDate:new Date(new Date()-3600*24*1000),
       price:'',
+      pricingPolicy:'',
+      pricingNote:'',
       location:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd',
       data:{
         name:'Homie欢乐轰趴·龙岸花园店',
@@ -133,6 +135,9 @@ export default class Index extends Component {
       session:this.state.session,
       date:this.state.date,
       location:this.state.location,
+      price:this.state.price,
+      pricingPolicy:this.state.pricingPolicy,
+      pricingNote:this.state.pricingNote,
       shopInfo:{
         name:shopInfo.name,
         thumb:shopInfo.thumb
@@ -201,7 +206,7 @@ export default class Index extends Component {
       success: function(res) {
         if(res.result){
           if(res.result.available&&res.result.data.session==me.state.session&&res.result.data.date==me.state.date){
-            me.setState({price:res.result.price})
+            me.setState({price:res.result.price,pricingPolicy:res.result.pricingPolicy,pricingNote:res.result.pricingNote})
             Taro.atMessage({
               'message': '价格已更新',
               'type': 'success',

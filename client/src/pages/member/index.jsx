@@ -75,7 +75,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='avatar-info'>
           <View className='avatar'><OpenData type="userAvatarUrl"></OpenData></View>
-          <CloudImage className='avatarBg' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/appData/memberBG.jpg'></CloudImage>
+          
           <View className='nickname'><OpenData type="userNickName"></OpenData></View>
           <View className='card'>
             <Text>尊贵的会员，您好！</Text>

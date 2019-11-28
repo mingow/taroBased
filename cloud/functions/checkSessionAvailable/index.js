@@ -46,6 +46,8 @@ exports.main = async (event) => {
       db.collection('pricing').where(condition).get().then((res)=>{
         if(res.data.length){
           result.price=res.data[0].val;
+          result.pricingPolicy=res.data[0].note;
+          result.pricingNote=res.data[0].extra;
           resolve(result);
         }else{
           reject({errMsg:'rec not exsit!'})

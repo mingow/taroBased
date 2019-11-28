@@ -65,7 +65,10 @@ exports.main = async (event) => {
                 stamp:db.serverDate(), //时间戳
                 timeline:[{status:0,stamp:db.serverDate()}],
                 shopInfo:event.shopInfo,
-                createTime:db.serverDate()
+                createTime:db.serverDate(),
+                price:event.price,
+                pricingNote:event.pricingNote,
+                pricingPolicy:event.pricingPolicy
               }
             })
             .then((res) => {

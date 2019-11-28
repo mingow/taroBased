@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtBadge,AtCard,AtToast } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -18,7 +18,10 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      reserve:1000,
       isLoading:true,
+      currentPrice:0,
+      isFullPayment:false,
       data:{
         id:'',
         shopInfo:{
@@ -43,9 +46,14 @@ export default class Index extends Component {
           night:'通宵场',
         };
         res.result.sessionT=session[res.result.session];
+        if(res.result.status!=0){
+          //订单状态发生变化，返回上层
+          Taro.navigateBack({ delta:1});
+        }
         me.setState({
           isLoading:false,
-          data:res.result
+          data:res.result,
+          currentPrice:res.result.price
         });
       },
       fail:function(){
@@ -60,8 +68,8 @@ export default class Index extends Component {
 
   }
 
-  getPhoneNum (res) {
-    console.log(res.result.cloudID)
+  changePaymentPolicy () {
+    this.setState({isFullPayment:!this.state.isFullPayment})
   }
 
   componentDidShow () { }
@@ -69,6 +77,7 @@ export default class Index extends Component {
   componentDidHide () { }
 
   render () {
+
     return (
       <View className='index'>
         <View className='session' style={this.state.data.id?'':'display:none'}>
@@ -81,17 +90,37 @@ export default class Index extends Component {
           </View>
           <View className='header'><Text>金额</Text></View>
           <View className='body'>
-            <View className='at-row'>
-              <Text></Text>
-            </View>
+            <AtList>
+              <AtListItem title={this.state.data.pricingNote} extraText={'￥'+parseFloat(this.state.data.price).toFixed(2)} />
+              <AtListItem title='优惠券' extraText={'￥'+parseFloat('0').toFixed(2)} arrow='right' />
+              <AtListItem title='总价' extraText={'￥'+parseFloat(this.state.currentPrice).toFixed(2)} />
+            </AtList>
+          </View>
+        </View>
+        <View className='session' style={this.state.data.id?'':'display:none'}>
+          <View className='header'><Text>支付方式</Text></View>
+          <View className='body'>
+            <AtList>
+              <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
+              <AtListItem
+                title='支付全款？'
+                isSwitch
+                onSwitchChange={this.changePaymentPolicy.bind(this)}
+              />
+            </AtList>
+
           </View>
           <View className='footer'>
-            <Text>说明：场次预定成功以最终的通知信息为准，如预定失败支付定金将原路退回。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
+            <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
+            <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
+            <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
 
           </View>
         </View>
-        <View className='footer'>
-          <Text>更多分店即将到来，敬请期待...</Text>
+        <View className='safeArea blank'></View>
+        <View className='bottom safeArea'>
+          <View className='margin'><AtButton type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
       </View>

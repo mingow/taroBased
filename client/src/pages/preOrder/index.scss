@@ -3,6 +3,7 @@
 .index {
   // height:400px;
   background-color: #eee;
+  width:100%
 }
 
 .session{
@@ -31,6 +32,15 @@
         margin:5rpx 0;
       }
     }
+    .at-list__item {
+      font-size: 24rpx;
+      .item-extra__info {
+        font-size: 24rpx;
+      }
+    }
+    .at-radio__title {
+      font-size: 24rpx;
+    }
   }
   .footer{
     border-top: 1rpx solid #eee;
@@ -39,6 +49,30 @@
     text{
       font-size: 22rpx;
       color:#c60000;
+      display: block;
     }
   }
+}
+
+.safeArea {
+  padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
+}
+.bottom {
+  position: fixed;
+  width:100%;
+  bottom:0;
+  .margin {
+    margin: 20rpx 10rpx;
+  }
+}
+.empty {
+  text-align: center;
+  width:100%;
+  display: inline-block;
+  margin:20rpx 0;
+  font-size: 24rpx;
+}
+.blank {
+  background-color: #fff;
 }

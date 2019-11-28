@@ -36,6 +36,10 @@ export default class Index extends Component {
 
   }
 
+  componentDidShow() {
+    console.log('show');
+  }
+
   handleClick(index) {
     const me = this;
     this.setState({current:index},me.updateCurrentLst.bind(this,me));
