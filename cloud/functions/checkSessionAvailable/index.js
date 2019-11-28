@@ -15,13 +15,18 @@ exports.main = async (event) => {
   var condition={
     shop:event.location,
     session:event.session,
-    isWeekend:true
+    isWeekend:true,
+    isCurrent:false,
   }
 
   if(date.getDay()!=6&&date.getDay()!=0){
     condition.isWeekend=false;
   }
-
+  const current = new Date();
+  const paramsDate = new Date(event.date);
+  if(current.toJSON().substring(0,current.toJSON().indexOf('T'))==paramsDate.toJSON().substring(0,paramsDate.toJSON().indexOf('T'))){
+    condition.isCurrent=true;
+  }
   return new Promise((resolve,reject) => {
     var result = {
       available:true,
@@ -32,7 +37,7 @@ exports.main = async (event) => {
     const _ = db.command;
     //先判定是否为节假日
     db.collection('holidayEvent').where({
-      date:event.date
+      date:new Date(event.date)
     }).get().then((res) =>{
       if(res.data.length){
         //如果查询到记录则按照对应价格获取
