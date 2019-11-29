@@ -48,6 +48,7 @@ export default class Index extends Component {
         res.result.sessionT=session[res.result.session];
         if(res.result.status!=0){
           //订单状态发生变化，返回上层
+          Taro.eventCenter.trigger('refreshOrder');
           Taro.navigateBack({ delta:1});
         }
         me.setState({
@@ -65,7 +66,7 @@ export default class Index extends Component {
   componentDidMount () { }
 
   componentWillUnmount () {
-
+    Taro.eventCenter.trigger('refreshOrder');
   }
 
   changePaymentPolicy () {

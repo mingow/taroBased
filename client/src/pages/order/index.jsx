@@ -33,7 +33,8 @@ export default class Index extends Component {
     if(this.$router.params){
       this.setState({current:Number(this.$router.params.index)})
     }
-
+    Taro.eventCenter.off('refreshOrder');
+    Taro.eventCenter.on('refreshOrder', this.updateRawData.bind(this));
   }
 
   componentDidShow() {
@@ -151,6 +152,7 @@ export default class Index extends Component {
   }
 
   showDetail(id){
+    var me = this;
     Taro.navigateTo({
       url:'/pages/preOrder/index?id='+id,
       success: function(res) {
