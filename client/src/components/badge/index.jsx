@@ -5,23 +5,12 @@ import PropTypes from 'prop-types'
 import _isFunction from 'lodash/isFunction'
 import './index.scss'
 
-const SIZE_CLASS = {
-  normal: 'normal',
-  small: 'small',
-}
+import { AtIcon,AtBadge } from 'taro-ui'
 
-const TYPE_CLASS = {
-  primary: 'primary',
-  secondary: 'secondary',
-}
 
-export default class CCard extends Component {
+export default class CBadge extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      context: {},
-      src:''
-    }
   }
 
   handleClick = (...args) => {
@@ -30,23 +19,7 @@ export default class CCard extends Component {
     }
   }
 
-  componentWillMount() {
-    var own = this;
-    if(own.props.cloudId){
-      Taro.cloud.getTempFileURL({
-        fileList: [{
-          fileID: own.props.cloudId
-        }]
-      }).then(res => {
-        console.log(res.fileList[0].tempFileURL)
-        if(res.fileList[0].tempFileURL){
-          own.setState({src:res.fileList[0].tempFileURL})
-        }
-      }).catch(error => {
-        // handle error
-      })
-    }
-  }
+  componentWillMount() { }
 
   componentDidMount() {
 
@@ -65,51 +38,30 @@ export default class CCard extends Component {
   }
 
   render() {
-    const { title, note, extra, thumb, isFull, icon } = this.props
-    const rootClass = classNames(
-      'grid',
-      {
-        'at-card--full': isFull
-      },
-      this.props.className
-    )
-
-    const iconClass = classNames({
-      'at-icon': true,
-      [`at-icon-${icon && icon.value}`]: icon && icon.value,
-      'at-card__header-icon': true,
-    })
-
-    return (
-      <View onClick={this.handleClick} className={rootClass}>
-        <Image className='image' mode='aspectFill' src = {this.state.src}></Image>
-      </View>
-    )
+    var res = null
+    if(this.props.badge){
+      res = (<View className='badge'>{this.props.badge}</View>);
+    }
+    return (<View onClick={this.handleClick} className={this.props.className}>
+        <View><AtIcon prefixClass='icon' value={this.props.icon} size='24' color='#666'></AtIcon></View>
+        <Text>{this.props.text}</Text>
+        {res}
+      </View>)
   }
 }
 
-CCard.defaultProps = {
-  size: 'normal',
-  title:'',
-  type: '',
-  circle: false,
-  full: false,
-  loading: false,
-  cloudId:'',
-  disabled: false,
-  customStyle: {},
-  onClick: () => {}
+CBadge.defaultProps = {
+  text:'',
+  icon: '',
+  className: '',
+  onClick: () => {},
+  badge:0
 }
 
-CCard.propTypes = {
-  title: PropTypes.string,
-  cloudId: PropTypes.string,
-  size: PropTypes.oneOf(['normal', 'small']),
-  type: PropTypes.oneOf(['primary', 'secondary', '']),
-  circle: PropTypes.bool,
-  full: PropTypes.bool,
-  loading: PropTypes.bool,
-  disabled: PropTypes.bool,
+CBadge.propTypes = {
+  text: PropTypes.string,
+  icon: PropTypes.string,
+  badge:PropTypes.number,
+  className: PropTypes.string,
   onClick: PropTypes.func,
-  customStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 }

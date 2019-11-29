@@ -14,7 +14,9 @@ export default class Index extends Component {
     navigationBarTextStyle: 'white',
     backgroundColor:'#f5f5f6',
     backgroundColorTop:'#2CD18A',
-    backgroundColorBottom:'#f5f5f6'
+    backgroundColorBottom:'#f5f5f6',
+    enablePullDownRefresh: true,
+    onReachBottomDistance:50,
   }
 
   constructor (props) {
@@ -39,6 +41,10 @@ export default class Index extends Component {
 
   componentDidShow() {
     console.log('show');
+  }
+
+  onPullDownRefresh(){
+    this.updateRawData()
   }
 
   handleClick(index) {
@@ -110,8 +116,10 @@ export default class Index extends Component {
       name:'getOrderInfo',
       success:function(res){
         me.setState({isLoading:false,rawLst:res.result},me.updateCurrentLst.bind(this,me));
+        Taro.stopPullDownRefresh();
       },
       fail:function(){
+        Taro.stopPullDownRefresh();
         Taro.navigateBack({ delta:1});
       }
     })

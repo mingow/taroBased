@@ -5,6 +5,7 @@ import './index.scss'
 import { AtButton,AtIcon,AtBadge,AtCard } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
+import CBadge from '../../components/badge/index'
 
 export default class Index extends Component {
 
@@ -12,14 +13,17 @@ export default class Index extends Component {
     navigationBarTitleText: '个人中心',
     navigationBarBackgroundColor: '#2CD18A',
     navigationBarTextStyle: 'white',
-    backgroundColor:'#f5f5f6',
+    backgroundColor:'#2CD18A',
     backgroundColorTop:'#2CD18A',
-    backgroundColorBottom:'#f5f5f6'
+    backgroundColorBottom:'#f5f5f6',
+    enablePullDownRefresh: true
   }
 
   constructor (props) {
     super(props);
     this.state = {
+      unPayBadge:0,
+      unUsedBadge:0,
       orderPanel:[
         {text:'待支付',icon:'daifukuan'},
         {text:'待使用',icon:'daifahuo'},
@@ -37,7 +41,38 @@ export default class Index extends Component {
 
   componentWillMount () { }
 
-  componentDidMount () { }
+  onPullDownRefresh(){
+    //触发刷新订单数
+    const me = this;
+    wx.cloud.callFunction({
+      name:'getOrderLstStatus',
+      success:function(res){
+        Taro.stopPullDownRefresh();
+        console.log(res);
+        var orderPanel=[
+          {text:'待支付',icon:'daifukuan'},
+          {text:'待使用',icon:'daifahuo'},
+          {text:'已取消',icon:'shanchu'},
+          {text:'全部订单',icon:'suoyoudingdan'},
+        ]
+        if(res.errMsg.indexOf('ok')!=-1){
+          var lst = res.result.list;
+          lst.map(function(i){
+            if(i._id==0){orderPanel[0].num=i.count};
+            if(i._id==1){orderPanel[1].num=i.count};
+          });
+          me.setState({orderPanel:orderPanel});
+        }
+      },
+      fail:function(res){
+        Taro.stopPullDownRefresh();
+      }
+    })
+  }
+
+  componentDidMount () {
+    Taro.startPullDownRefresh()
+  }
 
   componentWillUnmount () { }
 
@@ -55,13 +90,11 @@ export default class Index extends Component {
     })
   }
 
+
   render () {
     const me = this;
     const order = this.state.orderPanel.map((i,index) => {
-      return <View key={index} className='at-col iButton' onClick={me.naviOrderLst.bind(me,index)}>
-        <View><AtIcon prefixClass='icon' value={i.icon} size='24' color='#666'></AtIcon></View>
-        <Text>{i.text}</Text>
-      </View>
+      return <View key={index} className='at-col'><CBadge badge={i.num} className='iButton' onClick={me.naviOrderLst.bind(me,index)} icon={i.icon} text={i.text} ></CBadge></View>;
     });
 
     const discount = this.state.discountPanel.map((i,index) => {
@@ -75,7 +108,7 @@ export default class Index extends Component {
       <View className='index'>
         <View className='avatar-info'>
           <View className='avatar'><OpenData type="userAvatarUrl"></OpenData></View>
-          
+
           <View className='nickname'><OpenData type="userNickName"></OpenData></View>
           <View className='card'>
             <Text>尊贵的会员，您好！</Text>
