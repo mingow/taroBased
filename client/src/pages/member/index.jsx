@@ -71,7 +71,7 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
-    Taro.startPullDownRefresh()
+    setTimeout(Taro.startPullDownRefresh.bind(this),1000);
   }
 
   componentWillUnmount () { }
