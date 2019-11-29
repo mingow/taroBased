@@ -125,7 +125,9 @@ export default class Index extends Component {
     })
   }
 
-  componentWillUnmount () { }
+  componentWillUnmount () {
+    Taro.eventCenter.trigger('refreshMemberOrderLst');
+  }
 
   componentDidShow () { }
 

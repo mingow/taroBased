@@ -72,6 +72,8 @@ export default class Index extends Component {
 
   componentDidMount () {
     setTimeout(Taro.startPullDownRefresh.bind(this),1000);
+    Taro.eventCenter.off('refreshMemberOrderLst');
+    Taro.eventCenter.on('refreshMemberOrderLst', Taro.startPullDownRefresh.bind(this));
   }
 
   componentWillUnmount () { }
