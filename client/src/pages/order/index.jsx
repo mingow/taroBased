@@ -1,228 +1,129 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtTabs, AtTabsPane,AtToast,AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '我的订单',
-    navigationBarBackgroundColor: '#2CD18A',
-    navigationBarTextStyle: 'white',
-    backgroundColor:'#2CD18A',
-    backgroundColorTop:'#2CD18A',
-    backgroundColorBottom:'#f5f5f6',
-    enablePullDownRefresh: true,
-    onReachBottomDistance:50,
+    navigationBarTitleText: '确认订单',
+
+    backgroundColorTop:'#fff',
+    backgroundColorBottom:'#fff',
   }
 
   constructor (props) {
     super(props);
     this.state = {
-      current:3,
+      reserve:1000,
       isLoading:true,
-      currentLst:[],
-      rawLst:[],
-      target:'',
-      showModal:false,
+      currentPrice:0,
+      isFullPayment:false,
+      data:{
+        id:'',
+        shopInfo:{
+          thumb:'',
+          name:''
+        }
+      }
     }
   }
 
   componentWillMount () {
-    if(this.$router.params){
-      this.setState({current:Number(this.$router.params.index)})
-    }
-    Taro.eventCenter.off('refreshOrder');
-    Taro.eventCenter.on('refreshOrder', this.updateRawData.bind(this));
-  }
-
-  componentDidShow() {
-    console.log('show');
-  }
-
-  onPullDownRefresh(){
-    this.updateRawData()
-  }
-
-  handleClick(index) {
     const me = this;
-    this.setState({current:index},me.updateCurrentLst.bind(this,me));
-  }
-
-  updateCurrentLst(me) {
-    var arr = [];
-    const LST = me.state.rawLst;
-    switch (me.state.current) {
-      case 0:
-        LST.map((i) => {
-          if(i.status==0){
-            arr.push(i);
-          }
-        })
-        break;
-      case 1:
-        LST.map((i) => {
-          if(i.status==1){
-            arr.push(i);
-          }
-        })
-        break;
-      case 2:
-        LST.map((i) => {
-          if(i.status==-1){
-            arr.push(i);
-          }
-        })
-        break;
-      default:
-        LST.map((i) => {arr.push(i);})  //全部显示
-    }
-
-    //处理列表格式
-    var session={
-      all:'全天场',
-      day:'白天场',
-      night:'通宵场',
-    };
-    var orderStatus={
-      '0':'待支付',
-      '1':'待使用',
-      '2':'已使用',
-      '-1':'已取消',
-    }
-    arr.map((i) =>{
-      i.statusT=orderStatus[i.status];
-      i.sessionT= session[i.session];
-      var date = new Date(i.createTime);
-      console.log(date);
-      i.create = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getMinutes();
-    })
-    me.setState({currentLst:arr},function(){
-      console.log(me.state.currentLst);
-    });
-  }
-
-  componentDidMount () {
-    this.updateRawData();
-  }
-
-  updateRawData(){
-    const me = this;
-    this.setState({isLoading:true});
+    console.log(this.$router.params)
     wx.cloud.callFunction({
       name:'getOrderInfo',
+      data:this.$router.params,
       success:function(res){
-        me.setState({isLoading:false,rawLst:res.result},me.updateCurrentLst.bind(this,me));
-        Taro.stopPullDownRefresh();
+        console.log(res);
+        var session={
+          all:'全天场',
+          day:'白天场',
+          night:'通宵场',
+        };
+        res.result.sessionT=session[res.result.session];
+        if(res.result.status!=0){
+          //订单状态发生变化，返回上层
+          Taro.eventCenter.trigger('refreshOrder');
+          Taro.navigateBack({ delta:1});
+        }
+        me.setState({
+          isLoading:false,
+          data:res.result,
+          currentPrice:res.result.price
+        });
       },
       fail:function(){
-        Taro.stopPullDownRefresh();
         Taro.navigateBack({ delta:1});
       }
     })
   }
 
+  componentDidMount () { }
+
   componentWillUnmount () {
-    Taro.eventCenter.trigger('refreshMemberOrderLst');
+    Taro.eventCenter.trigger('refreshOrder');
+  }
+
+  changePaymentPolicy () {
+    this.setState({isFullPayment:!this.state.isFullPayment})
   }
 
   componentDidShow () { }
 
   componentDidHide () { }
 
-  cancelOrder() {
-    var me = this;
-    wx.cloud.callFunction({
-      name:'unpayOrderTrigger',
-      data:{
-        id:me.state.target
-      },
-      success:function(res){
-        me.setState({showModal:false});
-        me.updateRawData();
-      }
-    })
-  }
-
-  showModal(id){
-    console.log(id);
-    this.setState({
-      target:id,
-      showModal:true
-    })
-  }
-
-  closeModal(){
-    this.setState({
-      showModal:false
-    })
-  }
-
-  showDetail(id){
-    var me = this;
-    Taro.navigateTo({
-      url:'/pages/preOrder/index?id='+id,
-      success: function(res) {
-        // 通过eventChannel向被打开页面传送数据
-        console.log(res);
-      }
-    })
-  }
-
-  doNothing() {}
-
   render () {
-    var me = this;
-    const List = this.state.currentLst.map((i,index) => {
-      return <View key={index} className='itemPanel'>
-        <View className='header'><Text>{i.create}</Text><Text className='right'>{i.statusT}</Text></View>
-        <View className='body'>
-          <View className='at-row'>
-            <View className='thumb at-col--auto'><CloudImage cloudId={i.shopInfo.thumb} ></CloudImage></View>
-            <View className='at-col contents'><Text>{i.shopInfo.name}</Text><Text>{i.date}</Text><Text>{i.sessionT}</Text></View>
-          </View>
-        </View>
-        <View className='at-row at-row__justify--end footer'>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showModal.bind(this,i._id)} className='gray' size='small'>取消</AtButton></View>
-          <View style={i.status>0?'':'display:none'} className='at-col--auto grid'><AtButton className='gray' size='small'>查看</AtButton></View>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id)} type='primary' size='small'>去支付</AtButton></View>
-
-        </View>
-      </View>
-    })
 
     return (
       <View className='index'>
-      <AtTabs
-        animated={false}
-        current={this.state.current}
-        tabList={[
-          { title: '待支付' },
-          { title: '待使用' },
-          { title: '已取消' },
-          { title: '全部' },
-        ]}
-        onClick={this.handleClick.bind(this)}>
+        <View className='session' style={this.state.data.id?'':'display:none'}>
+          <View className='header'><Text>场次信息</Text></View>
+          <View className='body'>
+            <View className='at-row'>
+              <View className='thumb at-col--auto'><CloudImage cloudId={this.state.data.shopInfo.thumb} ></CloudImage></View>
+              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{this.state.data.date}</Text><Text>{this.state.data.sessionT}</Text></View>
+            </View>
+          </View>
+          <View className='header'><Text>金额</Text></View>
+          <View className='body'>
+            <AtList>
+              <AtListItem title={this.state.data.pricingNote} extraText={'￥'+parseFloat(this.state.data.price).toFixed(2)} />
+              <AtListItem title='优惠券' extraText={'￥'+parseFloat('0').toFixed(2)} arrow='right' />
+              <AtListItem title='总价' extraText={'￥'+parseFloat(this.state.currentPrice).toFixed(2)} />
+            </AtList>
+          </View>
+        </View>
+        <View className='session' style={this.state.data.id?'':'display:none'}>
+          <View className='header'><Text>支付方式</Text></View>
+          <View className='body'>
+            <AtList>
+              <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
+              <AtListItem
+                title='支付全款？'
+                isSwitch
+                onSwitchChange={this.changePaymentPolicy.bind(this)}
+              />
+            </AtList>
 
-      </AtTabs>
-      <View>
-        {List}
-      </View>
-      <View className='empty' style={this.state.currentLst.length==0?'':'display:none'} >订单空空如也，赶紧下一单吧</View>
-      <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
-      <AtModal
-        isOpened={this.state.showModal}
-        title='取消订单'
-        cancelText='再想想'
-        confirmText='确认取消'
-        onConfirm={ this.cancelOrder.bind(this)}
-        onCancel={this.closeModal.bind(this)}
-        onClose={this.closeModal.bind(this)}
-        content='确认要取消所选订单吗？'
-      />
+          </View>
+          <View className='footer'>
+            <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
+            <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
+            <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
+
+          </View>
+        </View>
+        <View className='safeArea blank'></View>
+        <View className='bottom safeArea'>
+          <View className='margin'><AtButton type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+
+        </View>
+        <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
       </View>
     )
   }

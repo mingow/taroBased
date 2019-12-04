@@ -84,7 +84,7 @@ export default class Index extends Component {
 
   naviOrderLst(index) {
     Taro.navigateTo({
-      url:'/pages/order/index?index='+index,
+      url:'/pages/orderLst/index?index='+index,
       success: function(res) {
         // 通过eventChannel向被打开页面传送数据
         //res.eventChannel.emit('sendData', {})

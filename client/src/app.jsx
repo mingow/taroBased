@@ -21,7 +21,7 @@ class App extends Component {
       'pages/booking/index',
       'pages/webview/index',
       'pages/item/index',
-      'pages/order/index',
+      'pages/orderLst/index',
       'pages/preOrder/index'
     ],
     tabBar: {
