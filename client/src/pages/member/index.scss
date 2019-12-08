@@ -12,9 +12,7 @@
   overflow: hidden;
 }
 .avatar {
-  position: relative;
-  left:100rpx;
-  top:55rpx;
+  margin:18rpx auto;
   width:120rpx;
   height:120rpx;
   display:block;
@@ -24,9 +22,6 @@
 }
 
 .nickname {
-  position: relative;
-  left: -80rpx;
-  top: -30rpx;
   text-align: center;
   font-size: 32rpx;
 }
@@ -36,7 +31,7 @@
   width:88%;
   background-color: darken($color-brand,35%);
   position: relative;
-  bottom: -60rpx;
+  bottom: -20rpx;
   border-radius: 15rpx;
   margin:0 auto;
   box-shadow: 0 0 15rpx #000;
