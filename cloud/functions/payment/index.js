@@ -75,10 +75,8 @@ exports.main = async (event, context) => {
       url:'https://api.mch.weixin.qq.com/pay/orderquery',
       method:'POST',
       body: formData
-
     },function(error, response, body){
       if (!error && response.statusCode == 200) {
-
         console.log(fxp.parse(body).xml);
       }else{
         console.log("error");
