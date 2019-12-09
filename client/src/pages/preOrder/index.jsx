@@ -63,6 +63,49 @@ export default class Index extends Component {
     })
   }
 
+  payment() {
+    wx.showLoading({
+      title: '正在下单',
+    });
+    const config = {
+      $url: "pay",
+      price:this.state.isFullPayment?this.state.currentPrice:this.state.reserve,
+      title:this.state.isFullPayment?'支付全款':'支付定金',
+      full:this.state.isFullPayment,
+      id:this.state.data.id
+    }
+    console.log(config);
+
+    wx.cloud.callFunction({
+      name:'payment',
+      data:config,
+      success: function(res){
+        wx.hideLoading();
+        console.log(res.result);
+        wx.requestPayment({
+          timeStamp:res.result.timeStamp,
+          nonceStr:res.result.nonceStr,
+          package:res.result.package,
+          signType: 'MD5',
+          paySign:res.result.paySign,
+          success:function(res){
+            console.log(res);
+          },
+          fail:function(res){
+            console.log(res);
+          }
+        })
+      },
+      fail: function(e){
+        wx.hideLoading();
+        wx.showToast({
+          title: '支付失败，请及时反馈或稍后再试',
+          icon:'none'
+        });
+      }
+    });
+  }
+
   componentDidMount () { }
 
   componentWillUnmount () {
@@ -120,7 +163,7 @@ export default class Index extends Component {
         </View>
         <View className='safeArea blank'></View>
         <View className='bottom safeArea'>
-          <View className='margin'><AtButton type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
 
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>

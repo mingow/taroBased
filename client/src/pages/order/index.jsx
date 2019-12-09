@@ -63,6 +63,14 @@ export default class Index extends Component {
     })
   }
 
+  payment() {
+    const config = {
+      price:this.state.isFullPayment?this.state.currentPrice:this.state.reserve,
+      id:this.state.data.id
+    }
+    console.log(config);
+  }
+
   componentDidMount () { }
 
   componentWillUnmount () {
@@ -120,7 +128,7 @@ export default class Index extends Component {
         </View>
         <View className='safeArea blank'></View>
         <View className='bottom safeArea'>
-          <View className='margin'><AtButton type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
 
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>

@@ -31,9 +31,9 @@ export default class Index extends Component {
       data:{
         name:'Homie欢乐轰趴·龙岸花园店',
         pics:[
-          'cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg',
+          'cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/photos/0.jpg',
         ],
-        thumb:'cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/photos/0.jpg',
+        thumb:'cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/photos/0.jpg',
         desciption:'价格为30人标准价格，支付前请和客服确认场次信息，节假日请提前预定',
         price:'',
         oriPrice:'',

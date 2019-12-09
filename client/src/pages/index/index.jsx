@@ -80,22 +80,22 @@ export default class Index extends Component {
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
         <CScrollArea>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/e35328563ec1a76207e7ffd0340db7ba.png'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/e35328563ec1a76207e7ffd0340db7ba.png'>
             <View className='avatar'><Text>桌游</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/61f78111c558b48dd6a624fe408d4a54.jpg'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/61f78111c558b48dd6a624fe408d4a54.jpg'>
             <View className='avatar'><Text>KTV</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/88d8be1ea8369f9276c3e400a466823e.jpg'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/88d8be1ea8369f9276c3e400a466823e.jpg'>
             <View className='avatar'><Text>麻将</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/98aebf4eba20f898330e3b109a4d4d8f.jpg'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/98aebf4eba20f898330e3b109a4d4d8f.jpg'>
             <View className='avatar'><Text>电竞</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/6ea73555dbd407472ccd3762fe6019d6.jpeg'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/6ea73555dbd407472ccd3762fe6019d6.jpeg'>
             <View className='avatar'><Text>射箭</Text></View>
           </CCard>
-          <CCard title='Game' className='item' cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy/resources/images/60e67392224b03e76993802cf423da2d.jpeg'>
+          <CCard title='Game' className='item' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/60e67392224b03e76993802cf423da2d.jpeg'>
             <View className='avatar'><Text>电影</Text></View>
           </CCard>
         </CScrollArea>
@@ -107,13 +107,13 @@ export default class Index extends Component {
           circular
           autoplay>
           <SwiperItem>
-            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales00.jpg' ></CloudImage>
+            <CloudImage cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/banners/sales00.jpg' ></CloudImage>
           </SwiperItem>
           <SwiperItem>
-            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales01.jpg' ></CloudImage>
+            <CloudImage cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/banners/sales01.jpg' ></CloudImage>
           </SwiperItem>
           <SwiperItem>
-            <CloudImage cloudId='cloud://vue-homeparty-4iqxy.7675-vue-homeparty-4iqxy-1300407309/resources/images/banners/sales02.jpg' ></CloudImage>
+            <CloudImage cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/banners/sales02.jpg' ></CloudImage>
           </SwiperItem>
         </Swiper>
         <View className='title'><Text className='primary'>活动</Text><Text className='second'>精彩活动，嗨翻全场</Text></View>

@@ -1,0 +1,19 @@
+{
+  "name": "login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "wx-server-sdk": "latest",
+    "tenpay":"latest",
+    "request":"2.88.0",
+    "tcb-router":"1.1.2",
+    "crypto":"^1.0.1",
+    "fast-xml-parser":"3.15.1"
+  }
+}

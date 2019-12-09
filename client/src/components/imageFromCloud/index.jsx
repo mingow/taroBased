@@ -39,7 +39,7 @@ export default class CloudImage extends Component {
           fileID: nextProps.cloudId
         }]
       }).then(res => {
-        console.log(res.fileList[0].tempFileURL)
+        //console.log(res.fileList[0].tempFileURL)
         if(res.fileList[0].tempFileURL){
           own.setState({src:res.fileList[0].tempFileURL})
         }
