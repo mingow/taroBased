@@ -62,8 +62,12 @@
   position: fixed;
   width:100%;
   bottom:0;
-  .margin {
-    margin: 20rpx 10rpx;
+
+}
+.margin {
+  margin: 10rpx 10rpx 0;
+  .btn{
+    margin:10rpx 0;
   }
 }
 .empty {

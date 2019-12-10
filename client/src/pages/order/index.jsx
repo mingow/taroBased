@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import QRCode from '../../utils/weapp-qrcode'
@@ -92,7 +92,7 @@ export default class Index extends Component {
       height: 150,
       colorDark: "#2CD18A",
       colorLight: "white",
-      correctLevel: QRCode.CorrectLevel.H,
+      correctLevel: QRCode.CorrectLevel.L,
     });
     console.log(qrcode);
   }
@@ -157,14 +157,15 @@ export default class Index extends Component {
             <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
             <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
             <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
+            <Text>墙裂建议订阅预约通知提醒，我们将在订单日期到期前发送预约提醒。</Text>
           </View>
-        </View>
-        <View className='safeArea blank'></View>
-        <View className='bottom safeArea'>
-          <View className='margin'><AtButton onClick={this.subscribe.bind(this)} type='primary' >使用</AtButton></View>
-          <View className='margin'><AtButton >改期</AtButton></View>
+          <View className='margin'>
+            <View className='btn'><AtButton onClick={this.subscribe.bind(this)} type='primary' >订阅预约通知提醒</AtButton></View>
+            <View className='btn'><AtButton >改期</AtButton></View>
+          </View>
 
         </View>
+        <View className='safeArea blank'></View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
       </View>
     )
