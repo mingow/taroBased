@@ -15,7 +15,8 @@ exports.main = async (event) => {
       })
       .update({
         data:{
-          status:-1
+          status:-1,
+          timeline:_.push({status:-1,stamp:db.serverDate()})
         }
       })
     } catch(e){

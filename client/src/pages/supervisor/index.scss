@@ -1,0 +1,58 @@
+@import './../../app';
+
+.index {
+  // height:400px;
+  background-color: #f5f5f6;
+}
+
+.at-tabs__item {
+  color:#070707;
+}
+
+.at-tabs__item--active {
+  color:$color-brand;
+}
+.itemPanel{
+  background-color: #fff;
+  width:100%;
+  margin:16rpx 0 0;
+  .header{
+    font-size: 24rpx;
+    padding:16rpx;
+    border-bottom: 1rpx solid #eee;
+  }
+  .right{
+    float: right;
+  }
+  .thumb{
+    height:160rpx;
+    width:160rpx;
+    margin:16rpx;
+  }
+  .body{
+    .contents{
+      margin:16rpx;
+      text{
+        display: block;
+        font-size: 22rpx;
+        margin:5rpx 0;
+      }
+    }
+  }
+  .footer{
+    border-top: 1rpx solid #eee;
+    .grid{
+      margin:10rpx 10rpx 10rpx 0;
+      .gray{
+        color:#070707;
+      }
+    }
+  }
+}
+.empty {
+  text-align: center;
+  width:100%;
+  display: inline-block;
+  margin:20rpx 0;
+  font-size: 24rpx;
+}

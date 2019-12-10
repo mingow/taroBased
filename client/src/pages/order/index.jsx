@@ -5,11 +5,13 @@ import './index.scss'
 import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
+import QRCode from '../../utils/weapp-qrcode'
+
 
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '确认订单',
+    navigationBarTitleText: '订单详情',
 
     backgroundColorTop:'#fff',
     backgroundColorBottom:'#fff',
@@ -18,10 +20,9 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      reserve:1000,
       isLoading:true,
       currentPrice:0,
-      isFullPayment:false,
+      paid:0,
       data:{
         id:'',
         shopInfo:{
@@ -34,25 +35,44 @@ export default class Index extends Component {
 
   componentWillMount () {
     const me = this;
+    const ID = this.$router.params.id;
     console.log(this.$router.params)
     wx.cloud.callFunction({
       name:'getOrderInfo',
       data:this.$router.params,
       success:function(res){
-        console.log(res);
         var session={
           all:'全天场',
           day:'白天场',
           night:'通宵场',
         };
         res.result.sessionT=session[res.result.session];
-        if(res.result.status!=0){
+        if(res.result.status<0){
           //订单状态发生变化，返回上层
           Taro.eventCenter.trigger('refreshOrder');
           Taro.navigateBack({ delta:1});
         }
+        //确认订单支付情况
+        wx.cloud.callFunction({
+          name:'payment',
+          data:{
+            $url:'getPaymentOrder',
+            id:ID,
+            out_trade_no:ID
+          },
+          success:function(res){
+            if(res.result.result_code=="SUCCESS"){
+              me.setState({
+                isLoading:false,
+                paid:parseInt(res.result.total_fee)/100
+              })
+            }
+          },
+          fail:function(res){
+            Taro.navigateBack({ delta:1});
+          }
+        })
         me.setState({
-          isLoading:false,
           data:res.result,
           currentPrice:res.result.price
         });
@@ -63,15 +83,19 @@ export default class Index extends Component {
     })
   }
 
-  payment() {
-    const config = {
-      price:this.state.isFullPayment?this.state.currentPrice:this.state.reserve,
-      id:this.state.data.id
-    }
-    console.log(config);
-  }
+  componentDidMount () {
 
-  componentDidMount () { }
+    var qrcode = new QRCode('canvas', {
+      // usingIn: this,
+      text: this.$router.params.id,
+      width: 150,
+      height: 150,
+      colorDark: "#2CD18A",
+      colorLight: "white",
+      correctLevel: QRCode.CorrectLevel.H,
+    });
+    console.log(qrcode);
+  }
 
   componentWillUnmount () {
     Taro.eventCenter.trigger('refreshOrder');
@@ -84,6 +108,18 @@ export default class Index extends Component {
   componentDidShow () { }
 
   componentDidHide () { }
+
+  subscribe() {
+    wx.requestSubscribeMessage({
+      tmplIds: ['mYzVgOdG7q4kXRKY39qqQOMyr7-qGB8v9_3wHaQqLsk'],
+      success (res) {
+        if(JSON.stringify(res).indexOf('reject')!=-1){
+
+        }
+        console.log(res)
+      }
+    })
+  }
 
   render () {
 
@@ -107,28 +143,26 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='session' style={this.state.data.id?'':'display:none'}>
-          <View className='header'><Text>支付方式</Text></View>
+          <View className='header'><Text>已支付金额</Text></View>
           <View className='body'>
             <AtList>
-              <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
-              <AtListItem
-                title='支付全款？'
-                isSwitch
-                onSwitchChange={this.changePaymentPolicy.bind(this)}
-              />
+              <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.paid).toFixed(2)} />
             </AtList>
 
+          </View>
+          <View>
+            <canvas class='canvas' style="width:150px; height:150px;" canvas-id='canvas' bindlongtap='save'></canvas>
           </View>
           <View className='footer'>
             <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
             <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
             <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
-
           </View>
         </View>
         <View className='safeArea blank'></View>
         <View className='bottom safeArea'>
-          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+          <View className='margin'><AtButton onClick={this.subscribe.bind(this)} type='primary' >使用</AtButton></View>
+          <View className='margin'><AtButton >改期</AtButton></View>
 
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>

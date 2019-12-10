@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtModal } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -22,6 +22,8 @@ export default class Index extends Component {
       isLoading:true,
       currentPrice:0,
       isFullPayment:false,
+      modalIsOpened:false,
+      modalContent:'未成功订阅提醒信息，请注意自行查询订单状态',
       data:{
         id:'',
         shopInfo:{
@@ -64,24 +66,25 @@ export default class Index extends Component {
   }
 
   payment() {
+    const me = this;
     wx.showLoading({
       title: '正在下单',
     });
+
     const config = {
       $url: "pay",
-      price:this.state.isFullPayment?this.state.currentPrice:this.state.reserve,
-      title:this.state.isFullPayment?'支付全款':'支付定金',
-      full:this.state.isFullPayment,
-      id:this.state.data.id
+      price:this.state.reserve,
+      title:'支付定金',
+      id:this.state.data.id,
+      out_trade_no:this.state.data.id
     }
     console.log(config);
-
+    //生成支付订单
     wx.cloud.callFunction({
       name:'payment',
       data:config,
       success: function(res){
         wx.hideLoading();
-        console.log(res.result);
         wx.requestPayment({
           timeStamp:res.result.timeStamp,
           nonceStr:res.result.nonceStr,
@@ -89,7 +92,23 @@ export default class Index extends Component {
           signType: 'MD5',
           paySign:res.result.paySign,
           success:function(res){
-            console.log(res);
+            //付款完成后标记订单
+            wx.cloud.callFunction({
+              name:'payment',
+              data:{
+                $url:'changeState',
+                id:config.id,
+                out_trade_no:config.out_trade_no
+              },
+              success:function(){
+                Taro.redirectTo({
+                  url: '/pages/order/index?id='+config.id
+                })
+              },
+              fail:function(res){
+                console.error(res);
+              }
+            })
           },
           fail:function(res){
             console.log(res);
@@ -146,11 +165,7 @@ export default class Index extends Component {
           <View className='body'>
             <AtList>
               <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
-              <AtListItem
-                title='支付全款？'
-                isSwitch
-                onSwitchChange={this.changePaymentPolicy.bind(this)}
-              />
+
             </AtList>
 
           </View>
@@ -163,10 +178,11 @@ export default class Index extends Component {
         </View>
         <View className='safeArea blank'></View>
         <View className='bottom safeArea'>
-          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{this.state.isFullPayment?'支付全款￥'+this.state.currentPrice:'支付定金￥'+this.state.reserve}</AtButton></View>
+          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{'支付定金￥'+this.state.reserve}</AtButton></View>
 
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
+        <AtModal isOpened = {this.modalIsOpened} content = {this.modalContent}/>
       </View>
     )
   }
