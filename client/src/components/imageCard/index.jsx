@@ -40,7 +40,6 @@ export default class CCard extends Component {
           fileID: own.props.cloudId
         }]
       }).then(res => {
-        console.log(res.fileList[0].tempFileURL)
         if(res.fileList[0].tempFileURL){
           own.setState({src:res.fileList[0].tempFileURL})
         }

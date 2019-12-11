@@ -50,7 +50,6 @@ export default class Index extends Component {
       name:'getOrderLstStatus',
       success:function(res){
         Taro.stopPullDownRefresh();
-        console.log(res);
         var orderPanel=[
           {text:'待支付',icon:'daifukuan'},
           {text:'待使用',icon:'daifahuo'},

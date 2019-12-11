@@ -61,9 +61,6 @@ export default class CButton extends Component {
       'at-button--full': full,
 
     }
-
-    console.log(classObject);
-
     return (
       <View className={classNames(rootClassName, classObject, this.props.className)}
       style={customStyle}

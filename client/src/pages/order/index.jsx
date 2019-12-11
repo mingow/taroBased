@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import QRCode from '../../utils/weapp-qrcode'
@@ -114,10 +114,12 @@ export default class Index extends Component {
     wx.requestSubscribeMessage({
       tmplIds: ['mYzVgOdG7q4kXRKY39qqQOMyr7-qGB8v9_3wHaQqLsk'],
       success (res) {
-        if(JSON.stringify(res).indexOf('reject')!=-1){
-
+        if(JSON.stringify(res).indexOf('reject')==-1){
+          Taro.atMessage({
+            'message': '订阅成功',
+            'type': 'success',
+          })
         }
-        console.log(res)
       }
     })
   }
@@ -126,6 +128,7 @@ export default class Index extends Component {
 
     return (
       <View className='index'>
+        <AtMessage />
         <View className='session' style={this.state.data.id?'':'display:none'}>
           <View className='header'><Text>场次信息</Text></View>
           <View className='body'>
@@ -168,11 +171,6 @@ export default class Index extends Component {
         </View>
         <View className='safeArea blank'></View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
-        <AtModal
-          isOpened={this.state.isSubscribe}
-          confirmText='确认'
-          content='订阅提醒通知成功！我们将在订单'
-        />
       </View>
     )
   }

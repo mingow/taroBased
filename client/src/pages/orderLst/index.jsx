@@ -97,7 +97,6 @@ export default class Index extends Component {
       i.statusT=orderStatus[i.status];
       i.sessionT= session[i.session];
       var date = new Date(i.createTime);
-      console.log(date);
       i.create = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getMinutes();
     })
     me.setState({currentLst:arr},function(){
