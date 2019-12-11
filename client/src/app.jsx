@@ -23,6 +23,7 @@ class App extends Component {
       'pages/item/index',
       'pages/orderLst/index',
       'pages/order/index',
+      'pages/supervisor/index',
       'pages/preOrder/index'
     ],
     tabBar: {

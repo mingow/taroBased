@@ -85,6 +85,16 @@ export default class Index extends Component {
       data:config,
       success: function(res){
         wx.hideLoading();
+        //检查订单是否处于可支付状态
+        if(res.result=='orderExpired'){
+          me.setState({
+            modalIsOpened:true,
+            modalContent:'订单付款时间已超时，请重新下单支付，谢谢！'
+          })
+          Taro.navigateBack({ delta:1});
+          return;
+        }
+        //确认可以支付，调用支付接口
         wx.requestPayment({
           timeStamp:res.result.timeStamp,
           nonceStr:res.result.nonceStr,
@@ -101,6 +111,7 @@ export default class Index extends Component {
                 out_trade_no:config.out_trade_no
               },
               success:function(){
+                //更改订单状态成功，跳转订单详情页
                 Taro.redirectTo({
                   url: '/pages/order/index?id='+config.id
                 })
@@ -111,7 +122,11 @@ export default class Index extends Component {
             })
           },
           fail:function(res){
-            console.log(res);
+            //支付失败
+            wx.showToast({
+              title: '支付失败，重新支付！',
+              icon:'none'
+            });
           }
         })
       },

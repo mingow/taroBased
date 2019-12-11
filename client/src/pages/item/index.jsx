@@ -16,6 +16,7 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      shopId:'',
       src: '',
       width:0,
       buy:false,
@@ -38,16 +39,7 @@ export default class Index extends Component {
         price:'',
         oriPrice:'',
         intro:[
-          '【场地空间】400平米天地4层超大面积，100平米湖畔花园鸟语花香',
-          '【娱乐设施】',
-          '【五黑房】超强吃机主机配34寸曲面显示器，祝你大吉大利',
-          '【KTV】20平米海量曲库超大练歌房，让你想唱就唱',
-          '【电影房】高清投影巨幅荧幕，让你身临其境',
-          '【桌游】玉女烈白混，谁水谁先die',
-          '【说明】',
-          '本次费用包含30人套餐价格，超出人员按68元/人收取费用，场地布置有28人次床铺，超出此人数将无法安排床位，我们的管家会尽可能为您协调，还请谅解。',
-          '场地提供自助厨房，如需动火做饭需额外加收200元清洁费。',
-          '场地提供各类酒水，均按照超市价格出售，可提前冰镇，欢迎和管家咨询。',
+
           '由于有多个预定渠道，可能出现预定失败的情况，预定失败支付的定金会原路退回，还请谅解（如非顾客原因导致预定失败，将赠送一张优惠券，我们将竭尽所能满足顾客的需求）',
         ],
         more:'https://mp.weixin.qq.com/s/MYfcxgegSKjch2DMBcBZbw'
@@ -228,11 +220,23 @@ export default class Index extends Component {
     this.getCurrentDate();
     console.log(wx.getSystemInfoSync().windowWidth);
     this.setState({width:wx.getSystemInfoSync().windowWidth+'px'});
-    if(this.$router.params.src){
-      this.setState({src:this.$router.params.src})
+    if(this.$router.params.shopId){
+      this.setState({shopId:this.$router.params.shopId})
+      //获取信息
+      const me = this;
+      const db = wx.cloud.database();
+      const SHOPID = this.$router.params.shopId;
+      db.collection('shopInfo').where({_id:SHOPID}).get().then((res)=>{
+        if(res.data.length){
+          this.setState({
+            data:res.data[0]
+          })
+        }
+      })
     }
     else{
-
+      //未获取shopId，返回上一页
+      Taro.navigateBack({delta:1})
     }
     wx.setNavigationBarTitle({
       title: this.state.data.name

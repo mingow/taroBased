@@ -5,7 +5,7 @@ cloud.init()
 
 exports.main = async (event) => {
   //处理多种请求
-
+  const { OPENID, APPID } = cloud.getWXContext();
   //判断传入参数
   if(event.id){
     //获取特定id订单信息
@@ -13,7 +13,7 @@ exports.main = async (event) => {
       const ID = event.id;//获取订单编号
       const db = cloud.database();
       var result = {};
-      db.collection('orderLst').where({_id:ID}).get().then((res) =>{
+      db.collection('orderLst').where({_id:ID,userId:OPENID}).get().then((res) =>{
         if(res.data.length){
           const SHOP=res.data[0].location;
           result = Object.assign({id:res.data[0]._id},res.data[0])

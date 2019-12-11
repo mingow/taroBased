@@ -48,16 +48,28 @@ exports.main = async (event, context) => {
       trade_no=trade_no+'F';
     }
 
-    let result = await api.getPayParams({
-      //商户订单号，我这里是定义的book+商品发布时间+当前时间戳
-      //微信这里限制订单号一次性不能重复，只需要唯一即可
-      out_trade_no:event.out_trade_no,
-      body: event.title,       //商品名称，我设置的书名
-      total_fee: parseInt(1),     //金额，注意是数字，不是字符串
-      openid: wxContext.OPENID //***用户的openid
-    });
+    //再次确认订单状态是否可支付
+    var rec = await db.collection('orderLst')
+    .where({
+      _id:event.id,
+      status:0
+    })
+    .get();
 
-    ctx.body = result;
+    if(rec.data.length){
+      let result = await api.getPayParams({
+        //商户订单号，我这里是定义的book+商品发布时间+当前时间戳
+        //微信这里限制订单号一次性不能重复，只需要唯一即可
+        out_trade_no:event.out_trade_no,
+        body: event.title,       //商品名称，我设置的书名
+        total_fee: parseInt(1),     //金额，注意是数字，不是字符串
+        openid: wxContext.OPENID //***用户的openid
+      });
+
+      ctx.body = result;
+    }else{
+      ctx.body = 'orderExpired'
+    }    
   });
 
 

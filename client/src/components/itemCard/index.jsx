@@ -12,7 +12,9 @@ export default class ItemCard extends Component {
     super(props)
     this.state = {
       context: {},
-      img:''
+      img:'',
+      price:3999,
+      fullPrice:5999
     }
   }
 
@@ -35,7 +37,23 @@ export default class ItemCard extends Component {
   }
 
   componentDidMount() {
-
+    const ID = this.props.shopId;
+    const me = this;
+    const db = wx.cloud.database();
+    db.collection('pricing').where({note:/Discount/i}).limit(1).orderBy('val','asc').get().then((res) =>{
+      if(res.data.length){
+        me.setState({
+          price:parseFloat(res.data[0].val)
+        })
+      }
+    })
+    db.collection('pricing').where({note:/Full/i}).limit(1).orderBy('val','asc').get().then((res) =>{
+      if(res.data.length){
+        me.setState({
+          fullPrice:parseFloat(res.data[0].val)
+        })
+      }
+    })
   }
 
   componentWillUnmount() {}
@@ -45,15 +63,10 @@ export default class ItemCard extends Component {
   componentDidHide() {}
 
   naviTo() {
-    console.log(this.props.src)
     var own = this;
-    if(this.props.src){
+    if(this.props.shopId){
       Taro.navigateTo({
-        url:'/pages/item/index?src='+this.props.src,
-        success: function(res) {
-          // 通过eventChannel向被打开页面传送数据
-          res.eventChannel.emit('sendData', { src: own.props.src })
-        }
+        url:'/pages/item/index?shopId='+this.props.shopId,
       })
     }
   }
@@ -71,8 +84,8 @@ export default class ItemCard extends Component {
           <View className='text'>
             <Text className='primary'>{this.props.title}</Text>
             <Text className='second'>{this.props.second}</Text>
-            <Text className='price'>¥3999起</Text>
-            <Text className='oriPrice'>¥5200</Text>
+            <Text className='price'>￥{this.state.price}起</Text>
+            <Text className='oriPrice'>¥{this.state.fullPrice}</Text>
           </View>
         </View>
         <View className='clear'></View>
@@ -85,6 +98,7 @@ ItemCard.defaultProps = {
   size: 'normal',
   title:'undefined',
   second:'second',
+  shopId:'',
   src:'',
   thumb:'',
   type: '',
@@ -100,6 +114,7 @@ ItemCard.defaultProps = {
 ItemCard.propTypes = {
   title: PropTypes.string,
   src: PropTypes.string,
+  shopId: PropTypes.string,
   second: PropTypes.string,
   thumb: PropTypes.string,
   cloudId: PropTypes.string,

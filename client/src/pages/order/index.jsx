@@ -2,7 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar } from 'taro-ui'
+import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import QRCode from '../../utils/weapp-qrcode'
@@ -22,6 +22,7 @@ export default class Index extends Component {
     this.state = {
       isLoading:true,
       currentPrice:0,
+      isSubscribe:false,
       paid:0,
       data:{
         id:'',
@@ -167,6 +168,11 @@ export default class Index extends Component {
         </View>
         <View className='safeArea blank'></View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
+        <AtModal
+          isOpened={this.state.isSubscribe}
+          confirmText='确认'
+          content='订阅提醒通知成功！我们将在订单'
+        />
       </View>
     )
   }

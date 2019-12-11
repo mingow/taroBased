@@ -24,6 +24,8 @@ export default class Index extends Component {
     this.state = {
       unPayBadge:0,
       unUsedBadge:0,
+      tapCount:0,
+      timer:null,
       orderPanel:[
         {text:'待支付',icon:'daifukuan'},
         {text:'待使用',icon:'daifahuo'},
@@ -33,7 +35,7 @@ export default class Index extends Component {
       discountPanel:[
         {text:'优惠券',icon:'youhuiquan',available:true},
         {text:'邀请码',icon:'yaoqing',available:false},
-        {text:'积分',icon:'jifen',available:true},
+        {text:'积分',icon:'jifen',available:false},
         {text:'返现',icon:'fanxian',available:false},
       ],
     }
@@ -71,14 +73,15 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
-    setTimeout(Taro.startPullDownRefresh.bind(this),1000);
     Taro.eventCenter.off('refreshMemberOrderLst');
     Taro.eventCenter.on('refreshMemberOrderLst', Taro.startPullDownRefresh.bind(this));
   }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
+  componentDidShow() {
+    setTimeout(Taro.startPullDownRefresh.bind(this),1000);
+  }
 
   componentDidHide () { }
 
@@ -89,6 +92,24 @@ export default class Index extends Component {
         // 通过eventChannel向被打开页面传送数据
         //res.eventChannel.emit('sendData', {})
       }
+    })
+  }
+
+  tapToSupervisor() {
+
+    const me = this;
+    clearTimeout(this.state.timer);
+    var timer = setTimeout(function(){
+      me.setState({tapCount:0})
+    },1000)
+    if(this.state.tapCount>15){
+      Taro.navigateTo({
+        url:'/pages/supervisor/index',
+      })
+    }
+    this.setState({
+      tapCount:this.state.tapCount+1,
+      timer:timer
     })
   }
 
@@ -109,12 +130,11 @@ export default class Index extends Component {
     return (
       <View className='index'>
         <View className='avatar-info'>
-          <View className='avatar'><OpenData type="userAvatarUrl"></OpenData></View>
+          <View onClick = {this.tapToSupervisor.bind(this)} className='avatar'><OpenData type="userAvatarUrl"></OpenData></View>
 
           <View className='nickname'><OpenData type="userNickName"></OpenData></View>
           <View className='card'>
             <Text>尊贵的会员，您好！</Text>
-            <Text className='right'>积分:1000000</Text>
           </View>
         </View>
         <View className='banner'>

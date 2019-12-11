@@ -8,15 +8,18 @@ const _ = db.command;
 
 exports.main = async (event, context) => {
   var currentDate = new Date();
+  currentDate = new Date(currentDate+3*3600*24*1000);
   var date = currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+(currentDate.getDate())
-  //获取所有未使用订单信息
+  //获取所有已订阅未使用的订单进行提醒
   let rec = await db.collection('orderLst')
   .where({
     status:1,
-    date:date
+    date:_.lt(currentDate),
+    subscribe:_.gt(0)
   })
   .get()
   console.log(rec)
+
   rec.data.map(async(i) =>{
     try {
       await cloud.openapi.subscribeMessage.send({

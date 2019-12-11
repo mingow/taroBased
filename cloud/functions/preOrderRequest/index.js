@@ -59,7 +59,7 @@ exports.main = async (event) => {
               data: {
                 userId: OPENID, //用户id
                 location:event.location,
-                date:event.date,  //预约日期
+                date:new Date(event.date),  //预约日期
                 session:event.session,  //预约场次
                 status:0, //订单状态
                 stamp:db.serverDate(), //时间戳
@@ -68,7 +68,8 @@ exports.main = async (event) => {
                 createTime:db.serverDate(),
                 price:event.price,
                 pricingNote:event.pricingNote,
-                pricingPolicy:event.pricingPolicy
+                pricingPolicy:event.pricingPolicy,
+                subscribe:0
               }
             })
             .then((res) => {

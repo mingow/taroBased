@@ -20,7 +20,22 @@ export default class Index extends Component {
     backgroundColorBottom:'#fff',
   }
 
-  componentWillMount () { }
+  constructor (props) {
+    super(props);
+    this.state = {
+      list:[]
+    }
+  }
+
+  componentWillMount () {
+    const me = this;
+    const db = wx.cloud.database();
+    db.collection('shopInfo').where({state:1}).orderBy('sort','asc').get().then((res) =>{
+      console.log(res)
+      me.setState({list:res.data})
+    })
+
+  }
 
   componentDidMount () { }
 
@@ -31,6 +46,13 @@ export default class Index extends Component {
   componentDidHide () { }
 
   render () {
+
+    const List = this.state.list.map((i,index) => {
+      return <ItemCard key = {index} title={i.name} second={i.addr} src={i.art} cloudId={i.banner} shopId={i._id}>
+        {i.title}
+      </ItemCard>
+    })
+
     return (
       <View className='index'>
         <Swiper
@@ -49,9 +71,7 @@ export default class Index extends Component {
             <CloudImage cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/banners/sales00.jpg' ></CloudImage>
           </SwiperItem>
         </Swiper>
-        <ItemCard title="Homiez轰趴馆-龙岸花园店" second="深圳市龙华区民治街道华南路龙岸花园2期31A" src='https://mp.weixin.qq.com/s/IkmaHpNddqf12YeLP4iB4g' cloudId='cloud://homie-7g9vm.686f-homie-7g9vm-1300872165/resources/images/photos/0.jpg'>
-          快邀上好友来龙岸嗨翻天吧
-        </ItemCard>
+        {List}
         <View className='footer'>
           <Text>更多分店即将到来，敬请期待...</Text>
         </View>

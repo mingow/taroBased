@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 
-import { AtButton,AtIcon,AtTabs, AtTabsPane,AtToast,AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
+import { AtButton,AtIcon,AtTabs,AtTabsPane,AtToast,AtModal,AtForm,AtSearchBar  } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -15,15 +15,18 @@ export default class Index extends Component {
     backgroundColor:'#2CD18A',
     backgroundColorTop:'#2CD18A',
     backgroundColorBottom:'#f5f5f6',
-    enablePullDownRefresh: true,
+    enablePullDownRefresh: false,
     onReachBottomDistance:50,
   }
 
   constructor (props) {
     super(props);
     this.state = {
-      current:3,
-      isLoading:true,
+      dateSel:null,
+      current:0,
+      searchBtn:'扫一扫',
+      searchValue:'',
+      isLoading:false,
       currentLst:[],
       rawLst:[],
       target:'',
@@ -32,167 +35,73 @@ export default class Index extends Component {
   }
 
   componentWillMount () {
-    if(this.$router.params){
-      this.setState({current:Number(this.$router.params.index)})
-    }
-    Taro.eventCenter.off('refreshOrder');
-    Taro.eventCenter.on('refreshOrder', this.updateRawData.bind(this));
-  }
-
-  componentDidShow() {
-    console.log('show');
-  }
-
-  onPullDownRefresh(){
-    this.updateRawData()
-  }
-
-  handleClick(index) {
-    const me = this;
-    this.setState({current:index},me.updateCurrentLst.bind(this,me));
-  }
-
-  updateCurrentLst(me) {
-    var arr = [];
-    const LST = me.state.rawLst;
-    switch (me.state.current) {
-      case 0:
-        LST.map((i) => {
-          if(i.status==0){
-            arr.push(i);
-          }
-        })
-        break;
-      case 1:
-        LST.map((i) => {
-          if(i.status==1){
-            arr.push(i);
-          }
-        })
-        break;
-      case 2:
-        LST.map((i) => {
-          if(i.status==-1){
-            arr.push(i);
-          }
-        })
-        break;
-      default:
-        LST.map((i) => {arr.push(i);})  //全部显示
-    }
-
-    //处理列表格式
-    var session={
-      all:'全天场',
-      day:'白天场',
-      night:'通宵场',
-    };
-    var orderStatus={
-      '0':'待支付',
-      '1':'待使用',
-      '2':'已使用',
-      '-1':'已取消',
-    }
-    arr.map((i) =>{
-      i.statusT=orderStatus[i.status];
-      i.sessionT= session[i.session];
-      var date = new Date(i.createTime);
-      console.log(date);
-      i.create = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getMinutes();
+    var currentDate = new Date();
+    this.setState({
+      dateSel:currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+(currentDate.getDate())
     })
-    me.setState({currentLst:arr},function(){
-      console.log(me.state.currentLst);
-    });
   }
 
   componentDidMount () {
-    this.updateRawData();
-  }
 
-  updateRawData(){
-    const me = this;
-    this.setState({isLoading:true});
-    wx.cloud.callFunction({
-      name:'getOrderInfo',
-      success:function(res){
-        me.setState({isLoading:false,rawLst:res.result},me.updateCurrentLst.bind(this,me));
-        Taro.stopPullDownRefresh();
-      },
-      fail:function(){
-        Taro.stopPullDownRefresh();
-        Taro.navigateBack({ delta:1});
-      }
-    })
   }
 
   componentWillUnmount () {
-    Taro.eventCenter.trigger('refreshMemberOrderLst');
   }
 
   componentDidShow () { }
 
   componentDidHide () { }
 
-  cancelOrder() {
-    var me = this;
-    wx.cloud.callFunction({
-      name:'unpayOrderTrigger',
-      data:{
-        id:me.state.target
-      },
-      success:function(res){
-        me.setState({showModal:false});
-        me.updateRawData();
-      }
-    })
-  }
-
-  showModal(id){
-    console.log(id);
+  handleClick (value) {
     this.setState({
-      target:id,
-      showModal:true
+      current: value
     })
   }
 
-  closeModal(){
+  onDateChange(e) {
     this.setState({
-      showModal:false
+      dateSel: e.detail.value
     })
   }
 
-  showDetail(id,page){
-    var me = this;
-    Taro.navigateTo({
-      url:'/pages/'+page+'/index?id='+id,
-      success: function(res) {
-        // 通过eventChannel向被打开页面传送数据
-        console.log(res);
-      }
+  clearSearch() {
+    this.setState({
+      searchValue:'',
+      searchBtn:'扫一扫'
     })
   }
 
-  doNothing() {}
+  changeSearchValue(val){
+    if(val){
+      this.setState({
+        searchValue:val,
+        searchBtn:'搜索'
+      })
+    }
+
+  }
+
+  scanQRcode(){
+    const me = this;
+    if(this.state.searchValue==''){
+      wx.scanCode({
+        success (res) {
+          if(res.errMsg.indexOf('ok')!=-1){
+            me.setState({
+              searchValue:res.result,
+              searchBtn:'搜索'
+            })
+          }
+        }
+      })
+    }else{
+      console.log('search')
+    }
+
+  }
 
   render () {
     var me = this;
-    const List = this.state.currentLst.map((i,index) => {
-      return <View key={index} className='itemPanel'>
-        <View className='header'><Text>{i.create}</Text><Text className='right'>{i.statusT}</Text></View>
-        <View className='body'>
-          <View className='at-row'>
-            <View className='thumb at-col--auto'><CloudImage cloudId={i.shopInfo.thumb} ></CloudImage></View>
-            <View className='at-col contents'><Text>{i.shopInfo.name}</Text><Text>{i.date}</Text><Text>{i.sessionT}</Text></View>
-          </View>
-        </View>
-        <View className='at-row at-row__justify--end footer'>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showModal.bind(this,i._id)} className='gray' size='small'>取消</AtButton></View>
-          <View style={i.status>0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'order')} className='gray' size='small'>查看</AtButton></View>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'preOrder')} type='primary' size='small'>去支付</AtButton></View>
-
-        </View>
-      </View>
-    })
 
     return (
       <View className='index'>
@@ -200,29 +109,29 @@ export default class Index extends Component {
         animated={false}
         current={this.state.current}
         tabList={[
-          { title: '待支付' },
-          { title: '待使用' },
-          { title: '已取消' },
-          { title: '全部' },
+          { title: '有效订单' },
+          { title: '场次信息' }
         ]}
-        onClick={this.handleClick.bind(this)}>
-
+        onClick={this.handleClick.bind(this)}
+        >
+        <AtTabsPane current={this.state.current} index={0} >
+          <View>
+          <AtSearchBar
+            showActionButton
+            actionName={this.state.searchBtn}
+            value={this.state.searchValue}
+            onChange={this.changeSearchValue.bind(this)}
+            onActionClick={this.scanQRcode.bind(this)}
+            onClear={this.clearSearch.bind(this)}
+          />
+          </View>
+        </AtTabsPane>
+        <AtTabsPane current={this.state.current} index={1}>
+          <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;'>标签页二的内容</View>
+        </AtTabsPane>
       </AtTabs>
-      <View>
-        {List}
-      </View>
-      <View className='empty' style={this.state.currentLst.length==0?'':'display:none'} >订单空空如也，赶紧下一单吧</View>
       <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
-      <AtModal
-        isOpened={this.state.showModal}
-        title='取消订单'
-        cancelText='再想想'
-        confirmText='确认取消'
-        onConfirm={ this.cancelOrder.bind(this)}
-        onCancel={this.closeModal.bind(this)}
-        onClose={this.closeModal.bind(this)}
-        content='确认要取消所选订单吗？'
-      />
+
       </View>
     )
   }
