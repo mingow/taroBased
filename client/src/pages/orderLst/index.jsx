@@ -60,7 +60,7 @@ export default class Index extends Component {
       case 0:
         LST.map((i) => {
           if(i.status==0){
-            i.date = Util.Date.toString(i.date,'-')
+            i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
         })
@@ -68,7 +68,7 @@ export default class Index extends Component {
       case 1:
         LST.map((i) => {
           if(i.status==1){
-            i.date = Util.Date.toString(i.date,'-')
+            i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
         })
@@ -76,13 +76,13 @@ export default class Index extends Component {
       case 2:
         LST.map((i) => {
           if(i.status==-1){
-            i.date = Util.Date.toString(i.date,'-')
+            i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
         })
         break;
       default:
-        LST.map((i) => {i.date = Util.Date.toString(i.date,'-');arr.push(i);})  //全部显示
+        LST.map((i) => {i.date = Util.Date.toShortDate(i.date,'-');arr.push(i);})  //全部显示
     }
 
     //处理列表格式

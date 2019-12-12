@@ -10,7 +10,7 @@ import CloudImage from '../../components/imageFromCloud/index'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '我的订单',
+    navigationBarTitleText: '管理员页面',
     navigationBarBackgroundColor: '#2CD18A',
     navigationBarTextStyle: 'white',
     backgroundColor:'#2CD18A',
@@ -41,16 +41,13 @@ export default class Index extends Component {
   componentWillMount () {
     var currentDate = new Date();
     this.setState({
-      dateSel:Util.Date.toString(currentDate)
+      dateSel:Util.Date.toShortDate(currentDate)
     })
   }
 
-  componentDidMount () {
+  componentDidMount () { }
 
-  }
-
-  componentWillUnmount () {
-  }
+  componentWillUnmount () { }
 
   componentDidShow () { }
 
@@ -110,7 +107,7 @@ export default class Index extends Component {
           console.log(arr);
           var dic = {}
           arr.map(function(i){
-            let date = Util.Date.toString(i.date,'/');
+            let date = Util.Date.toShortDate(i.date,'/');
             switch (i.session) {
               case 'all':
                 dic[date]=3

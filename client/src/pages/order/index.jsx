@@ -138,7 +138,7 @@ export default class Index extends Component {
           <View className='body'>
             <View className='at-row'>
               <View className='thumb at-col--auto'><CloudImage cloudId={this.state.data.shopInfo.thumb} ></CloudImage></View>
-              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{Util.Date.toString(this.state.data.date,'-')}</Text><Text>{this.state.data.sessionT}</Text></View>
+              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{Util.Date.toShortDate(this.state.data.date,'-')}</Text><Text>{this.state.data.sessionT}</Text></View>
             </View>
           </View>
           <View className='header'><Text>金额</Text></View>

@@ -15,7 +15,6 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '订场',
-
     backgroundColorTop:'#fff',
     backgroundColorBottom:'#fff',
   }
@@ -31,10 +30,8 @@ export default class Index extends Component {
     const me = this;
     const db = wx.cloud.database();
     db.collection('shopInfo').where({state:1}).orderBy('sort','asc').get().then((res) =>{
-      console.log(res)
       me.setState({list:res.data})
     })
-
   }
 
   componentDidMount () { }
