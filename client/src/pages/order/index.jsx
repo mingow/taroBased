@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
+import Util from '../../utils/utils'
 
 import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
 
@@ -40,7 +41,10 @@ export default class Index extends Component {
     console.log(this.$router.params)
     wx.cloud.callFunction({
       name:'getOrderInfo',
-      data:this.$router.params,
+      data:{
+        $url:'getOrderById',
+        id:this.$router.params.id
+      },
       success:function(res){
         var session={
           all:'全天场',
@@ -134,7 +138,7 @@ export default class Index extends Component {
           <View className='body'>
             <View className='at-row'>
               <View className='thumb at-col--auto'><CloudImage cloudId={this.state.data.shopInfo.thumb} ></CloudImage></View>
-              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{this.state.data.date}</Text><Text>{this.state.data.sessionT}</Text></View>
+              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{Util.Date.toString(this.state.data.date,'-')}</Text><Text>{this.state.data.sessionT}</Text></View>
             </View>
           </View>
           <View className='header'><Text>金额</Text></View>

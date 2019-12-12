@@ -5,6 +5,7 @@ import './index.scss'
 import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtModal } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
+import Util from '../../utils/utils'
 
 export default class Index extends Component {
 
@@ -39,7 +40,10 @@ export default class Index extends Component {
     console.log(this.$router.params)
     wx.cloud.callFunction({
       name:'getOrderInfo',
-      data:this.$router.params,
+      data:{
+        $url:'getOrderById',
+        id:this.$router.params.id
+      },
       success:function(res){
         console.log(res);
         var session={
@@ -53,6 +57,8 @@ export default class Index extends Component {
           Taro.eventCenter.trigger('refreshOrder');
           Taro.navigateBack({ delta:1});
         }
+        var date = new Date(res.result.date);
+        res.result.date = date.getFullYear()+'/'+(date.getMonth()+1)+'/'+date.getDate()
         me.setState({
           isLoading:false,
           data:res.result,
@@ -163,7 +169,7 @@ export default class Index extends Component {
           <View className='body'>
             <View className='at-row'>
               <View className='thumb at-col--auto'><CloudImage cloudId={this.state.data.shopInfo.thumb} ></CloudImage></View>
-              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{this.state.data.date}</Text><Text>{this.state.data.sessionT}</Text></View>
+              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{Util.Date.toString(this.state.data.date,'-')}</Text><Text>{this.state.data.sessionT}</Text></View>
             </View>
           </View>
           <View className='header'><Text>金额</Text></View>

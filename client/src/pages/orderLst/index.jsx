@@ -5,6 +5,7 @@ import './index.scss'
 import { AtButton,AtIcon,AtTabs, AtTabsPane,AtToast,AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
+import Util from '../../utils/utils'
 
 export default class Index extends Component {
 
@@ -59,6 +60,7 @@ export default class Index extends Component {
       case 0:
         LST.map((i) => {
           if(i.status==0){
+            i.date = Util.Date.toString(i.date,'-')
             arr.push(i);
           }
         })
@@ -66,6 +68,7 @@ export default class Index extends Component {
       case 1:
         LST.map((i) => {
           if(i.status==1){
+            i.date = Util.Date.toString(i.date,'-')
             arr.push(i);
           }
         })
@@ -73,12 +76,13 @@ export default class Index extends Component {
       case 2:
         LST.map((i) => {
           if(i.status==-1){
+            i.date = Util.Date.toString(i.date,'-')
             arr.push(i);
           }
         })
         break;
       default:
-        LST.map((i) => {arr.push(i);})  //全部显示
+        LST.map((i) => {i.date = Util.Date.toString(i.date,'-');arr.push(i);})  //全部显示
     }
 
     //处理列表格式
@@ -112,6 +116,9 @@ export default class Index extends Component {
     const me = this;
     this.setState({isLoading:true});
     wx.cloud.callFunction({
+      data:{
+        $url:'getOrderByUserId'
+      },
       name:'getOrderInfo',
       success:function(res){
         me.setState({isLoading:false,rawLst:res.result},me.updateCurrentLst.bind(this,me));

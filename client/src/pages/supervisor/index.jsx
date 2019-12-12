@@ -1,8 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
+import Util from '../../utils/utils'
 
-import { AtButton,AtIcon,AtTabs,AtTabsPane,AtToast,AtModal,AtForm,AtSearchBar  } from 'taro-ui'
+import { AtButton,AtIcon,AtTabs,AtTabsPane,AtToast,AtModal,AtForm,AtSearchBar,AtCalendar } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -29,15 +30,18 @@ export default class Index extends Component {
       isLoading:false,
       currentLst:[],
       rawLst:[],
+      marks:[],
       target:'',
       showModal:false,
+      currentDate:new Date(),
+      shopId:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd'
     }
   }
 
   componentWillMount () {
     var currentDate = new Date();
     this.setState({
-      dateSel:currentDate.getFullYear()+'-'+(currentDate.getMonth()+1)+'-'+(currentDate.getDate())
+      dateSel:Util.Date.toString(currentDate)
     })
   }
 
@@ -56,6 +60,9 @@ export default class Index extends Component {
     this.setState({
       current: value
     })
+    if(value==1){
+      this.getSessionLst(new Date())
+    }
   }
 
   onDateChange(e) {
@@ -81,6 +88,56 @@ export default class Index extends Component {
 
   }
 
+  getSessionLst(date){
+    this.setState({
+      isLoading:true
+    })
+    const me = this;
+    if(typeof date=='string'){
+      date = new Date(date);
+    }
+    wx.cloud.callFunction({
+      name:'getOrderInfo',
+      data:{
+        $url:'getSessionStatus',
+        currentMonth:date,
+        shopId:me.state.shopId
+      },
+      success:function(res){
+        if(res.errMsg.indexOf('ok')!=-1){
+          //返回数据，开始标记
+          const arr = res.result;
+          console.log(arr);
+          var dic = {}
+          arr.map(function(i){
+            let date = Util.Date.toString(i.date,'/');
+            switch (i.session) {
+              case 'all':
+                dic[date]=3
+                break;
+              case 'day':
+                dic[date]=dic[date]?dic[date]+1:1;
+                break;
+              case 'night':
+                dic[date]=dic[date]?dic[date]+2:2;
+                break;
+              default:
+            }
+          })
+          var marks=[]
+          for(var i in dic){
+            marks.push({value:i,len:dic[i]})
+          }
+          console.log(marks)
+          me.setState({marks:marks,isLoading:false})
+        }
+      },
+      fail:function(){
+        me.setState({isLoading:false})
+      }
+    })
+  }
+
   scanQRcode(){
     const me = this;
     if(this.state.searchValue==''){
@@ -97,7 +154,6 @@ export default class Index extends Component {
     }else{
       console.log('search')
     }
-
   }
 
   render () {
@@ -127,7 +183,10 @@ export default class Index extends Component {
           </View>
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={1}>
-          <View style='padding: 100px 50px;background-color: #FAFBFC;text-align: center;'>标签页二的内容</View>
+          <View>
+            <View className='notice'><Text className=''>红点代表当日不可预定，黄点代表当日不可预定白天场，蓝点代表当日不可预订通宵场</Text></View>
+            <AtCalendar className='cal' onMonthChange={this.getSessionLst.bind(this)} marks={this.state.marks} />
+          </View>
         </AtTabsPane>
       </AtTabs>
       <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>

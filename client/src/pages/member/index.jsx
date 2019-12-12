@@ -102,6 +102,7 @@ export default class Index extends Component {
       me.setState({tapCount:0})
     },1000)
     if(this.state.tapCount>15){
+      this.setState({tapCount:0})
       Taro.navigateTo({
         url:'/pages/supervisor/index',
       })

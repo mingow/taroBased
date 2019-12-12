@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wx-server-sdk": "latest"
+    "wx-server-sdk": "latest",
+    "tcb-router":"1.1.2",
+    "crypto":"^1.0.1",
+    "fast-xml-parser":"3.15.1"
   }
 }

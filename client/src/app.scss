@@ -5,3 +5,26 @@ $shadow-color:darken($panel-blank,10%);
 $panel-bg:#fff;
 $img-blank:#f5f5f6;
 $custom-base-color:#fff;
+$at-calendar-mark-size: 16px !default;
+
+.at-calendar {
+  &__list {
+    &.flex {
+      .flex__item {
+        &-extra {
+          .extra-marks {
+            .mark1 {
+              background-color: #ffb800!important;
+            }
+            .mark2 {
+              background-color: #0075ff!important;
+            }
+            .mark3 {
+              background-color: #cf0000!important;
+            }
+          }
+        }
+      }
+    }
+  }
+}

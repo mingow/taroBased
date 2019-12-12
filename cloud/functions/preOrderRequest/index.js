@@ -31,6 +31,7 @@ exports.main = async (event) => {
 
         //判断查询条件，如果是全天场，当天只要有记录即不可预定
         var arr = []
+        event.date = new Date(event.date)
         if(event.session=='all'){
           arr.push({location:event.location,date:event.date,status:1});//日期相同且订单有效
           arr.push({location:event.location,date:event.date,status:0,stamp:_.gt(db.serverDate({offset:-1000*60*15}))});//日期相同，但订单仍在付款有效时间内(15min)

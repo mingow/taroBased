@@ -2,7 +2,7 @@
 
 .index {
   // height:400px;
-  background-color: #f5f5f6;
+  background-color: #fff;
 }
 
 .at-tabs__item {
@@ -12,41 +12,14 @@
 .at-tabs__item--active {
   color:$color-brand;
 }
-.itemPanel{
-  background-color: #fff;
-  width:100%;
-  margin:16rpx 0 0;
-  .header{
-    font-size: 24rpx;
-    padding:16rpx;
-    border-bottom: 1rpx solid #eee;
-  }
-  .right{
-    float: right;
-  }
-  .thumb{
-    height:160rpx;
-    width:160rpx;
-    margin:16rpx;
-  }
-  .body{
-    .contents{
-      margin:16rpx;
-      text{
-        display: block;
-        font-size: 22rpx;
-        margin:5rpx 0;
-      }
-    }
-  }
-  .footer{
-    border-top: 1rpx solid #eee;
-    .grid{
-      margin:10rpx 10rpx 10rpx 0;
-      .gray{
-        color:#070707;
-      }
-    }
+
+.notice{
+  background-color: #ffc4c4;
+  padding:12rpx;
+  text{
+    font-size: 22rpx;
+    color:#c60000;
+    display: block;
   }
 }
 .empty {
@@ -55,4 +28,7 @@
   display: inline-block;
   margin:20rpx 0;
   font-size: 24rpx;
+}
+.cal{
+  margin:20rpx 0;
 }
