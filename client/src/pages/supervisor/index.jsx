@@ -3,7 +3,7 @@ import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 
-import { AtButton,AtIcon,AtTabs,AtTabsPane,AtToast,AtModal,AtForm,AtSearchBar,AtCalendar } from 'taro-ui'
+import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -34,7 +34,10 @@ export default class Index extends Component {
       target:'',
       showModal:false,
       currentDate:new Date(),
-      shopId:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd'
+      shopId:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd',
+      stateLst:[],
+      actionOpened:false,
+      longTapDate:null
     }
   }
 
@@ -104,7 +107,9 @@ export default class Index extends Component {
         if(res.errMsg.indexOf('ok')!=-1){
           //返回数据，开始标记
           const arr = res.result;
-          console.log(arr);
+          me.setState({
+            rawLst:arr
+          })
           var dic = {}
           arr.map(function(i){
             let date = Util.Date.toShortDate(i.date,'/');
@@ -153,14 +158,49 @@ export default class Index extends Component {
     }
   }
 
+  selectDate(val){
+    var current = new Date(val.value);
+
+    var arr = this.state.rawLst.filter((i)=>{
+      if(Util.Date.toShortDate(current,'/')==Util.Date.toShortDate(new Date(i.date),'/')){
+        return i;
+      }
+    });
+    this.setState({currentDate:current,stateLst:arr});
+  }
+
+  actionSheet(val){
+    if(val){this.setState({longTapDate:new Date(val.value)})}
+    this.setState({actionOpened:!this.state.actionOpened})
+  }
+
   render () {
     var me = this;
+    var session={
+      all:'全天场',
+      day:'白天场',
+      night:'通宵场',
+    };
+    const list = this.state.stateLst.map((item,index)=>{
+      return (
+        <AtSwipeAction
+          key={index}
+          options={[
+            {text:'改期',style: {backgroundColor: '#2da0ff'}},
+            {text:'退款',style: {backgroundColor: '#ff4c2d'}},
+          ]}
+        >
+          <AtListItem title={session[item.session]} />
+        </AtSwipeAction>
+      )
+    })
 
     return (
       <View className='index'>
       <AtTabs
         animated={false}
         current={this.state.current}
+        swipeable={false}
         tabList={[
           { title: '有效订单' },
           { title: '场次信息' }
@@ -182,12 +222,26 @@ export default class Index extends Component {
         <AtTabsPane current={this.state.current} index={1}>
           <View>
             <View className='notice'><Text className=''>红点代表当日不可预定，黄点代表当日不可预定白天场，蓝点代表当日不可预订通宵场</Text></View>
-            <AtCalendar className='cal' onMonthChange={this.getSessionLst.bind(this)} marks={this.state.marks} />
-          </View>
+            <AtCalendar onDayLongClick={this.actionSheet.bind(this)} onDayClick = {this.selectDate.bind(this)} className='cal' onMonthChange={this.getSessionLst.bind(this)} marks={this.state.marks} />
+            <AtList>
+              {list}
+            </AtList>
+        </View>
         </AtTabsPane>
       </AtTabs>
       <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
+        <AtActionSheet
+          isOpened={this.state.actionOpened}
+          onClose={this.actionSheet.bind(this)}
 
+          cancelText='取消' title={Util.Date.toShortDate(this.state.longTapDate,'/')+' 临时占位锁定场次30分钟'}>
+          <AtActionSheetItem>
+            临时占位
+          </AtActionSheetItem>
+          <AtActionSheetItem>
+            预约
+          </AtActionSheetItem>
+        </AtActionSheet>
       </View>
     )
   }

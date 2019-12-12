@@ -70,13 +70,19 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  booking(){
+    wx.switchTab({
+      url:'/pages/booking/index'
+    })
+  }
+
   render () {
     return (
       <View className='index'>
         <View className='1px'></View>
         <View className='header margin'>
           <Text>Homie欢迎你</Text>
-          <Cbutton circle type='secondary'>立即预定</Cbutton>
+          <Cbutton circle onClick={this.booking.bind(this)} type='secondary'>立即预定</Cbutton>
         </View>
         <View className='title'><Text className='primary'>主推项目</Text><Text className='second'>精致推荐，给你最好的体验</Text></View>
         <CScrollArea>
