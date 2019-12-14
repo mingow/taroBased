@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
+import MD5 from '../../utils/md5'
 
 import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
 
@@ -92,7 +93,7 @@ export default class Index extends Component {
 
     var qrcode = new QRCode('canvas', {
       // usingIn: this,
-      text: this.$router.params.id,
+      text: MD5.md5(this.$router.params.id),
       width: 150,
       height: 150,
       colorDark: "#2CD18A",

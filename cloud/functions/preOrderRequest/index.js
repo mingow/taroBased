@@ -70,6 +70,9 @@ exports.main = async (event) => {
                 price:event.price,
                 pricingNote:event.pricingNote,
                 pricingPolicy:event.pricingPolicy,
+                expiredTime:db.serverDate({
+                  offset:event.expired*60*1000
+                }),
                 subscribe:0
               }
             })

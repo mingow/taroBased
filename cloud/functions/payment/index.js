@@ -21,16 +21,15 @@ const _ = db.command;
 
 //初始化微信支付
 const api = tenpay.init(config);//初始化api
-
+const wxContext = cloud.getWXContext();
 
 function checkOrder(json){
+  console.log(json);
   if(json.return_code=='SUCCESS'&&json.result_code=="SUCCESS"&&json.trade_state=="SUCCESS"){
     return true;
   }
   return false
 }
-
-
 
 exports.main = async (event, context) => {
 
@@ -69,7 +68,7 @@ exports.main = async (event, context) => {
       ctx.body = result;
     }else{
       ctx.body = 'orderExpired'
-    }    
+    }
   });
 
 
@@ -88,9 +87,11 @@ exports.main = async (event, context) => {
     })
     if(checkOrder(result)){
       try{
+
         let db_result = await db.collection('orderLst')
         .where({
-          _id:event.id
+          _id:event.id,
+          userId:wxContext.OPENID //增加对openid检查功能
         })
         .update({
           data:{
@@ -103,7 +104,10 @@ exports.main = async (event, context) => {
       } catch(e){
         console.error(e)
       }
+    }else{
+      ctx.body='userErr';
     }
+
   })
   return app.serve();
 }

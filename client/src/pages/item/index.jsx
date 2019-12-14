@@ -130,6 +130,7 @@ export default class Index extends Component {
       price:this.state.price,
       pricingPolicy:this.state.pricingPolicy,
       pricingNote:this.state.pricingNote,
+      expired:15,
       shopInfo:{
         name:shopInfo.name,
         thumb:shopInfo.thumb

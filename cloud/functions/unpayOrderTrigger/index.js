@@ -27,7 +27,7 @@ exports.main = async (event) => {
       return await db.collection('orderLst')
       .where({
         status:0,
-        createTime:_.lt(db.serverDate({offset:-1000*60*15}))
+        expiredTime:_.lt(db.serverDate())
       })
       .update({
         data:{
