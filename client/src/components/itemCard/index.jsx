@@ -66,7 +66,7 @@ export default class ItemCard extends Component {
     var own = this;
     if(this.props.shopId){
       Taro.navigateTo({
-        url:'/pages/item/index?shopId='+this.props.shopId,
+        url:'/pages/store/index?shopId='+this.props.shopId,
       })
     }
   }

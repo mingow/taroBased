@@ -20,7 +20,7 @@ class App extends Component {
       'pages/member/index',
       'pages/booking/index',
       'pages/webview/index',
-      'pages/item/index',
+      'pages/store/index',
       'pages/orderLst/index',
       'pages/order/index',
       'pages/supervisor/index',

@@ -3,7 +3,7 @@ import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 
-import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem } from 'taro-ui'
+import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -35,6 +35,7 @@ export default class Index extends Component {
       showModal:false,
       currentDate:new Date(),
       shopId:'a9f7ef91-0fd7-4928-beef-ac19dd8742bd',
+      occupyLayerOpened:false,
       stateLst:[],
       actionOpened:false,
       longTapDate:null
@@ -51,6 +52,10 @@ export default class Index extends Component {
   componentDidMount () { }
 
   componentWillUnmount () { }
+
+  componentWillUpdate() {
+    console.log(arguments);
+  }
 
   componentDidShow () { }
 
@@ -174,6 +179,13 @@ export default class Index extends Component {
     this.setState({actionOpened:!this.state.actionOpened})
   }
 
+  sessionOccupy(){
+    this.setState({
+      occupyLayerOpened:true,
+      actionOpened:false
+    })
+  }
+
   render () {
     var me = this;
     var session={
@@ -235,13 +247,15 @@ export default class Index extends Component {
           onClose={this.actionSheet.bind(this)}
 
           cancelText='取消' title={Util.Date.toShortDate(this.state.longTapDate,'/')+' 临时占位锁定场次30分钟'}>
-          <AtActionSheetItem>
+          <AtActionSheetItem onClick={ this.sessionOccupy.bind(this) }>
             临时占位
           </AtActionSheetItem>
           <AtActionSheetItem>
             预约
           </AtActionSheetItem>
         </AtActionSheet>
+        <AtFloatLayout isOpened={this.state.occupyLayerOpened}>
+        </AtFloatLayout>
       </View>
     )
   }

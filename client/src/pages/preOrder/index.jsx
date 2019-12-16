@@ -186,7 +186,7 @@ export default class Index extends Component {
           <View className='body'>
             <AtList>
               <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
-
+              
             </AtList>
 
           </View>

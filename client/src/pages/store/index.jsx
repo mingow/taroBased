@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView,View, Text,WebView,Swiper, SwiperItem,CoverView  } from '@tarojs/components'
-import PropTypes from 'prop-types'
 import CloudImage from '../../components/imageFromCloud/index'
 import { AtButton,AtIcon,AtFloatLayout,AtCalendar,AtTag,AtDivider,AtMessage,AtToast  } from 'taro-ui'
+import './index.scss'
 
 export default class Index extends Component {
 
@@ -19,6 +19,7 @@ export default class Index extends Component {
       shopId:'',
       src: '',
       width:0,
+      tmp:0,
       buy:false,
       loading:'确认日期中',
       loadingToast:false,
