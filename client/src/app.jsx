@@ -26,6 +26,11 @@ class App extends Component {
       'pages/supervisor/index',
       'pages/preOrder/index'
     ],
+    "permission": {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用于提供到店的导航信息" // 高速公路行驶持续后台定位
+      }
+    },
     tabBar: {
       // custom: true,
       color: '#7A7E83',

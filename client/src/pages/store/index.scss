@@ -156,6 +156,10 @@
   view{
     margin: 0 auto;
   }
+  .at-button{
+    line-height: inherit;
+    border: inherit;
+  }
 }
 
 .at-tag--active.at-tag--primary{

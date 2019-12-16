@@ -3,7 +3,7 @@ import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 
-import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout } from 'taro-ui'
+import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -38,7 +38,8 @@ export default class Index extends Component {
       occupyLayerOpened:false,
       stateLst:[],
       actionOpened:false,
-      longTapDate:null
+      longTapDate:null,
+      occupySession:''
     }
   }
 
@@ -68,6 +69,10 @@ export default class Index extends Component {
     if(value==1){
       this.getSessionLst(new Date())
     }
+  }
+
+  changeSessionTag(e) {
+    this.setState({session:e.name});
   }
 
   onDateChange(e) {
@@ -175,14 +180,26 @@ export default class Index extends Component {
   }
 
   actionSheet(val){
-    if(val){this.setState({longTapDate:new Date(val.value)})}
-    this.setState({actionOpened:!this.state.actionOpened})
+    if(val){
+      this.setState({
+        longTapDate:new Date(val.value),
+        actionOpened:true
+      })
+      return;
+    }
+    this.setState({actionOpened:false})
   }
 
   sessionOccupy(){
     this.setState({
       occupyLayerOpened:true,
       actionOpened:false
+    })
+  }
+
+  handleLayerClose(){
+    this.setState({
+      occupyLayerOpened:false
     })
   }
 
@@ -254,7 +271,16 @@ export default class Index extends Component {
             预约
           </AtActionSheetItem>
         </AtActionSheet>
-        <AtFloatLayout isOpened={this.state.occupyLayerOpened}>
+        <AtFloatLayout onClose={this.handleLayerClose.bind(this)} isOpened={this.state.occupyLayerOpened}>
+          <View className='at-row'>
+            <AtTag type='primary' className='at-col--auto tag' name='day' onClick={this.changeSessionTag.bind(this)}  active={this.state.session=='day'}>白天场</AtTag>
+            <AtTag type='primary' className='at-col--auto tag' name='night' onClick={this.changeSessionTag.bind(this)}  active={this.state.session=='night'}>通宵场</AtTag>
+            <AtTag type='primary' className='at-col--auto tag' name='all' onClick={this.changeSessionTag.bind(this)}  active={this.state.session=='all'}>全天场</AtTag>
+          </View>
+          <View  className='margin20'>
+            <AtButton type='primary'>生成二维码付费订单</AtButton>
+            <AtButton type='secondary'>生成已支付订单</AtButton>
+          </View>
         </AtFloatLayout>
       </View>
     )
