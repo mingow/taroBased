@@ -84,8 +84,7 @@ export default class ItemCard extends Component {
           <View className='text'>
             <Text className='primary'>{this.props.title}</Text>
             <Text className='second'>{this.props.second}</Text>
-            <Text className='price'>￥{this.state.price}起</Text>
-            <Text className='oriPrice'>¥{this.state.fullPrice}</Text>
+            <Text className='price'>￥{this.state.price}起</Text><Text className='oriPrice'>¥{this.state.fullPrice}</Text>
           </View>
         </View>
         <View className='clear'></View>

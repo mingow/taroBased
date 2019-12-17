@@ -24,13 +24,18 @@ class App extends Component {
       'pages/orderLst/index',
       'pages/order/index',
       'pages/supervisor/index',
-      'pages/preOrder/index'
+      'pages/preOrder/index',
+      'pages/games/index',
     ],
     "permission": {
       "scope.userLocation": {
         "desc": "你的位置信息将用于提供到店的导航信息" // 高速公路行驶持续后台定位
       }
     },
+    "navigateToMiniProgramAppIdList": [
+      "wx3bc2967f275c82b0",
+      "wxf9d3fcee6eda88de"
+    ],
     tabBar: {
       // custom: true,
       color: '#7A7E83',
@@ -51,7 +56,7 @@ class App extends Component {
           text: "订场"
         },
         {
-          pagePath: "pages/index/index",
+          pagePath: "pages/games/index",
           iconPath: "assets/images/game.png",
           selectedIconPath: "assets/images/game-fill.png",
           text: "游戏"

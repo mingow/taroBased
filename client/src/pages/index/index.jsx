@@ -135,6 +135,9 @@ export default class Index extends Component {
         <View className='margin'>
           <AtButton type='primary' openType='contact'>联系客服</AtButton>
         </View>
+        <View className='margin'>
+          <OfficialAccount></OfficialAccount>
+        </View>
 
       </View>
     )

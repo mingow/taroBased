@@ -255,15 +255,16 @@ export default class Index extends Component {
   }
 
   handleMap(){
+    const me = this;
     wx.getLocation({//获取当前经纬度
       type: 'wgs84', //返回可以用于wx.openLocation的经纬度，官方提示bug: iOS 6.3.30 type 参数不生效，只会返回 wgs84 类型的坐标信息
       success: function (res) {
         wx.openLocation({//​使用微信内置地图查看位置。
-          latitude: 22.614313,//要去的纬度-地址
-          longitude: 114.057607,//要去的经度-地址
+          latitude: me.state.data.geo.latitude,//要去的纬度-地址
+          longitude:me.state.data.geo.longitude,//要去的经度-地址
           scale: 14,
-          name: "Homie欢乐轰趴",
-          address:'深圳市龙华区华南路龙岸花园2期31栋A'
+          name: me.state.data.name,
+          address:me.state.data.addr
         })
       }
     })

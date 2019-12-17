@@ -55,6 +55,17 @@ export default class CContent extends Component {
           res.eventChannel.emit('sendData', { src: own.props.src })
         }
       })
+    }else if(this.props.miniProgram){
+      const me = this;
+      wx.navigateToMiniProgram({
+        appId: me.props.miniProgram,
+        success(res) {
+          // 打开其他小程序成功同步触发
+          wx.showToast({
+            title: '跳转成功'
+          })
+        }
+      })
     }
   }
 

@@ -6,6 +6,7 @@ import { AtButton,AtIcon,AtBadge,AtCard } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import CBadge from '../../components/badge/index'
+import StoreLst from '../../components/storeLst/index'
 
 export default class Index extends Component {
 
@@ -149,7 +150,10 @@ export default class Index extends Component {
             {discount}
           </View>
         </View>
-
+        <View className='ads'>
+          <OfficialAccount></OfficialAccount>
+        </View>
+        <StoreLst></StoreLst>
       </View>
     )
   }
