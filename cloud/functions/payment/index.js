@@ -8,7 +8,7 @@ const config = {
   appid: 'wx75f54ddb4927fd4c', //小程序Appid
   envName: 'homie-7g9vm', // 小程序云开发环境ID
   mchid: '1567190391', //商户号
-  partnerKey: 'dah11035o8assa8o53011haddah11035', //此处填商户密钥
+  partnerKey: 'aaa97c81ad8732c1b06c95ef8ae928f5', //此处填商户密钥
   notify_url: 'https://mp.weixin.qq.com', //支付回调网址,这里可以随意填一个网址
   spbill_create_ip: '127.0.0.1'
 };
