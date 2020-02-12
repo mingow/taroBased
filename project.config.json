@@ -60,6 +60,14 @@
 					"id": -1,
 					"name": "pages/preOrder/index",
 					"pathName": "pages/preOrder/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 2,
+					"name": "pages/store/index",
+					"pathName": "pages/store/index",
+					"query": "shopId=a9f7ef91-0fd7-4928-beef-ac19dd8742bd",
 					"scene": null
 				}
 			]

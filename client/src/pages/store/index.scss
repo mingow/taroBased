@@ -106,35 +106,8 @@
 
 .bottom {
   position: fixed;
-  height:100rpx;
   width:100%;
-  background-color: #f2f2f2;
-  border-top: 1px solid #ccc;
   bottom:0;
-  .grid {
-    display: inline-block;
-    height: 100rpx;
-  }
-  .left{
-    width:50%;
-    display: flex;
-    justify-content: center;
-  }
-  .right {
-    right:0;
-    background-color: $color-brand;
-    position: fixed;
-    // bottom: 0;
-    width:50%;
-    text{
-      display: inline-block;
-      width:100%;
-      text-align: center;
-      line-height: 100rpx;
-      font-size: 28rpx;
-      font-weight: bold;
-    }
-  }
 }
 
 .article_p {
@@ -165,4 +138,82 @@
 .at-tag--active.at-tag--primary{
   border-color: $color-brand!important;
   background-color: $color-brand!important;
+}
+
+.floatBar{
+  border-radius: 9999rpx;
+  margin:24rpx;
+  background-color: #1d1d1d;
+  box-shadow: 0 0 24px darken($shadow-color,12%);
+  display: flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  justify-content:flex-end;
+  overflow: hidden;
+  .left{
+    flex:1;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+    color:$color-brand;
+    .item{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      color:$color-brand;
+      line-height: inherit;
+      padding: 0;
+      background-color: transparent;
+      margin: 0;
+      .title{
+        display: block;
+        font-size: 18rpx;
+        text-align: center;
+        padding: 0 0 12rpx;
+      }
+    }
+  }
+  .primary{
+    background-color: $color-brand;
+    line-height: 96rpx;
+    width:50%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 32rpx;
+  }
+}
+
+.circleButton {
+  background-color: #1d1d1d;
+  border-radius: 48rpx;
+  height: 96rpx;
+  box-shadow: 0 0 24px darken($shadow-color,12%);
+  overflow: hidden;
+  padding:0 0 0 48rpx;
+  .button{
+    display:inline-block;
+    float:right;
+    padding:0 48rpx;
+    line-height: 90rpx;
+    background-color: $color-brand;
+    right:-1rpx;
+    font-weight: bold;
+    height: 100%;
+  }
+  .contents{
+    height: 100%;
+    display:inline-block;
+    .primary{
+      color:#fff;
+      font-size:40rpx;
+      .sign{
+        font-size: 24rpx;
+      }
+    }
+    .second{
+      color: #888;
+      font-size: 24rpx;
+      line-height: 20rpx;
+    }
+  }
 }

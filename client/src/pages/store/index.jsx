@@ -16,6 +16,7 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      bottomArea:0,
       shopId:'',
       src: '',
       width:0,
@@ -218,6 +219,18 @@ export default class Index extends Component {
   }
 
   componentWillMount() {
+    const me = this;
+    wx.getSystemInfo({
+      success (res) {
+        const height=res.screenHeight;
+        const bottom =  res.safeArea.bottom;
+        const top =  res.safeArea.top;
+        var diff = height-bottom;
+        me.setState({
+          bottomArea:diff
+        })
+      }
+    })
 
     this.getCurrentDate();
     console.log(wx.getSystemInfoSync().windowWidth);
@@ -225,7 +238,7 @@ export default class Index extends Component {
     if(this.$router.params.shopId){
       this.setState({shopId:this.$router.params.shopId})
       //获取信息
-      const me = this;
+
       const db = wx.cloud.database();
       const SHOPID = this.$router.params.shopId;
       db.collection('shopInfo').where({_id:SHOPID}).get().then((res)=>{
@@ -274,12 +287,17 @@ export default class Index extends Component {
 
     const {data} = this.state
 
+    const style = {
+      paddingBottom:this.state.bottomArea+'rpx'
+    }
+
     const content = data.intro.map((i,index) => {
       return <View key={index} className='at-article__p article_p'>{i}</View>
     })
     const pics = data.pics.map((i,index) => {
       return <SwiperItem key={index}><CloudImage cloudId={i}></CloudImage></SwiperItem>
     })
+    const contectTitle = this.state.data.name
     return (
       <View>
         <View className='index safeAreaM'>
@@ -306,25 +324,14 @@ export default class Index extends Component {
           <View className='safeArea'></View>
 
           {/* 以下部分是底部菜单栏 */}
-          <View className='bottom at-row safeArea'>
-            <View className='grid left at-col at-col-6 at-row'>
-              <View className='at-col iButton' onClick={this.backHome.bind(this)}>
-                <View><AtIcon prefixClass='icon' value='home' size='24' color='#666'></AtIcon></View>
-                <Text>首页</Text>
+          <View className='bottom' style={style}>
+            <View className='floatBar'>
+              <View className='left'>
+                <View className='item' onClick={this.backHome.bind(this)}><AtIcon prefixClass='icon' value='home' size='24'></AtIcon><Text className='title'>首页</Text></View>
+                <View className='item' onClick={this.handleMap.bind(this)}><AtIcon prefixClass='icon' value='ditu' size='24'></AtIcon><Text className='title'>地址</Text></View>
+                <Button className='item' showMessageCard sendMessageTitle={this.state.data.name} openType="contact"><AtIcon prefixClass='icon' value='tel-fill' size='24'></AtIcon><Text className='title'>客服</Text></Button>
               </View>
-              <View className='at-col iButton' onClick={this.handleMap.bind(this)}>
-                <View><AtIcon prefixClass='icon' value='dizhi' size='24' color='#666'></AtIcon></View>
-                <Text>位置</Text>
-              </View>
-              <View className='at-col iButton'>
-                <AtButton openType='contact'>
-                  <View><AtIcon prefixClass='icon' value='tel-fill' size='24' color='#666'></AtIcon></View>
-                  <Text>客服</Text>
-                </AtButton>
-              </View>
-            </View>
-            <View  className='safeArea grid at-col right at-col-6'>
-              <Text onClick={this.openFloatLayer.bind(this)} >立即预定</Text>
+              <View className='primary' onClick={this.openFloatLayer.bind(this)}>立即预定</View>
             </View>
           </View>
           {/* 以下部分是弹出层内容 */}
