@@ -19,6 +19,7 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      bottomArea:0,
       reserve:1000,
       isLoading:true,
       currentPrice:0,
@@ -37,6 +38,19 @@ export default class Index extends Component {
 
   componentWillMount () {
     const me = this;
+    wx.getSystemInfo({
+      success (res) {
+        const height=res.screenHeight;
+        const bottom =  res.safeArea.bottom;
+        const top =  res.safeArea.top;
+        var diff = height-bottom;
+        me.setState({
+          bottomArea:diff
+        })
+      }
+    })
+
+
     console.log(this.$router.params)
     wx.cloud.callFunction({
       name:'getOrderInfo',
@@ -161,7 +175,9 @@ export default class Index extends Component {
   componentDidHide () { }
 
   render () {
-
+    const style = {
+      paddingBottom:this.state.bottomArea+'rpx'
+    }
     return (
       <View className='index'>
         <View className='session' style={this.state.data.id?'':'display:none'}>
@@ -186,7 +202,7 @@ export default class Index extends Component {
           <View className='body'>
             <AtList>
               <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.isFullPayment?this.state.currentPrice:this.state.reserve).toFixed(2)} />
-              
+
             </AtList>
 
           </View>
@@ -198,13 +214,22 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='safeArea blank'></View>
-        <View className='bottom safeArea'>
-          <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{'支付定金￥'+this.state.reserve}</AtButton></View>
-
+        <View className='bottom ' style={style}>
+          <View className='margin'>
+            <View className='circleButton'>
+              <View className='button' onClick={this.payment.bind(this)}>
+                <Text>立即支付</Text>
+              </View>
+              <View className='contents'>
+                <View className='primary'><Text className='sign'>￥</Text><Text>{this.state.reserve}</Text></View>
+                <View className='second'><Text>定金</Text></View>
+              </View>
+            </View>
+          </View>
         </View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
         <AtModal isOpened = {this.modalIsOpened} content = {this.modalContent}/>
       </View>
     )
   }
-}
+}// <View className='margin'><AtButton onClick={this.payment.bind(this)} type='primary' >{'支付定金￥'+this.state.reserve}</AtButton></View>

@@ -3,7 +3,7 @@
 .index {
   // height:400px;
   background-color: #eee;
-  width:100%
+  width:100%;
 }
 
 .session{
@@ -58,12 +58,46 @@
   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
   padding-bottom: env(safe-area-inset-bottom); /* 兼容 iOS >= 11.2 */
 }
+.circleButton {
+  background-color: #1d1d1d;
+  border-radius: 48rpx;
+  height: 96rpx;
+  box-shadow: 0 0 24px darken($shadow-color,12%);
+  overflow: hidden;
+  padding:0 0 0 48rpx;
+  .button{
+    display:inline-block;
+    float:right;
+    padding:0 48rpx;
+    line-height: 90rpx;
+    background-color: $color-brand;
+    right:-1rpx;
+    font-weight: bold;
+    height: 100%;
+  }
+  .contents{
+    height: 100%;
+    display:inline-block;
+    .primary{
+      color:#fff;
+      font-size:40rpx;
+      .sign{
+        font-size: 24rpx;
+      }
+    }
+    .second{
+      color: #888;
+      font-size: 24rpx;
+      line-height: 20rpx;
+    }
+  }
+}
 .bottom {
   position: fixed;
   width:100%;
   bottom:0;
   .margin {
-    margin: 20rpx 10rpx;
+    margin: 20rpx 24rpx;
   }
 }
 .empty {

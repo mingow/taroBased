@@ -53,6 +53,13 @@
 					"id": -1,
 					"name": "pages/supervisor/index",
 					"pathName": "pages/supervisor/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/preOrder/index",
+					"pathName": "pages/preOrder/index",
 					"scene": null
 				}
 			]
