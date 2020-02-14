@@ -4,7 +4,7 @@ import './index.scss'
 import Util from '../../utils/utils'
 import MD5 from '../../utils/md5'
 
-import { AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
+import { AtSteps,AtTag,AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import QRCode from '../../utils/weapp-qrcode'
@@ -14,8 +14,10 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '订单详情',
-
-    backgroundColorTop:'#fff',
+    navigationBarBackgroundColor: '#ffcf00',
+    navigationBarTextStyle: 'black',
+    backgroundColor:'#ffcf00',
+    backgroundColorTop:'#ffcf00',
     backgroundColorBottom:'#fff',
   }
 
@@ -25,6 +27,7 @@ export default class Index extends Component {
       isLoading:true,
       currentPrice:0,
       isSubscribe:false,
+      state:1,
       paid:0,
       data:{
         id:'',
@@ -130,10 +133,39 @@ export default class Index extends Component {
   }
 
   render () {
+    const steps = [
+      {
+        'title': '待支付',
+        'success': true
+      },
+      {
+        'title': '待使用',
+      },
+      {
+        'title': '已完成'
+      }
+    ]
 
     return (
       <View className='index'>
+        <View className='topBG'></View>
         <AtMessage />
+        <View className='contents'>
+          <Text className='header'>期待与你相遇</Text>
+          <View className='orderSession'>
+            <Text className='at-article__h1'>{this.state.data.shopInfo.name}</Text>
+            <Text className='info'>订单号:{this.$router.params.id}</Text>
+            <View className='steps'>
+              <AtSteps
+                items={steps}
+                current={this.state.state}
+              />
+            </View>
+
+          </View>
+        </View>
+
+
         <View className='session' style={this.state.data.id?'':'display:none'}>
           <View className='header'><Text>场次信息</Text></View>
           <View className='body'>

@@ -13,7 +13,7 @@ export default class Index extends Component {
   config = {
     navigationBarTitleText: '个人中心',
     navigationBarBackgroundColor: '#ffcf00',
-    navigationBarTextStyle: 'white',
+    navigationBarTextStyle: 'black',
     backgroundColor:'#ffcf00',
     backgroundColorTop:'#ffcf00',
     backgroundColorBottom:'#f5f5f6',

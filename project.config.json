@@ -69,6 +69,12 @@
 					"pathName": "pages/store/index",
 					"query": "shopId=a9f7ef91-0fd7-4928-beef-ac19dd8742bd",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/orderLst/index",
+					"pathName": "pages/orderLst/index",
+					"scene": null
 				}
 			]
 		}
