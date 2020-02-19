@@ -11,10 +11,10 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '我的订单',
-    navigationBarBackgroundColor: '#2CD18A',
-    navigationBarTextStyle: 'white',
-    backgroundColor:'#2CD18A',
-    backgroundColorTop:'#2CD18A',
+    navigationBarBackgroundColor: '#ffcf00',
+    navigationBarTextStyle: 'black',
+    //backgroundColor:'#2CD18A',
+    backgroundColorTop:'#ffcf00',
     backgroundColorBottom:'#f5f5f6',
     enablePullDownRefresh: true,
     onReachBottomDistance:50,

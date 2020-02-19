@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { ScrollView,View, Text,WebView,Swiper, SwiperItem,CoverView  } from '@tarojs/components'
 import CloudImage from '../../components/imageFromCloud/index'
+import Util from '../../utils/utils'
 import { AtButton,AtIcon,AtFloatLayout,AtCalendar,AtTag,AtDivider,AtMessage,AtToast  } from 'taro-ui'
 import './index.scss'
 
@@ -24,7 +25,7 @@ export default class Index extends Component {
       buy:false,
       loading:'确认日期中',
       loadingToast:false,
-      session:'',
+      session:-1,
       date:'',
       currentDate:new Date(new Date()-3600*24*1000),
       price:'',
@@ -46,12 +47,9 @@ export default class Index extends Component {
         ],
         more:'https://mp.weixin.qq.com/s/MYfcxgegSKjch2DMBcBZbw'
       },
-      static:{
-        session:{
-          day:'白天场',
-          night:'通宵场',
-          all:'全天场',
-        }
+      sessionDetail:{},
+      config:{
+        session:[]
       }
     }
   }
@@ -95,7 +93,7 @@ export default class Index extends Component {
   }
   //弹出通知条，获取价格
   pushInfo() {
-    if(this.state.session&&this.state.date){
+    if(this.state.session!=-1&&this.state.date){
       this.checkAvailable();
       Taro.atMessage({
         'message': '获取价格中...',
@@ -105,7 +103,7 @@ export default class Index extends Component {
   }
   //更改场次
   changeTag(e) {
-    this.setState({session:e.name},this.pushInfo);
+    this.setState({session:e.name,sessionDetail:Util.sessionTime(this.state.config.session[e.name].start,this.state.config.session[e.name].duration)},this.pushInfo);
 
   }
   //跳转公众号文章介绍店铺详情
@@ -126,13 +124,14 @@ export default class Index extends Component {
     var shopInfo = Object.assign({},this.state.data);
     delete shopInfo.intro;
     const data = {
-      session:this.state.session,
+      session:this.state.config.session[this.state.session].val,
       date:this.state.date,
       location:this.state.location,
       price:this.state.price,
       pricingPolicy:this.state.pricingPolicy,
       pricingNote:this.state.pricingNote,
       expired:15,
+      time:this.state.config.session[this.state.session],
       shopInfo:{
         name:shopInfo.name,
         thumb:shopInfo.thumb
@@ -185,8 +184,9 @@ export default class Index extends Component {
 
   checkAvailable(){
     const me = this;
+    const session = this.state.config.session[this.state.session]
     const data = {
-      session:this.state.session,
+      session:this.state.config.session[this.state.session].val,
       date:this.state.date,
       location:this.state.location,
       shopName:this.state.data.name
@@ -200,7 +200,7 @@ export default class Index extends Component {
       data: data,
       success: function(res) {
         if(res.result){
-          if(res.result.available&&res.result.data.session==me.state.session&&res.result.data.date==me.state.date){
+          if(res.result.available&&res.result.data.session==session.val&&res.result.data.date==me.state.date){
             me.setState({price:res.result.price,pricingPolicy:res.result.pricingPolicy,pricingNote:res.result.pricingNote})
             Taro.atMessage({
               'message': '价格已更新',
@@ -248,6 +248,16 @@ export default class Index extends Component {
           })
         }
       })
+      db.collection('config').where({key:'storeSession'}).get().then((res)=>{
+        var arr = []
+        res.data.map((i)=>{
+          if(i.val.store==''||i.val.store==SHOPID){
+            arr.push(i.val)
+          }
+        })
+        this.setState({config:Object.assign({},this.state.config,{session:arr})})
+        console.log(Object.assign({},this.state.config,{session:arr}));
+      })
     }
     else{
       //未获取shopId，返回上一页
@@ -284,8 +294,8 @@ export default class Index extends Component {
   }
 
   render () {
-
-    const {data} = this.state
+    const me = this
+    const {data,config} = this.state
 
     const style = {
       paddingBottom:this.state.bottomArea+'rpx'
@@ -293,6 +303,9 @@ export default class Index extends Component {
 
     const content = data.intro.map((i,index) => {
       return <View key={index} className='at-article__p article_p'>{i}</View>
+    })
+    const sessionTag = config.session.map((i,index)=>{
+      return <AtTag key={index} size='small' type='primary' className='at-col--auto tag' name={index} onClick={me.changeTag.bind(me)}  active={me.state.session==index}>{i.name}</AtTag>
     })
     const pics = data.pics.map((i,index) => {
       return <SwiperItem key={index}><CloudImage cloudId={i}></CloudImage></SwiperItem>
@@ -346,8 +359,9 @@ export default class Index extends Component {
               <Text>{this.state.data.name}</Text>
               <View className='at-row'>
                 <View className='at-col'>
-                  <Text className='small'>场次:{this.state.session?this.state.static.session[this.state.session]:'请选择'}</Text>
+                  <Text className='small'>场次:{this.state.session!=-1?this.state.config.session[this.state.session].name:'请选择'}</Text>
                   <Text className='small'>日期:{this.state.date?this.state.date:'请选择'}</Text>
+                  <Text className='small'>时间:{this.state.session!=-1?this.state.sessionDetail.start+'-'+(this.state.sessionDetail.day?'第'+(this.state.sessionDetail.day+1)+'天':'')+this.state.sessionDetail.end:'请选择'}</Text>
                 </View>
                 <View className='at-col priceSession'>
                   <Text>价格：{this.state.price?this.state.price+' 元':'暂无'}</Text>
@@ -360,9 +374,7 @@ export default class Index extends Component {
               <AtDivider><Text className='header'>场次选择</Text></AtDivider>
             </View>
             <View className='at-row'>
-              <AtTag size='small' type='primary' className='at-col--auto tag' name='day' onClick={this.changeTag.bind(this)}  active={this.state.session=='day'}>白天场</AtTag>
-              <AtTag size='small' type='primary' className='at-col--auto tag' name='night' onClick={this.changeTag.bind(this)}  active={this.state.session=='night'}>通宵场</AtTag>
-              <AtTag size='small' type='primary' className='at-col--auto tag' name='all' onClick={this.changeTag.bind(this)}  active={this.state.session=='all'}>全天场</AtTag>
+              {sessionTag}
             </View>
             <View>
               <AtDivider><Text className='header'>日期选择</Text></AtDivider>

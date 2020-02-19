@@ -5,19 +5,21 @@
   width:100%;
   display: flex;
   flex-direction: column;
+  background-color: #f6f6f6;
   .topBG{
     height:500rpx;
     width:100%;
-    background-image:linear-gradient(to bottom , $color-brand, #fff);
+    background-image:linear-gradient(to bottom , $color-brand, #f6f6f6);
     position: absolute;
     top:0;
-    z-index: -99;
+    // z-index: -99;
   }
   .contents{
-    margin:12rpx;
+    margin:24rpx;
+    z-index: 99;
     .header{
       font-size: 48rpx;
-      font-weight: bold;
+      // font-weight: bold;
       color:darken($color-brand,10);
       display: block;
       margin:24rpx 30rpx;
@@ -36,6 +38,34 @@
         margin:24rpx 0;
         .at-steps__title{
           font-size: 24rpx;
+        }
+      }
+      .timeZone{
+        padding: 24rpx 48rpx;
+        display: flex;
+        flex-direction: row;
+        justify-content:center;
+        align-items:stretch;
+        .h1{
+          line-height: 108rpx;
+        }
+      }
+      .featureZone{
+        margin: 48rpx 0;
+        display: flex;
+        flex-direction: row;
+        justify-content:space-around;
+        align-items:stretch;
+        color:#444;
+        .item{
+          display: flex;
+          flex-direction: column;
+          align-items:stretch;
+          text-align: center;
+          .text{
+            line-height:64rpx;
+            font-size: 24rpx;
+          }
         }
       }
     }
@@ -121,4 +151,11 @@
   height:150px;
   width:150px;
   margin:20rpx auto;
+}
+
+.bold{
+  font-weight: bold;
+}
+.center{
+  text-align: center;
 }

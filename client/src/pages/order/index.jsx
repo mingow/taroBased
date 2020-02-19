@@ -4,7 +4,7 @@ import './index.scss'
 import Util from '../../utils/utils'
 import MD5 from '../../utils/md5'
 
-import { AtSteps,AtTag,AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage } from 'taro-ui'
+import { AtSteps,AtDivider,AtTag,AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage,AtBadge } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 import QRCode from '../../utils/weapp-qrcode'
@@ -16,9 +16,9 @@ export default class Index extends Component {
     navigationBarTitleText: '订单详情',
     navigationBarBackgroundColor: '#ffcf00',
     navigationBarTextStyle: 'black',
-    backgroundColor:'#ffcf00',
+    backgroundColor:'#f6f6f6',
     backgroundColorTop:'#ffcf00',
-    backgroundColorBottom:'#fff',
+    backgroundColorBottom:'#f6f6f6',
   }
 
   constructor (props) {
@@ -28,6 +28,11 @@ export default class Index extends Component {
       currentPrice:0,
       isSubscribe:false,
       state:1,
+      time:{
+        start:'',
+        end:'',
+        day:0
+      },
       paid:0,
       data:{
         id:'',
@@ -81,9 +86,15 @@ export default class Index extends Component {
             Taro.navigateBack({ delta:1});
           }
         })
+        var time = Util.sessionTime(res.result.time.start,res.result.time.duration);
         me.setState({
           data:res.result,
-          currentPrice:res.result.price
+          currentPrice:res.result.price,
+          time:{
+            start:time.start.substring(0,time.start.lastIndexOf(':')),
+            end:time.end.substring(0,time.end.lastIndexOf(':')),
+            day:time.day
+          }
         });
       },
       fail:function(){
@@ -145,6 +156,13 @@ export default class Index extends Component {
         'title': '已完成'
       }
     ]
+    var day = null;
+    if(this.state.time.day){
+      day = (<AtBadge value={'第'+(this.state.time.day+1)+'天'}><Text className='at-article__h1 h1'>{this.state.time.end}</Text></AtBadge>)
+    }
+    else{
+      day = (<Text className='at-article__h1 h1'>{this.state.time.end}</Text>)
+    }
 
     return (
       <View className='index'>
@@ -153,7 +171,7 @@ export default class Index extends Component {
         <View className='contents'>
           <Text className='header'>期待与你相遇</Text>
           <View className='orderSession'>
-            <Text className='at-article__h1'>{this.state.data.shopInfo.name}</Text>
+            <Text className='at-article__h2'>{this.state.data.shopInfo.name}</Text>
             <Text className='info'>订单号:{this.$router.params.id}</Text>
             <View className='steps'>
               <AtSteps
@@ -161,7 +179,22 @@ export default class Index extends Component {
                 current={this.state.state}
               />
             </View>
-
+            <Text className='info'>场次信息:{this.state.data.sessionT}</Text>
+            <View>
+              <Text className='at-article__h3'>{Util.Date.toShortDate(this.state.data.date,'-')} {Util.getWeekDay(this.state.data.date)}</Text>
+            </View>
+            <View className='timeZone'>
+              <View><Text className='at-article__h1 h1'>{this.state.time.start}</Text></View>
+              <View><AtIcon prefixClass='icon' value='zhi' size='48' ></AtIcon></View>
+              <View>{day}</View>
+            </View>
+            <AtButton circle type='primary' size='small'>调整时间</AtButton>
+            <View className='featureZone'>
+              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='canshi' size='32' ></AtIcon></AtBadge><Text className='text'>餐食套餐</Text></View>
+              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='sirendingzhi' size='32' ></AtIcon></AtBadge><Text className='text'>私人定制</Text></View>
+              <View className='item'><AtIcon prefixClass='icon' value='icon_huabanfuben' size='32' ></AtIcon><Text className='text'>联系管家</Text></View>
+              <View className='item'><AtIcon prefixClass='icon' value='ditu' size='32' ></AtIcon><Text className='text'>地图导航</Text></View>
+            </View>
           </View>
         </View>
 

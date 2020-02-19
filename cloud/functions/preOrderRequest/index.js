@@ -65,6 +65,7 @@ exports.main = async (event) => {
                 status:0, //订单状态
                 stamp:db.serverDate(), //时间戳
                 timeline:[{status:0,stamp:db.serverDate()}],
+                time:event.time,
                 shopInfo:event.shopInfo,
                 createTime:db.serverDate(),
                 price:event.price,
