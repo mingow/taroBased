@@ -3,6 +3,7 @@ import { View, Text,Swiper, SwiperItem } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 import MD5 from '../../utils/md5'
+import RSA from '../../utils/wx-rsa'
 
 import { AtSteps,AtDivider,AtTag,AtButton,AtIcon,AtToast,AtList, AtListItem,AtRadio,AtNoticebar,AtModal,AtMessage,AtBadge } from 'taro-ui'
 
@@ -24,6 +25,7 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      showQR:false,
       isLoading:true,
       currentPrice:0,
       isSubscribe:false,
@@ -45,6 +47,24 @@ export default class Index extends Component {
   }
 
   componentWillMount () {
+    //加密订单号生成二维码
+    var publicKey=Util.publicKey
+    var encrypt_rsa = new RSA.RSAKey();
+    encrypt_rsa = RSA.KEYUTIL.getKey(publicKey);
+    var encStr = encrypt_rsa.encrypt(this.$router.params.id)
+    encStr = RSA.hex2b64(encStr);
+
+    var qrcode = new QRCode('canvas', {
+      // usingIn: this,
+      text: encStr,
+      width: 150,
+      height: 150,
+      colorDark: "black",
+      colorLight: "white",
+      correctLevel: QRCode.CorrectLevel.L,
+    });
+    console.log(qrcode);
+
     const me = this;
     const ID = this.$router.params.id;
     console.log(this.$router.params)
@@ -105,16 +125,10 @@ export default class Index extends Component {
 
   componentDidMount () {
 
-    var qrcode = new QRCode('canvas', {
-      // usingIn: this,
-      text: MD5.md5(this.$router.params.id),
-      width: 150,
-      height: 150,
-      colorDark: "#2CD18A",
-      colorLight: "white",
-      correctLevel: QRCode.CorrectLevel.L,
-    });
-    console.log(qrcode);
+
+
+
+
   }
 
   componentWillUnmount () {
@@ -140,6 +154,12 @@ export default class Index extends Component {
           })
         }
       }
+    })
+  }
+
+  showQR(){
+    this.setState({
+      showQR:!this.state.showQR
     })
   }
 
@@ -169,76 +189,76 @@ export default class Index extends Component {
         <View className='topBG'></View>
         <AtMessage />
         <View className='contents'>
-          <Text className='header'>期待与你相遇</Text>
-          <View className='orderSession'>
+          <View className='header'>
+            <View className='tag'>已支付</View>
+            <View><Text className='title'>期待与你相遇</Text></View>
+          </View>
+
+          <View className='session'>
             <Text className='at-article__h2'>{this.state.data.shopInfo.name}</Text>
             <Text className='info'>订单号:{this.$router.params.id}</Text>
-            <View className='steps'>
-              <AtSteps
-                items={steps}
-                current={this.state.state}
-              />
-            </View>
             <Text className='info'>场次信息:{this.state.data.sessionT}</Text>
-            <View>
+            <View className='dateZone'>
               <Text className='at-article__h3'>{Util.Date.toShortDate(this.state.data.date,'-')} {Util.getWeekDay(this.state.data.date)}</Text>
+              <View>
+                <AtButton circle type='primary' full={false} size='small'>调整时间</AtButton>
+              </View>
             </View>
             <View className='timeZone'>
               <View><Text className='at-article__h1 h1'>{this.state.time.start}</Text></View>
               <View><AtIcon prefixClass='icon' value='zhi' size='48' ></AtIcon></View>
               <View>{day}</View>
             </View>
-            <AtButton circle type='primary' size='small'>调整时间</AtButton>
+
             <View className='featureZone'>
               <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='canshi' size='32' ></AtIcon></AtBadge><Text className='text'>餐食套餐</Text></View>
               <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='sirendingzhi' size='32' ></AtIcon></AtBadge><Text className='text'>私人定制</Text></View>
               <View className='item'><AtIcon prefixClass='icon' value='icon_huabanfuben' size='32' ></AtIcon><Text className='text'>联系管家</Text></View>
               <View className='item'><AtIcon prefixClass='icon' value='ditu' size='32' ></AtIcon><Text className='text'>地图导航</Text></View>
             </View>
+            <View className='flex'>
+              <Text className='note'>请点击右侧按钮预留手机号以便管家在必要时能及时与您取得联系！</Text>
+              <AtButton openType="getPhoneNumber" full={false} type='primary' size='small'>预留电话</AtButton>
+            </View>
+
           </View>
-        </View>
+          <View className='session'>
+            <Text className='at-article__h3'>验证信息</Text>
+            <View className='QRsession' style={this.state.showQR?'':'display:none'}>
+              <canvas className='canvas' style="width:150px; height:150px;" canvas-id='canvas'></canvas>
+            </View>
+            <View className='QRsession'>
+              <AtButton circle type='primary' size='small' full={false} onClick={this.showQR.bind(this)} >{this.state.showQR?'隐藏':'显示'}二维码</AtButton>
+            </View>
 
+          </View>
+          <View className='session'>
+            <Text className='at-article__h3'>支付信息</Text>
+            <View className='list'>
+              <View className='item'><Text className='key'>{this.state.data.pricingNote}</Text><Text className='value'>{'￥'+parseFloat(this.state.data.price).toFixed(2)}</Text></View>
+              <View className='item'><Text className='key'>优惠券</Text><Text className='value'>{'￥'+parseFloat('0').toFixed(2)}</Text></View>
+              <View className='item'><Text className='key'>订单总价</Text><Text className='value'>{'￥'+parseFloat(this.state.currentPrice).toFixed(2)}</Text></View>
+              <View className='item line'><Text className='key important'>实付款</Text><Text className='value important red'>{'￥'+parseFloat(this.state.paid).toFixed(2)}</Text></View>
+            </View>
 
-        <View className='session' style={this.state.data.id?'':'display:none'}>
-          <View className='header'><Text>场次信息</Text></View>
-          <View className='body'>
-            <View className='at-row'>
-              <View className='thumb at-col--auto'><CloudImage cloudId={this.state.data.shopInfo.thumb} ></CloudImage></View>
-              <View className='at-col contents'><Text>{this.state.data.shopInfo.name}</Text><Text>{Util.Date.toShortDate(this.state.data.date,'-')}</Text><Text>{this.state.data.sessionT}</Text></View>
+          </View>
+          <View className='session'>
+            <View className='footer'>
+              <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
+              <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
+              <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
+              <Text>墙裂建议订阅预约通知提醒，我们将在订单日期到期前发送预约提醒。</Text>
             </View>
           </View>
-          <View className='header'><Text>金额</Text></View>
-          <View className='body'>
-            <AtList>
-              <AtListItem title={this.state.data.pricingNote} extraText={'￥'+parseFloat(this.state.data.price).toFixed(2)} />
-              <AtListItem title='优惠券' extraText={'￥'+parseFloat('0').toFixed(2)} arrow='right' />
-              <AtListItem title='总价' extraText={'￥'+parseFloat(this.state.currentPrice).toFixed(2)} />
-            </AtList>
-          </View>
-        </View>
-        <View className='session' style={this.state.data.id?'':'display:none'}>
-          <View className='header'><Text>已支付金额</Text></View>
-          <View className='body'>
-            <AtList>
-              <AtListItem title='微信支付' extraText={'￥'+parseFloat(this.state.paid).toFixed(2)} />
-            </AtList>
-
-          </View>
           <View>
-            <canvas class='canvas' style="width:150px; height:150px;" canvas-id='canvas' bindlongtap='save'></canvas>
-          </View>
-          <View className='footer'>
-            <Text>说明：场次预定仅需支付定金，剩余部分到场后支付。如场次预定成功，定金不可退回，但如无法如约到场，可提前3天联系管家调整时间。</Text>
-            <Text>说明：场次预定结果以系统通知信息为准，如预定失败支付费用将原路退回。</Text>
-            <Text>特别说明：当日特惠场次不可改期，定金支付后不可退换，还请见谅！</Text>
-            <Text>墙裂建议订阅预约通知提醒，我们将在订单日期到期前发送预约提醒。</Text>
-          </View>
-          <View className='margin'>
-            <View className='btn'><AtButton onClick={this.subscribe.bind(this)} type='primary' >订阅预约通知提醒</AtButton></View>
-            <View className='btn'><AtButton >改期</AtButton></View>
-          </View>
 
+          </View>
         </View>
+        <View className='margin'>
+          <View className='btn'><AtButton onClick={this.subscribe.bind(this)} type='primary' >订阅预约通知提醒</AtButton></View>
+          <View className='btn'><AtButton >改期</AtButton></View>
+        </View>
+
         <View className='safeArea blank'></View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
       </View>

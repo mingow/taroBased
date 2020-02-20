@@ -382,7 +382,7 @@ export default class Index extends Component {
             <AtCalendar onSelectDate={this.changeDate.bind(this)} Swiper="{false}" minDate={this.state.currentDate} />
           </ScrollView>
 
-          <AtButton onClick={this.submit.bind(this)} type='primary' disabled={!this.state.price} >立即预定</AtButton>
+          <AtButton circle onClick={this.submit.bind(this)} type='primary' disabled={!this.state.price} >立即预定</AtButton>
           <View className='safeArea'></View>
         </AtFloatLayout>
         <AtToast hasMask={true} duration={0} isOpened={this.state.loadingToast} text={this.state.loading} status='loading'></AtToast>

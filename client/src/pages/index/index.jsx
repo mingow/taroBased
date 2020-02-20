@@ -133,7 +133,7 @@ export default class Index extends Component {
           快邀上好友来龙岸嗨翻天吧
         </CContent>
         <View className='margin'>
-          <AtButton type='primary' openType='contact'>联系客服</AtButton>
+          <AtButton circle type='primary' openType='contact'>联系客服</AtButton>
         </View>
         <View className='margin'>
           <OfficialAccount></OfficialAccount>

@@ -1,5 +1,5 @@
 @import './../../app';
-
+// @import './../../custom-var';
 .index {
   // height:400px;
   width:100%;
@@ -18,17 +18,44 @@
     margin:24rpx;
     z-index: 99;
     .header{
-      font-size: 48rpx;
-      // font-weight: bold;
-      color:darken($color-brand,10);
-      display: block;
-      margin:24rpx 30rpx;
+      margin:0 30rpx;
+      .tag{
+        font-size: 32rpx;
+        display: inline-block;
+        padding: 5rpx 10rpx;
+        border-radius: 10rpx;
+        background-color: darken($color-brand,30);
+        color: #fff;
+
+      }
+      .flex{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        color:#000;
+        margin: 0;
+        .text{
+          font-weight: bold;
+          font-size: 36rpx;
+          margin-left: 10rpx;
+        }
+      }
+      .title{
+        font-size: 48rpx;
+        // font-weight: bold;
+        color:darken($color-brand,10);
+        display: block;
+        margin:12rpx 0 24rpx;
+      }
     }
-    .orderSession{
+    .session{
       background-color: #fff;
       border-radius: 12rpx;
-      padding: 12rpx;
+      box-shadow: 0 0 18px darken($shadow-color,5%);
+      padding: 24rpx 12rpx;
       font-size: 24rpx;
+      margin-bottom: 24rpx;
       .info{
         display: block;
         margin:12rpx 30rpx;
@@ -40,6 +67,11 @@
           font-size: 24rpx;
         }
       }
+      .dateZone{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
       .timeZone{
         padding: 24rpx 48rpx;
         display: flex;
@@ -49,6 +81,10 @@
         .h1{
           line-height: 108rpx;
         }
+      }
+      .phoneZone{
+        display: flex;
+
       }
       .featureZone{
         margin: 48rpx 0;
@@ -68,58 +104,113 @@
           }
         }
       }
-    }
-  }
-
-}
-
-.session{
-  background-color: #fff;
-  width:100%;
-  margin:16rpx 0 0;
-  .header{
-    font-size: 24rpx;
-    padding:16rpx;
-    border-bottom: 1rpx solid #eee;
-  }
-  .right{
-    float: right;
-  }
-  .thumb{
-    height:160rpx;
-    width:160rpx;
-    margin:16rpx;
-  }
-  .body{
-    .contents{
-      margin:16rpx;
-      text{
-        display: block;
-        font-size: 22rpx;
-        margin:5rpx 0;
+      .list{
+        display: flex;
+        flex-direction: column;
+        margin:24rpx 12rpx 12rpx;
+        .item{
+          margin:8rpx 24rpx;
+          .key{
+            float: left;
+            color: $custom-forward-color;
+            font-size: 24rpx;
+          }
+          .value{
+            float:right;
+            color: $custom-forward-color;
+            font-size: 24rpx;
+          }
+          .important{
+            color:darken($color-brand,40%);
+            font-size: 28rpx;
+          }
+          .red{
+            color:#f00;
+          }
+        }
+        .line{
+          border-top: 1rpx dashed #aaa;
+          padding-top: 6rpx;
+        }
+      }
+      .QRsession{
+        display: flex;
+        justify-content: center;
+        margin:24rpx;
+      }
+      .footer{
+        padding:12rpx;
+        text{
+          font-size: 24rpx;
+          color:#333;
+          display: block;
+        }
       }
     }
-    .at-list__item {
-      font-size: 24rpx;
-      .item-extra__info {
-        font-size: 24rpx;
-      }
+    .flex{
+      margin: 24rpx;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
     }
-    .at-radio__title {
+    .note{
       font-size: 24rpx;
-    }
-  }
-  .footer{
-    border-top: 1rpx solid #eee;
-    background-color: #ffc4c4;
-    padding:12rpx;
-    text{
-      font-size: 22rpx;
-      color:#c60000;
+      color:#333;
       display: block;
+      margin-right: 24rpx;
     }
   }
+
 }
+
+// .session{
+//   background-color: #fff;
+//   width:100%;
+//   margin:16rpx 0 0;
+//   .header{
+//     font-size: 24rpx;
+//     padding:16rpx;
+//     border-bottom: 1rpx solid #eee;
+//   }
+//   .right{
+//     float: right;
+//   }
+//   .thumb{
+//     height:160rpx;
+//     width:160rpx;
+//     margin:16rpx;
+//   }
+//   .body{
+//     .contents{
+//       margin:16rpx;
+//       text{
+//         display: block;
+//         font-size: 22rpx;
+//         margin:5rpx 0;
+//       }
+//     }
+//     .at-list__item {
+//       font-size: 24rpx;
+//       .item-extra__info {
+//         font-size: 24rpx;
+//       }
+//     }
+//     .at-radio__title {
+//       font-size: 24rpx;
+//     }
+//   }
+//   .footer{
+//     border-top: 1rpx solid #eee;
+//     background-color: #ffc4c4;
+//     padding:12rpx;
+//     text{
+//       font-size: 22rpx;
+//       color:#c60000;
+//       display: block;
+//     }
+//   }
+// }
 
 .safeArea {
   padding-bottom: constant(safe-area-inset-bottom); /* 兼容 iOS < 11.2 */
@@ -151,6 +242,7 @@
   height:150px;
   width:150px;
   margin:20rpx auto;
+  z-index: 199;
 }
 
 .bold{

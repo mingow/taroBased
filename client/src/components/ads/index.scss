@@ -1,0 +1,27 @@
+.iButton{
+  height:100rpx;
+  text{
+    display: block;
+    font-weight: normal;
+    font-size: 22rpx;
+    text-align: center;
+    margin:10rpx;
+    color:#666;
+  }
+  view{
+    margin: 0 auto;
+  }
+}
+.badge{
+  position: relative;
+  font-size: 22rpx;
+  border-radius: 50%;
+  background-color: #f00;
+  color:#fff;
+  height:30rpx;
+  width:30rpx;
+  font-weight: bold;
+  text-align: center;
+  right: -30rpx;
+  top:-120rpx;
+}
