@@ -14,3 +14,5 @@ node_modules/taro-ui/dist/weapp/*
 !node_modules/taro-ui/dist/weapp/components
 node_modules/taro-ui/dist/weapp/components/*
 !node_modules/taro-ui/dist/weapp/components/calendar
+!node_modules/taro-ui/dist/weapp/components/indexes
+!node_modules/taro-ui/dist/weapp/components/list

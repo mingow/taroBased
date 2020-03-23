@@ -29,6 +29,7 @@ export default class Index extends Component {
       isLoading:true,
       currentPrice:0,
       isSubscribe:false,
+      showModal:false,
       state:1,
       time:{
         start:'',
@@ -44,6 +45,10 @@ export default class Index extends Component {
         }
       }
     }
+  }
+
+  handleClose(){
+    this.setState({showModal:false})
   }
 
   componentWillMount () {
@@ -81,6 +86,9 @@ export default class Index extends Component {
           night:'通宵场',
         };
         res.result.sessionT=session[res.result.session];
+        if(!res.result.phone){
+          me.setState({showModal:true})
+        }
         if(res.result.status<0){
           //订单状态发生变化，返回上层
           Taro.eventCenter.trigger('refreshOrder');
@@ -125,10 +133,20 @@ export default class Index extends Component {
 
   componentDidMount () {
 
+  }
 
-
-
-
+  updatePhoneInfo(e) {
+    console.log(arguments);
+    wx.cloud.callFunction({
+      name:'getPhoneNum',
+      data:{
+        phone:wx.cloud.CloudID(e.detail.cloudID),
+        id:this.$router.params.id
+      },
+      success:function(res){
+        console.log(res);
+      }
+    })
   }
 
   componentWillUnmount () {
@@ -217,8 +235,8 @@ export default class Index extends Component {
               <View className='item'><AtIcon prefixClass='icon' value='ditu' size='32' ></AtIcon><Text className='text'>地图导航</Text></View>
             </View>
             <View className='flex'>
-              <Text className='note'>请点击右侧按钮预留手机号以便管家在必要时能及时与您取得联系！</Text>
-              <AtButton openType="getPhoneNumber" full={false} type='primary' size='small'>预留电话</AtButton>
+              <Text className='note'>{this.state.data.phone?'当前预留手机号:'+this.state.data.phone:'请点击右侧按钮预留手机号以便管家在必要时能及时与您取得联系！'}</Text>
+              <AtButton openType="getPhoneNumber" onGetPhoneNumber={this.updatePhoneInfo.bind(this)} full={false} type='primary' size='small'>预留电话</AtButton>
             </View>
 
           </View>
@@ -261,6 +279,12 @@ export default class Index extends Component {
 
         <View className='safeArea blank'></View>
         <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
+        <AtModal
+          isOpened={this.state.showModal}
+          title='预留手机'
+          onClose={ this.handleClose.bind(this) }
+          content='您尚未预留手机号码，请点击页面预留电话预留手机号码，以便在必要时能及时与您取得联系'
+        />
       </View>
     )
   }

@@ -3,7 +3,7 @@ import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 
-import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton } from 'taro-ui'
+import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton,AtIndexes } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -69,6 +69,48 @@ export default class Index extends Component {
     if(value==1){
       this.getSessionLst(new Date())
     }
+    else if (value==0) {
+      this.getUndoneOrder()
+    }
+  }
+
+  getUndoneOrder(){
+    this.setState({
+      isLoading:true
+    })
+    const me = this;
+    if(typeof date=='string'){
+      date = new Date(date);
+    }
+    wx.cloud.callFunction({
+      name:'getOrderInfo',
+      data:{
+        $url:'getUndoneOrder'
+      },
+      success:function(res){
+        me.setState({isLoading:false})
+        if(res.errMsg.indexOf('ok')!=-1){
+          //返回数据，开始标记
+          const arr = res.result;
+          me.setState({
+            rawLst:arr
+          })
+          var today,tomorrow,expired,future=[];
+          console.log(arr);
+          arr.map((item,index)=>{
+            //formatting data
+            
+            if(new Date(item.date)==new Date()){
+              today.push(item)
+            }
+            console.log(item)
+          })
+        }
+      },
+      fail:function(){
+        me.setState({isLoading:false})
+      }
+    })
   }
 
   changeSessionTag(e) {
@@ -217,12 +259,60 @@ export default class Index extends Component {
           options={[
             {text:'改期',style: {backgroundColor: '#2da0ff'}},
             {text:'退款',style: {backgroundColor: '#ff4c2d'}},
+            {text:'详情',style: {backgroundColor: '#444'}},
           ]}
         >
           <AtListItem title={session[item.session]} />
         </AtSwipeAction>
       )
     })
+
+    const list1 = [{
+      title: '今日',
+      items: [
+        {
+          'name': '阿坝',
+          'tag':{
+            value:'全天',
+            cls:'orderInfoTagAll'
+          }
+          // 此处可加其他业务字段
+        },
+        {
+          'name': '阿拉善'
+        }]
+      },
+      {
+        title: '已过期',
+        items: [
+          {
+            'name': '北京'
+          },
+          {
+            'name': '保定'
+          }]
+      },
+      {
+        title: '即将过期',
+        items: [
+          {
+            'name': '北京'
+          },
+          {
+            'name': '保定'
+          }]
+      },
+      {
+        title: '未来',
+        items: [
+          {
+            'name': '北京'
+          },
+          {
+            'name': '保定'
+          }]
+      }
+    ]
 
     return (
       <View className='index'>
@@ -246,6 +336,11 @@ export default class Index extends Component {
             onActionClick={this.scanQRcode.bind(this)}
             onClear={this.clearSearch.bind(this)}
           />
+            <View style='top: 50px;bottom: 0px;'>
+              <AtIndexes list={list1}>
+                <View>自定义内容</View>
+              </AtIndexes>
+            </View>
           </View>
         </AtTabsPane>
         <AtTabsPane current={this.state.current} index={1}>

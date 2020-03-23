@@ -48,6 +48,19 @@ exports.main = async (event,context) => {
     ctx.body = result;
   })
 
+  app.router('getUndoneOrder', async(ctx,next) => {
+    let result = new Promise((resolve,reject) => {
+      const { OPENID, APPID } = cloud.getWXContext();
+      const ID = OPENID;//获取特定用户的订单Id
+      var result = {};
+      const db = cloud.database();
+      db.collection('orderLst').where({status:_.gt(0)}).orderBy('date', 'asc').get().then((res) =>{
+        resolve(res.data);
+      })
+    })
+    ctx.body = result;
+  })
+
   app.router('getSessionStatus', async(ctx,next) => {
     var current = new Date(event.currentMonth);
     current = new Date(current.getFullYear()+'-'+(current.getMonth()+1)+'-01');
