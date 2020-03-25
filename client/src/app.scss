@@ -8,16 +8,16 @@ $custom-base-color:#fff;
 $at-calendar-mark-size: 16px !default;
 $custom-forward-color: #404146;
 
-.orderInfoTagDay{
+.orderInfoTagSession{
   background-color: #ffb800;
   color:#000;
 }
-.orderInfoTagNight{
-  background-color: #0075ff;
+.orderInfoTagDate{
+  background-color: #6190E8;
   color:#fff;
 }
-.orderInfoTagAll{
-  background-color: #cf0000;
+.orderInfoTagTime{
+  background-color: #8c8c8c;
   color:#fff;
 }
 

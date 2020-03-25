@@ -26,6 +26,10 @@ export default class Index extends Component {
   }
 
   componentDidMount () {
+    wx.showModal({
+      title: '提示',
+      content: '小程序试运行上线，相关订单以客服确认信息为准'
+    })
     const version = wx.getSystemInfoSync().SDKVersion
     if (this.compareVersion(version, '2.6.0') >= 0) {
       wx.openBluetoothAdapter()

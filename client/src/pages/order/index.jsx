@@ -274,7 +274,7 @@ export default class Index extends Component {
         </View>
         <View className='margin'>
           <View className='btn'><AtButton onClick={this.subscribe.bind(this)} type='primary' >订阅预约通知提醒</AtButton></View>
-          <View className='btn'><AtButton >改期</AtButton></View>
+          <View className='btn'><AtButton openType='contact' showMessageCard sendMessageTitle='来自订单'>改期</AtButton></View>
         </View>
 
         <View className='safeArea blank'></View>

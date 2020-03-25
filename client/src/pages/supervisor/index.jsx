@@ -3,7 +3,7 @@ import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
 import Util from '../../utils/utils'
 
-import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton,AtIndexes } from 'taro-ui'
+import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton,AtIndexes,AtMessage } from 'taro-ui'
 
 import CloudImage from '../../components/imageFromCloud/index'
 
@@ -11,10 +11,10 @@ export default class Index extends Component {
 
   config = {
     navigationBarTitleText: '管理员页面',
-    navigationBarBackgroundColor: '#2CD18A',
-    navigationBarTextStyle: 'white',
-    backgroundColor:'#2CD18A',
-    backgroundColorTop:'#2CD18A',
+    navigationBarBackgroundColor: '#ffcf00',
+    navigationBarTextStyle: 'black',
+    backgroundColor:'#ffcf00',
+    backgroundColorTop:'#ffcf00',
     backgroundColorBottom:'#f5f5f6',
     enablePullDownRefresh: false,
     onReachBottomDistance:50,
@@ -39,7 +39,8 @@ export default class Index extends Component {
       stateLst:[],
       actionOpened:false,
       longTapDate:null,
-      occupySession:''
+      occupySession:'',
+      undoneLst:[]
     }
   }
 
@@ -50,7 +51,9 @@ export default class Index extends Component {
     })
   }
 
-  componentDidMount () { }
+  componentDidMount () {
+    this.getUndoneOrder()
+  }
 
   componentWillUnmount () { }
 
@@ -74,6 +77,10 @@ export default class Index extends Component {
     }
   }
 
+  orderActions () {
+    console.log(arguments);
+  }
+
   getUndoneOrder(){
     this.setState({
       isLoading:true
@@ -95,15 +102,66 @@ export default class Index extends Component {
           me.setState({
             rawLst:arr
           })
-          var today,tomorrow,expired,future=[];
+          var today=[],tomorrow=[],expired=[],future=[];
           console.log(arr);
           arr.map((item,index)=>{
             //formatting data
-            
-            if(new Date(item.date)==new Date()){
-              today.push(item)
+            var time = Util.sessionTime(item.time.start,item.time.duration);
+            var i = {
+              val:item._id,
+              phone:item.phone,
+              tag:[
+                {
+                  value:item.date.substring(0,item.date.indexOf('T')),
+                  cls:'orderInfoTagDate'
+                },{
+                  value:item.time.name,
+                  cls:'orderInfoTagSession'
+                },
+                {
+                  value:time.start.substring(0,time.start.lastIndexOf(':'))+'-'+time.end.substring(0,time.end.lastIndexOf(':')),
+                  cls:'orderInfoTagTime'
+                }
+              ],
+              actions:[
+                {
+                  text: '电话',
+                  val:'makePhoneCall',
+                  style: {
+                    backgroundColor: '#6190E8'
+                  }
+                },
+                {
+                  text: '详情',
+                  val:'detail',
+                  style: {
+                    backgroundColor: '#FF4949'
+                  }
+                }
+              ]
             }
-            console.log(item)
+            if(new Date(item.date)-new Date()>-24*60*60*1000&&new Date(item.date)-new Date()<=0){
+              today.push(i)
+            }
+            else if (new Date(item.date)-new Date()<0){
+              expired.push(i)
+            }
+            else if (new Date(item.date)-new Date()>0&&new Date(item.date)-new Date()<24*60*60*1000){
+              tomorrow.push(i)
+            }
+            else{
+              future.push(i)
+            }
+
+          })
+          var arr = [];
+          arr.push({title:'今日',items:today});
+          arr.push({title:'明日',items:tomorrow});
+          arr.push({title:'过期',items:expired});
+          arr.push({title:'未来',items:future});
+
+          me.setState({
+            undoneLst:arr
           })
         }
       },
@@ -221,6 +279,23 @@ export default class Index extends Component {
     this.setState({currentDate:current,stateLst:arr});
   }
 
+  orderActions (item,action){
+    if(action.val=='makePhoneCall'){
+      if(item.phone){
+        Taro.makePhoneCall({
+          phoneNumber: item.phone
+        })
+      }
+      else{
+        Taro.atMessage({
+          message: '用户未预留电话号码',
+          type: 'error',
+        })
+      }
+
+    }
+  }
+
   actionSheet(val){
     if(val){
       this.setState({
@@ -267,93 +342,47 @@ export default class Index extends Component {
       )
     })
 
-    const list1 = [{
-      title: '今日',
-      items: [
-        {
-          'name': '阿坝',
-          'tag':{
-            value:'全天',
-            cls:'orderInfoTagAll'
-          }
-          // 此处可加其他业务字段
-        },
-        {
-          'name': '阿拉善'
-        }]
-      },
-      {
-        title: '已过期',
-        items: [
-          {
-            'name': '北京'
-          },
-          {
-            'name': '保定'
-          }]
-      },
-      {
-        title: '即将过期',
-        items: [
-          {
-            'name': '北京'
-          },
-          {
-            'name': '保定'
-          }]
-      },
-      {
-        title: '未来',
-        items: [
-          {
-            'name': '北京'
-          },
-          {
-            'name': '保定'
-          }]
-      }
-    ]
-
     return (
       <View className='index'>
-      <AtTabs
-        animated={false}
-        current={this.state.current}
-        swipeable={false}
-        tabList={[
-          { title: '有效订单' },
-          { title: '场次信息' }
-        ]}
-        onClick={this.handleClick.bind(this)}
-        >
-        <AtTabsPane current={this.state.current} index={0} >
-          <View>
-          <AtSearchBar
-            showActionButton
-            actionName={this.state.searchBtn}
-            value={this.state.searchValue}
-            onChange={this.changeSearchValue.bind(this)}
-            onActionClick={this.scanQRcode.bind(this)}
-            onClear={this.clearSearch.bind(this)}
-          />
-            <View style='top: 50px;bottom: 0px;'>
-              <AtIndexes list={list1}>
-                <View>自定义内容</View>
-              </AtIndexes>
+        <AtMessage />
+        <AtTabs
+          animated={false}
+          current={this.state.current}
+          swipeable={false}
+          tabList={[
+            { title: '有效订单' },
+            { title: '场次信息' }
+          ]}
+          onClick={this.handleClick.bind(this)}
+          >
+          <AtTabsPane current={this.state.current} index={0} >
+            <View>
+            <AtSearchBar
+              showActionButton
+              actionName={this.state.searchBtn}
+              value={this.state.searchValue}
+              onChange={this.changeSearchValue.bind(this)}
+              onActionClick={this.scanQRcode.bind(this)}
+              onClear={this.clearSearch.bind(this)}
+            />
+              <View style='top: 50px;bottom: 0px;'>
+                <AtIndexes list={this.state.undoneLst} handleActions={this.orderActions.bind(this)} >
+                  <View>自定义内容</View>
+                </AtIndexes>
+              </View>
             </View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={1}>
+            <View>
+              <View className='notice'><Text className=''>红点代表当日不可预定，黄点代表当日不可预定白天场，蓝点代表当日不可预订通宵场</Text></View>
+              <AtCalendar onDayLongClick={this.actionSheet.bind(this)} onDayClick = {this.selectDate.bind(this)} className='cal' onMonthChange={this.getSessionLst.bind(this)} marks={this.state.marks} />
+              <AtList>
+                {list}
+              </AtList>
           </View>
-        </AtTabsPane>
-        <AtTabsPane current={this.state.current} index={1}>
-          <View>
-            <View className='notice'><Text className=''>红点代表当日不可预定，黄点代表当日不可预定白天场，蓝点代表当日不可预订通宵场</Text></View>
-            <AtCalendar onDayLongClick={this.actionSheet.bind(this)} onDayClick = {this.selectDate.bind(this)} className='cal' onMonthChange={this.getSessionLst.bind(this)} marks={this.state.marks} />
-            <AtList>
-              {list}
-            </AtList>
-        </View>
-        </AtTabsPane>
-      </AtTabs>
-      <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
+          </AtTabsPane>
+        </AtTabs>
+        <AtToast hasMask={true} duration={0} isOpened={this.state.isLoading} text='加载中' status='loading'></AtToast>
         <AtActionSheet
           isOpened={this.state.actionOpened}
           onClose={this.actionSheet.bind(this)}
