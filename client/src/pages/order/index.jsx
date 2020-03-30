@@ -25,6 +25,7 @@ export default class Index extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      modify:false,
       showQR:false,
       isLoading:true,
       currentPrice:0,
@@ -51,7 +52,21 @@ export default class Index extends Component {
     this.setState({showModal:false})
   }
 
+  advanced(){
+    if(this.state.data.role=='admin')
+    Taro.navigateTo({
+      url:'/admin/pages/orderModify/index?id='+this.state.data.id,
+      success: function(res) {
+        // 通过eventChannel向被打开页面传送数据
+        console.log(res);
+      }
+    })
+  }
+
   componentWillMount () {
+    if(!this.$router.params.id){
+      Taro.navigateBack({ delta:1});
+    }
     //加密订单号生成二维码
     var publicKey=Util.publicKey
     var encrypt_rsa = new RSA.RSAKey();
@@ -77,7 +92,8 @@ export default class Index extends Component {
       name:'getOrderInfo',
       data:{
         $url:'getOrderById',
-        id:this.$router.params.id
+        id:this.$router.params.id,
+        override:true
       },
       success:function(res){
         var session={
@@ -85,10 +101,15 @@ export default class Index extends Component {
           day:'白天场',
           night:'通宵场',
         };
+        console.log(res.result);
+        if(res.result.role=='owner'){
+          me.setState({modify:true})
+        }
         res.result.sessionT=session[res.result.session];
         if(!res.result.phone){
           me.setState({showModal:true})
         }
+
         if(res.result.status<0){
           //订单状态发生变化，返回上层
           Taro.eventCenter.trigger('refreshOrder');
@@ -146,6 +167,29 @@ export default class Index extends Component {
       success:function(res){
         console.log(res);
       }
+    })
+  }
+  //显示店铺地理位置
+  handleMap(){
+    const me = this;
+    wx.getLocation({//获取当前经纬度
+      type: 'wgs84', //返回可以用于wx.openLocation的经纬度，官方提示bug: iOS 6.3.30 type 参数不生效，只会返回 wgs84 类型的坐标信息
+      success: function (res) {
+        wx.openLocation({//​使用微信内置地图查看位置。
+          latitude: me.state.data.geo.latitude,//要去的纬度-地址
+          longitude:me.state.data.geo.longitude,//要去的经度-地址
+          scale: 14,
+          name: me.state.data.name,
+          address:me.state.data.addr
+        })
+      }
+    })
+  }
+  //拨通管家电话
+  callManager() {
+    const me = this;
+    Taro.makePhoneCall({
+      phoneNumber: me.state.data.managerTel
     })
   }
 
@@ -208,7 +252,7 @@ export default class Index extends Component {
         <AtMessage />
         <View className='contents'>
           <View className='header'>
-            <View className='tag'>已支付</View>
+            <View className='tag' onClick={this.advanced.bind(this)}>已支付</View>
             <View><Text className='title'>期待与你相遇</Text></View>
           </View>
 
@@ -218,9 +262,6 @@ export default class Index extends Component {
             <Text className='info'>场次信息:{this.state.data.sessionT}</Text>
             <View className='dateZone'>
               <Text className='at-article__h3'>{Util.Date.toShortDate(this.state.data.date,'-')} {Util.getWeekDay(this.state.data.date)}</Text>
-              <View>
-                <AtButton circle type='primary' full={false} size='small'>调整时间</AtButton>
-              </View>
             </View>
             <View className='timeZone'>
               <View><Text className='at-article__h1 h1'>{this.state.time.start}</Text></View>
@@ -229,14 +270,14 @@ export default class Index extends Component {
             </View>
 
             <View className='featureZone'>
-              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='canshi' size='32' ></AtIcon></AtBadge><Text className='text'>餐食套餐</Text></View>
-              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='sirendingzhi' size='32' ></AtIcon></AtBadge><Text className='text'>私人定制</Text></View>
-              <View className='item'><AtIcon prefixClass='icon' value='icon_huabanfuben' size='32' ></AtIcon><Text className='text'>联系管家</Text></View>
-              <View className='item'><AtIcon prefixClass='icon' value='ditu' size='32' ></AtIcon><Text className='text'>地图导航</Text></View>
+              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='canshi' color='#989898' size='32' ></AtIcon></AtBadge><Text className='text'>餐食套餐</Text></View>
+              <View className='item'><AtBadge value='增值'><AtIcon prefixClass='icon' value='sirendingzhi' color='#989898' size='32' ></AtIcon></AtBadge><Text className='text'>私人定制</Text></View>
+              <View className='item' onClick={this.callManager.bind(this)}><AtIcon prefixClass='icon' value='icon_huabanfuben' size='32' ></AtIcon><Text className='text'>联系管家</Text></View>
+              <View className='item' onClick={this.handleMap.bind(this)}><AtIcon prefixClass='icon' value='ditu' size='32' ></AtIcon><Text className='text'>地图导航</Text></View>
             </View>
             <View className='flex'>
               <Text className='note'>{this.state.data.phone?'当前预留手机号:'+this.state.data.phone:'请点击右侧按钮预留手机号以便管家在必要时能及时与您取得联系！'}</Text>
-              <AtButton openType="getPhoneNumber" onGetPhoneNumber={this.updatePhoneInfo.bind(this)} full={false} type='primary' size='small'>预留电话</AtButton>
+              <AtButton disabled={!this.state.modify} openType="getPhoneNumber" onGetPhoneNumber={this.updatePhoneInfo.bind(this)} full={false} type='primary' size='small'>预留电话</AtButton>
             </View>
 
           </View>
@@ -246,7 +287,7 @@ export default class Index extends Component {
               <canvas className='canvas' style="width:150px; height:150px;" canvas-id='canvas'></canvas>
             </View>
             <View className='QRsession'>
-              <AtButton circle type='primary' size='small' full={false} onClick={this.showQR.bind(this)} >{this.state.showQR?'隐藏':'显示'}二维码</AtButton>
+              <AtButton disabled={!this.state.modify} circle type='primary' size='small' full={false} onClick={this.showQR.bind(this)} >{this.state.showQR?'隐藏':'显示'}二维码</AtButton>
             </View>
 
           </View>

@@ -23,19 +23,28 @@ class App extends Component {
       'pages/store/index',
       'pages/orderLst/index',
       'pages/order/index',
-      'pages/supervisor/index',
       'pages/preOrder/index',
       'pages/games/index',
     ],
-    "permission": {
+    subpackages:[
+      {
+        root:'admin',
+        pages:[
+          'pages/supervisor/index',
+          'pages/orderModify/index',
+        ]
+      }
+    ],
+    permission: {
       "scope.userLocation": {
         "desc": "你的位置信息将用于提供到店的导航信息" // 高速公路行驶持续后台定位
       }
     },
-    "navigateToMiniProgramAppIdList": [
+    navigateToMiniProgramAppIdList: [
       "wx3bc2967f275c82b0",
       "wxf9d3fcee6eda88de"
-    ],
+    ]
+    ,
     tabBar: {
       // custom: true,
       color: '#7A7E83',

@@ -17,15 +17,44 @@ exports.main = async (event,context) => {
     const { OPENID, APPID } = cloud.getWXContext();
     let result = new Promise((resolve,reject) => {
       const ID = event.id;//获取订单编号
+      let params={
+        _id:ID,
+        userId:OPENID
+      }
+      if(event.override){
+        delete params.userId
+      }
       var result = {};
       const db = cloud.database();
-      db.collection('orderLst').where({_id:ID,userId:OPENID}).get().then((res) =>{
+      //获取订单信息
+      db.collection('orderLst').where(params).get().then((res) =>{
         if(res.data.length){
           const SHOP=res.data[0].location;
           result = Object.assign({id:res.data[0]._id},res.data[0])
+          //获取店铺信息
           db.collection('shopInfo').where({_id:SHOP}).get().then((res) => {
             result = Object.assign({},result,res.data[0]);
-            resolve(result);
+            //获取订单状态
+            db.collection('config').where({key:'orderStatus'}).get().then((res) =>{
+              var arr = res.data[0].val.filter((i)=>{
+                return result.status==i.key
+              });
+              result = Object.assign({},result,res.data[0],{status:arr[0].val,currentUserId:OPENID});
+              db.collection('config').where({key:'administrator'}).get().then((res)=>{
+                //判断用户身份
+                if(res.data[0].val.indexOf(OPENID)!=-1){
+                  result = Object.assign({},result,{role:'admin'});
+                }
+                else if(result.userId==result.currentUserId){
+                  result = Object.assign({},result,{role:'owner'});
+                }
+                else{
+                  result = Object.assign({},result,{role:'user'});
+                }
+                resolve(result);
+              })
+            })
+
           })
         }else{
           reject({errMsg:'na'});
@@ -82,39 +111,5 @@ exports.main = async (event,context) => {
   })
 
   return app.serve();
-  // //处理多种请求
-  // const { OPENID, APPID } = cloud.getWXContext();
-  // //判断传入参数
-  // if(event.id){
-  //   //获取特定id订单信息
-  //   return new Promise((resolve,reject) => {
-  //     const ID = event.id;//获取订单编号
-  //     const db = cloud.database();
-  //     var result = {};
-  //     db.collection('orderLst').where({_id:ID,userId:OPENID}).get().then((res) =>{
-  //       if(res.data.length){
-  //         const SHOP=res.data[0].location;
-  //         result = Object.assign({id:res.data[0]._id},res.data[0])
-  //         db.collection('shopInfo').where({_id:SHOP}).get().then((res) => {
-  //           result = Object.assign({},result,res.data[0]);
-  //           resolve(result);
-  //         })
-  //       }else{
-  //         reject({errMsg:'na'});
-  //       }
-  //     })
-  //   })
-  // }else{
-  //   //获取特定用户订单信息，返回列表
-  //   return new Promise((resolve,reject) => {
-  //     const { OPENID, APPID } = cloud.getWXContext();
-  //     const ID = OPENID;//获取特定用户的订单Id
-  //     const db = cloud.database();
-  //     var result = {};
-  //     db.collection('orderLst').where({userId:ID}).orderBy('createTime', 'desc').get().then((res) =>{
-  //       resolve(res.data);
-  //     })
-  //   })
-  // }
 
 }

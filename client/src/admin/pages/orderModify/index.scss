@@ -1,0 +1,23 @@
+@import './../../../app';
+
+.index {
+  // height:400px;
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f6f6f6;
+
+  .info{
+    .field{
+      background-color: #ffc666;
+    }
+    .val{
+      background-color: #dddddd;
+      white-space: pre-wrap;
+    }
+  }
+  .actions{
+    padding: 20rpx;
+  }
+
+}

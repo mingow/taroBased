@@ -74,6 +74,21 @@
 					"id": -1,
 					"name": "pages/orderLst/index",
 					"pathName": "pages/orderLst/index",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/order/index",
+					"pathName": "pages/order/index",
+					"query": "id=0dee15725e79632600205740103a1ed1",
+					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "pages/orderModify/index",
+					"pathName": "pages/orderModify/index",
+					"query": "id=355d7bae5e7962de001c565808c21fa2",
 					"scene": null
 				}
 			]

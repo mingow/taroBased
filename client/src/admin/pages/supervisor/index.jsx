@@ -1,11 +1,11 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Picker } from '@tarojs/components'
 import './index.scss'
-import Util from '../../utils/utils'
+import Util from '../../../utils/utils'
 
 import {AtTabs,AtTabsPane,AtToast,AtSearchBar,AtCalendar,AtList,AtListItem,AtSwipeAction,AtActionSheet,AtActionSheetItem,AtFloatLayout,AtTag,AtButton,AtIndexes,AtMessage } from 'taro-ui'
 
-import CloudImage from '../../components/imageFromCloud/index'
+import CloudImage from '../../../components/imageFromCloud/index'
 
 export default class Index extends Component {
 
@@ -77,9 +77,7 @@ export default class Index extends Component {
     }
   }
 
-  orderActions () {
-    console.log(arguments);
-  }
+
 
   getUndoneOrder(){
     this.setState({
@@ -278,12 +276,19 @@ export default class Index extends Component {
     });
     this.setState({currentDate:current,stateLst:arr});
   }
-
+  //订单右划按钮点击事件
   orderActions (item,action){
     if(action.val=='makePhoneCall'){
+      //选中为电话按钮
       if(item.phone){
         Taro.makePhoneCall({
-          phoneNumber: item.phone
+          phoneNumber: item.phone,
+          fail:function(){
+            Taro.atMessage({
+              message: '拨号失败',
+              type: 'error',
+            })
+          }
         })
       }
       else{
@@ -292,6 +297,9 @@ export default class Index extends Component {
           type: 'error',
         })
       }
+    }
+    else if(action.val=='detail'){
+      //选中为详情
 
     }
   }
