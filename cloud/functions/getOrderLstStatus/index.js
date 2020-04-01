@@ -16,7 +16,7 @@ exports.main = async (event) => {
       userId:OPENID
     })
     .group({
-      _id: '$status',
+      _id: '$_status',
       count: $.sum(1),
     })
     .end()

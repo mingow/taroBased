@@ -15,8 +15,10 @@ exports.main = async (event,context) => {
 
   app.router('getOrderById', async(ctx,next) => {
     const { OPENID, APPID } = cloud.getWXContext();
+    const ID = event.id;//获取订单编号
+
+
     let result = new Promise((resolve,reject) => {
-      const ID = event.id;//获取订单编号
       let params={
         _id:ID,
         userId:OPENID
@@ -25,6 +27,7 @@ exports.main = async (event,context) => {
         delete params.userId
       }
       var result = {};
+
       const db = cloud.database();
       //获取订单信息
       db.collection('orderLst').where(params).get().then((res) =>{
@@ -37,7 +40,7 @@ exports.main = async (event,context) => {
             //获取订单状态
             db.collection('config').where({key:'orderStatus'}).get().then((res) =>{
               var arr = res.data[0].val.filter((i)=>{
-                return result.status==i.key
+                return result._status==i.key
               });
               result = Object.assign({},result,res.data[0],{status:arr[0].val,currentUserId:OPENID});
               db.collection('config').where({key:'administrator'}).get().then((res)=>{
@@ -51,7 +54,50 @@ exports.main = async (event,context) => {
                 else{
                   result = Object.assign({},result,{role:'user'});
                 }
-                resolve(result);
+                //获取所有的微信支付信息
+                function getPayment(id){
+                  return new Promise((resolve,reject)=>{
+                    cloud.callFunction({
+                      name:'payment',
+                      data:{
+                        $url:'getPaymentOrder',
+                        id:ID,
+                        out_trade_no:ID
+                      }
+                    }).then(res=>{
+                      resolve(res)
+                    })
+                  })
+                }
+
+                var arr = result.payment;
+                const func = async function(){
+                  var list = [];
+                  for(var i in arr){
+                    list.push(await getPayment(arr[i].value))
+                  }
+                  return list;
+                }
+
+                const final = func().then(res=>{
+                  //获取中英翻译表
+                  db.collection('config').where({key:'dict'}).get().then((_res)=>{
+                    const dict = _res.data[0].val;
+                    var payments = res.map((i,index)=>{
+                      i.order_type=arr[index].key
+                      var obj = {
+                        out_trade_no:i.result.out_trade_no,
+                        order_type:arr[index].key,
+                        total_fee:i.result.total_fee,
+                        trade_state:i.result.trade_state,
+                        order_type_description:dict[i.order_type]?dict[i.order_type]:''
+                      }
+                      return obj;
+                    })
+                    var obj = Object.assign({},result,{payment:payments})
+                    resolve(obj);
+                  })
+                });
               })
             })
 
@@ -60,8 +106,15 @@ exports.main = async (event,context) => {
           reject({errMsg:'na'});
         }
       })
+    }).then((res) => {
+
+      return res;
     });
     ctx.body = result;
+    await next()
+
+  },async(ctx)=>{
+
   });
 
   app.router('getOrderByUserId', async(ctx,next) => {

@@ -59,7 +59,7 @@ export default class Index extends Component {
     switch (me.state.current) {
       case 0:
         LST.map((i) => {
-          if(i.status==0){
+          if(i._status==0){
             i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
@@ -67,7 +67,7 @@ export default class Index extends Component {
         break;
       case 1:
         LST.map((i) => {
-          if(i.status==1){
+          if(i._status==1){
             i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
@@ -75,7 +75,7 @@ export default class Index extends Component {
         break;
       case 2:
         LST.map((i) => {
-          if(i.status==-1){
+          if(i._status==-1){
             i.date = Util.Date.toShortDate(i.date,'-')
             arr.push(i);
           }
@@ -98,7 +98,7 @@ export default class Index extends Component {
       '-1':'已取消',
     }
     arr.map((i) =>{
-      i.statusT=orderStatus[i.status];
+      i.statusT=orderStatus[i._status];
       i.sessionT= session[i.session];
       var date = new Date(i.createTime);
       i.create = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getMinutes();
@@ -191,9 +191,9 @@ export default class Index extends Component {
           </View>
         </View>
         <View className='at-row at-row__justify--end footer'>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showModal.bind(this,i._id)} className='gray' size='small'>取消</AtButton></View>
-          <View style={i.status>0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'order')} className='gray' size='small'>查看</AtButton></View>
-          <View style={i.status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'preOrder')} type='primary' size='small'>去支付</AtButton></View>
+          <View style={i._status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showModal.bind(this,i._id)} className='gray' size='small'>取消</AtButton></View>
+          <View style={i._status>0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'order')} className='gray' size='small'>查看</AtButton></View>
+          <View style={i._status==0?'':'display:none'} className='at-col--auto grid'><AtButton onClick={this.showDetail.bind(this,i._id,'preOrder')} type='primary' size='small'>去支付</AtButton></View>
 
         </View>
       </View>

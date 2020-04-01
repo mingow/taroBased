@@ -62,9 +62,10 @@ exports.main = async (event) => {
                 location:event.location,
                 date:new Date(event.date),  //预约日期
                 session:event.session,  //预约场次
-                status:0, //订单状态
+                _status:0, //订单状态
                 stamp:db.serverDate(), //时间戳
                 timeline:[{status:0,stamp:db.serverDate()}],
+                payment:[],
                 time:event.time,
                 shopInfo:event.shopInfo,
                 createTime:db.serverDate(),

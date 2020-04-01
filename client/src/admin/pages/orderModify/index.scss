@@ -8,16 +8,27 @@
   background-color: #f6f6f6;
 
   .info{
+    margin:2rpx;
+    font-size: 24rpx;
+    background-color: #f00;
+    padding: 2rpx;
     .field{
+      padding:5rpx;
       background-color: #ffc666;
     }
     .val{
+      padding:5rpx;
       background-color: #dddddd;
       white-space: pre-wrap;
+      word-wrap:break-word;
+      word-break: break-all;
     }
   }
   .actions{
     padding: 20rpx;
   }
-
+  .primary{
+    color:#f00;
+    font-weight: bold;
+  }
 }

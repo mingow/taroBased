@@ -51,7 +51,7 @@ exports.main = async (event, context) => {
     var rec = await db.collection('orderLst')
     .where({
       _id:event.id,
-      status:0
+      _status:0
     })
     .get();
 
@@ -81,6 +81,13 @@ exports.main = async (event, context) => {
     console.log(result)
   })
 
+  app.router('reverse',async(ctx,next) => {
+    let result = await api.reverse({
+      out_trade_no:event.out_trade_no
+    })
+    ctx.body = result;
+  })
+
   app.router('changeState',async(ctx,next) =>{
     let result = await api.orderQuery({
       out_trade_no:event.out_trade_no
@@ -95,9 +102,13 @@ exports.main = async (event, context) => {
         })
         .update({
           data:{
-            status:1,
+            _status:1,
             timeline:_.push({status:1,stamp:db.serverDate()}),
-            paymentOrder:event.out_trade_no
+            //将支付订单改为数组格式可多次添加
+            payment:_.push({
+              key:'deposit_trade_no',
+              value:event.out_trade_no
+            })
           }
         })
         ctx.body = db_result;

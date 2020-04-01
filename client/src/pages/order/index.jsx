@@ -102,7 +102,7 @@ export default class Index extends Component {
           night:'通宵场',
         };
         console.log(res.result);
-        if(res.result.role=='owner'){
+        if(res.result.role=='owner'||res.result.role=='admin'){
           me.setState({modify:true})
         }
         res.result.sessionT=session[res.result.session];
