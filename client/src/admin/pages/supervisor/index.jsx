@@ -300,7 +300,9 @@ export default class Index extends Component {
     }
     else if(action.val=='detail'){
       //选中为详情
-
+      Taro.navigateTo({
+        url:'/admin/pages/orderModify/index?id='+item.val,
+      })
     }
   }
 

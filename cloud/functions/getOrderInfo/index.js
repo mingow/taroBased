@@ -136,7 +136,7 @@ exports.main = async (event,context) => {
       const ID = OPENID;//获取特定用户的订单Id
       var result = {};
       const db = cloud.database();
-      db.collection('orderLst').where({status:_.gt(0)}).orderBy('date', 'asc').get().then((res) =>{
+      db.collection('orderLst').where({_status:_.gt(0)}).orderBy('date', 'asc').get().then((res) =>{
         resolve(res.data);
       })
     })
@@ -153,7 +153,7 @@ exports.main = async (event,context) => {
       db.collection('orderLst').where({
         date:_.gt(minDate),
         date:_.lt(maxDate),
-        status:_.gt(0),
+        _status:_.gt(0),
         location:event.shopId
 
       }).orderBy('date', 'asc').get().then((res) =>{
